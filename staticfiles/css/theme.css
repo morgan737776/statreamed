@@ -1,0 +1,838 @@
+:root {
+  /* Brand primary colour used in buttons/links */
+  --bulma-primary: #1976d2;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* ---------- Bootstrap-to-Bulma alias helpers ---------- */
+/* Generic button */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  color: #fff;
+  background-color: var(--bulma-primary, hsl(217,71%,53%));
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+.btn:hover {
+  filter: brightness(0.9);
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Primary & outline variants */
+.btn-primary {
+  background-color: var(--bulma-primary, hsl(217,71%,53%));
+  color: #fff;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--bulma-primary, hsl(217,71%,53%));
+  border-color: currentColor;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Large size */
+.btn-lg {
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Alerts → map to Bulma’s notification look-&-feel */
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+.alert-success { background-color: #d1e7dd; color: #0f5132; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.alert-danger  { background-color: #f8d7da; color: #842029; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.alert-warning { background-color: #fff3cd; color: #664d03; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.alert-info    { background-color: #cff4fc; color: #055160; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Form controls */
+.form-control, .input-group input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Tables keep full-width & stripes handled by Bulma */
+.table {
+  width: 100%;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Utility */
+.text-center { text-align: center !important; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.mt-4 { margin-top: 1.5rem !important; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+.mb-4 { margin-bottom: 1.5rem !important; }
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+/* Enhance theme visual appearance */
+.section {
+  padding: 3rem 1.5rem;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+
+
+.hero {
+  padding: 4rem 1.5rem;
+}
+
+/* Gradient hero background */
+.hero.is-primary {
+  background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+  color: #fff;
+}
+
+/* Fancy navbar gradient */
+.navbar {
+  background: linear-gradient(90deg, #1976d2 0%, #0d47a1 100%);
+}
+.navbar-item, .navbar-burger span {
+  color: #fff;
+}
+
+/* Card shadow & hover lift */
+.card {
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.2);
+}
+
+/* Primary buttons with gradient */
+.button.is-primary {
+  background-image: linear-gradient(90deg,#ff8a00,#e52e71);
+  border: none;
+  color: #fff;
+}
+.button.is-primary:hover {
+  filter: brightness(0.95);
+}
+
+/* Section spacing tweak */
+.section {
+  padding: 4rem 1.5rem;
+}
+

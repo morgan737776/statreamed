@@ -1,0 +1,190 @@
+/* static/css/patient_list_redesigned.css */
+
+/* New structure from form design */
+.list-container {
+    max-width: 1200px; /* Wider than form */
+    margin: 0 auto;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+}
+
+.list-header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.list-section {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: .75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0, .08);
+}
+
+/* Filter panel inside the section */
+.filter-panel {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: .5rem;
+    border: 1px solid #e9ecef;
+    margin-bottom: 2rem;
+}
+
+.filter-reset {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+/* Table styles */
+.table {
+    font-size: 0.9rem;
+}
+
+/* DASHBOARD PATIENT TILE GRID */
+.patient-table-dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+.patient-tile {
+    background: linear-gradient(135deg, #f8fafc 0%, #e9ecef 100%);
+    border-radius: 1.1rem;
+    box-shadow: 0 2px 16px rgba(30,144,255,0.08);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 340px;
+    min-width: 240px;
+    padding: 1.1rem 1.2rem 1rem 1.2rem;
+    position: relative;
+    transition: box-shadow 0.18s, transform 0.18s;
+}
+.patient-tile:hover {
+    box-shadow: 0 8px 32px rgba(30,144,255,0.14);
+    transform: translateY(-4px) scale(1.02);
+}
+.patient-tile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.7rem;
+}
+.patient-tile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(30,144,255,0.10);
+}
+.patient-tile-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1e90ff;
+}
+.patient-tile-status {
+    display: inline-block;
+    padding: 0.22em 0.7em;
+    font-size: 0.85em;
+    font-weight: 700;
+    border-radius: 2rem;
+    margin-left: 0.5rem;
+    color: #fff;
+}
+.patient-tile-status.active { background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%); }
+.patient-tile-status.treatment { background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%); color:#333; }
+.patient-tile-status.discharged { background: linear-gradient(90deg, #fc575e 0%, #f7b42c 100%); }
+.patient-tile-status.archived { background: linear-gradient(90deg, #6c757d 0%, #adb5bd 100%); }
+.patient-tile-info {
+    font-size: 0.96rem;
+    color: #343a40;
+    margin-bottom: 0.3rem;
+}
+.patient-tile-actions {
+    margin-top: 0.7rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.patient-tile-actions .btn {
+    font-size: 0.85rem;
+    border-radius: 1.5rem;
+    padding: 0.27rem 0.88rem;
+}
+@media (max-width: 991px) {
+    .patient-table-dashboard {
+        gap: 0.7rem;
+    }
+    .patient-tile {
+        max-width: 100%;
+        min-width: 180px;
+        padding: 0.8rem 0.7rem 0.7rem 0.7rem;
+    }
+}
+
+
+.table thead th {
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #f8f9fa;
+    border-bottom-width: 1px;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.patient-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.patient-name {
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 0.3em 0.6em;
+    font-size: 0.8em;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 50rem; /* Pill shape */
+    color: #fff;
+}
+.status-badge.status-active { background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%); color:#fff; }
+.status-badge.status-treatment { background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%); color:#333; }
+.status-badge.status-discharged { background: linear-gradient(90deg, #fc575e 0%, #f7b42c 100%); color:#fff; }
+.status-badge.status-archived { background: linear-gradient(90deg, #6c757d 0%, #adb5bd 100%); color:#fff; }
+
+/* Action Buttons */
+.action-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+/* Pagination */
+.pagination-footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+    margin-top: 1rem;
+}

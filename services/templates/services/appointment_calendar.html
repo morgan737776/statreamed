@@ -1,0 +1,369 @@
+{% extends 'services/base.html' %}
+{% load static %}
+
+{% block page_title %}Календарь записей{% endblock %}
+
+{% block extra_css %}
+<!-- FullCalendar CSS -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+<style>
+    /* Custom styles for the calendar */
+    #calendar {
+        background-color: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    }
+    
+    .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .fc-button {
+        background-color: #0d6efd;
+        border: none;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .fc-button:hover {
+        background-color: #0b5ed7;
+    }
+    
+    .fc-button-primary:disabled {
+        background-color: #0d6efd;
+        opacity: 0.65;
+    }
+    
+    .fc-event {
+        border: none;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .fc-event-scheduled {
+        background-color: #0d6efd;
+        border-left: 3px solid #0a58ca;
+    }
+    
+    .fc-event-in_progress {
+        background-color: #ffc107;
+        border-left: 3px solid #e0a800;
+        color: #000;
+    }
+    
+    .fc-event-completed {
+        background-color: #198754;
+        border-left: 3px solid #146c43;
+    }
+    
+    .fc-event-cancelled {
+        background-color: #dc3545;
+        border-left: 3px solid #b02a37;
+    }
+    
+    .fc-daygrid-day-number {
+        color: #495057;
+        text-decoration: none;
+    }
+    
+    .fc-day-today {
+        background-color: #f8f9fa !important;
+    }
+    
+    .fc-col-header-cell-cushion {
+        color: #495057;
+        text-decoration: none;
+    }
+    
+    .filter-card {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .event-tooltip {
+        position: absolute;
+        z-index: 100;
+        background: #fff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        max-width: 300px;
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content_inner %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Календарь записей</h1>
+                <a href="{% url 'services:appointment_add' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Новая запись
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="filter-card">
+                <form method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="specialist" class="form-label">Специалист</label>
+                        <select name="specialist" id="specialist" class="form-select">
+                            <option value="">Все специалисты</option>
+                            {% for specialist in specialists %}
+                                <option value="{{ specialist.id }}" {% if selected_specialist|stringformat:'s' == specialist.id|stringformat:'s' %}selected{% endif %}>
+                                    {{ specialist.get_full_name|default:specialist.username }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="service" class="form-label">Услуга</label>
+                        <select name="service" id="service" class="form-select">
+                            <option value="">Все услуги</option>
+                            {% for service in services %}
+                                <option value="{{ service.id }}" {% if selected_service|stringformat:'s' == service.id|stringformat:'s' %}selected{% endif %}>
+                                    {{ service.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-filter me-1"></i> Применить
+                        </button>
+                        <a href="{% url 'services:appointment_calendar' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i> Сбросить
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calendar -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Event Tooltip -->
+<div id="eventTooltip" class="event-tooltip"></div>
+
+<!-- Add Appointment Modal -->
+<div class="modal fade" id="addAppointmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Новая запись</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form will be loaded here via AJAX -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Загрузка...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- FullCalendar JS -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ru.js'></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the calendar
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ru',
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+        },
+        buttonText: {
+            today: 'Сегодня',
+            month: 'Месяц',
+            week: 'Неделя',
+            day: 'День',
+            list: 'Список'
+        },
+        events: JSON.parse('{{ events_json|escapejs|safe }}'),
+        eventContent: function(arg) {
+            // Custom event content
+            var eventTitle = document.createElement('div');
+            eventTitle.classList.add('fc-event-title');
+            eventTitle.textContent = arg.event.title;
+            
+            var eventTime = document.createElement('div');
+            eventTime.classList.add('fc-event-time');
+            eventTime.textContent = arg.timeText;
+            
+            var eventEl = document.createElement('div');
+            eventEl.classList.add('d-flex', 'flex-column');
+            eventEl.appendChild(eventTime);
+            eventEl.appendChild(eventTitle);
+            
+            return { domNodes: [eventEl] };
+        },
+        eventDidMount: function(info) {
+            // Add tooltip to events
+            info.el.setAttribute('data-bs-toggle', 'tooltip');
+            info.el.setAttribute('title', 
+                `${info.event.title}\n` +
+                `Время: ${info.event.start.toLocaleTimeString('ru-RU', {hour: '2-digit', 'minute': '2-digit'})}` + 
+                (info.event.end ? ` - ${info.event.end.toLocaleTimeString('ru-RU', {hour: '2-digit', 'minute': '2-digit'})}` : '') + '\n' +
+                `Услуга: ${info.event.extendedProps.service}\n` +
+                `Специалист: ${info.event.extendedProps.specialist}\n` +
+                `Статус: ${info.event.extendedProps.status}`
+            );
+            
+            // Initialize tooltip
+            new bootstrap.Tooltip(info.el, {
+                container: 'body',
+                html: true
+            });
+        },
+        dateClick: function(info) {
+            // Handle date click to add new appointment
+            var dateStr = info.dateStr;
+            var url = '{% url \'services:appointment_add\' %}' + '?date=' + dateStr;
+            
+            // Load the form via AJAX
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector('#addAppointmentModal .modal-body').innerHTML = html;
+                    var modal = new bootstrap.Modal(document.getElementById('addAppointmentModal'));
+                    modal.show();
+                });
+        },
+        eventClick: function(info) {
+            // Handle event click to view/edit appointment
+            var url = '{% url "services:appointment_edit" 0 %}'.replace('0', info.event.id);
+            window.location.href = url;
+            
+            // Prevent default behavior
+            info.jsEvent.preventDefault();
+        },
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        },
+        slotMinTime: '08:00:00',
+        slotMaxTime: '22:00:00',
+        firstDay: 1, // Start week on Monday
+        businessHours: {
+            // days of week. an array of zero-based day of month integers (0=Sunday)
+            daysOfWeek: [1, 2, 3, 4, 5], // Monday - Friday
+            startTime: '09:00',
+            endTime: '18:00'
+        },
+        dayMaxEventRows: true,
+        views: {
+            timeGrid: {
+                dayMaxEventRows: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+            }
+        }
+    });
+    
+    // Render the calendar
+    calendar.render();
+    
+    // Handle form submission in modal
+    document.addEventListener('submit', function(e) {
+        if (e.target.matches('#appointmentForm')) {
+            e.preventDefault();
+            
+            // Submit form via AJAX
+            var form = e.target;
+            var formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    var toastEl = document.createElement('div');
+                    toastEl.classList.add('toast', 'align-items-center', 'text-white', 'bg-success', 'border-0', 'position-fixed', 'top-2', 'end-2');
+                    toastEl.setAttribute('role', 'alert');
+                    toastEl.setAttribute('aria-live', 'assertive');
+                    toastEl.setAttribute('aria-atomic', 'true');
+                    toastEl.innerHTML = `
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <i class="fas fa-check-circle me-2"></i> ${data.message}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>`;
+                    
+                    document.body.appendChild(toastEl);
+                    var toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                    
+                    // Close the modal
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('addAppointmentModal'));
+                    modal.hide();
+                    
+                    // Refresh the calendar
+                    calendar.refetchEvents();
+                    
+                    // Remove toast after it's hidden
+                    toastEl.addEventListener('hidden.bs.toast', function() {
+                        document.body.removeChild(toastEl);
+                    });
+                } else {
+                    // Show validation errors
+                    var modalBody = form.closest('.modal-body');
+                    modalBody.innerHTML = data.form_html;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+    
+    // Handle modal hidden event
+    var addAppointmentModal = document.getElementById('addAppointmentModal');
+    addAppointmentModal.addEventListener('hidden.bs.modal', function () {
+        // Reset modal content when hidden
+        var modalBody = this.querySelector('.modal-body');
+        modalBody.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>`;
+    });
+});
+</script>
+{% endblock %}

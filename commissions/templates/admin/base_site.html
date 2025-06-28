@@ -1,0 +1,142 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+/* Custom styles for the admin */
+#content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.dashboard #content-main {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard .app-list {
+    display: contents;
+}
+
+.dashboard .app {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-top: 4px solid #417690;
+}
+
+.dashboard .app:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dashboard .app .app-title {
+    background: #f8f9fa;
+    color: #333;
+    padding: 15px 20px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.dashboard .app .app-title i {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #417690;
+}
+
+.dashboard .app .app-model {
+    padding: 10px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.dashboard .app .app-model:hover {
+    background: #f8f9fa;
+}
+
+.dashboard .app .app-model:last-child {
+    border-bottom: none;
+}
+
+.dashboard .app .app-model a {
+    color: #447e9b;
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+.dashboard .app .app-model a:hover {
+    color: #0366d6;
+}
+
+.dashboard .app .app-model .addlink,
+.dashboard .app .app-model .viewlink {
+    color: #5b80b2;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+.dashboard .app .app-model .addlink {
+    background: #e7f2fa;
+}
+
+.dashboard .app .app-model .viewlink {
+    background: #f0f0f0;
+}
+
+.dashboard .app .app-model .addlink:hover,
+.dashboard .app .app-model .viewlink:hover {
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+/* App-specific colors */
+.dashboard .app-commissions {
+    border-top-color: #5b80b2;
+}
+
+.dashboard .app-core {
+    border-top-color: #5bb75b;
+}
+
+.dashboard .app-emr {
+    border-top-color: #f0ad4e;
+}
+
+.dashboard .app-rehab_programs {
+    border-top-color: #d9534f;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard #content-main {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}

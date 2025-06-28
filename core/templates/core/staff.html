@@ -1,0 +1,165 @@
+{% extends 'core/base_dashboard.html' %}
+
+{% block title %}Управление персоналом{% endblock %}
+
+{% block page_title %}
+<div class="d-flex justify-content-between align-items-center">
+    <h1>Сотрудники</h1>
+    <div>
+        <a href="#" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Добавить сотрудника
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_content %}
+<div class="row
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Аватар" width="100">
+                <h5 class="card-title mb-1">Иванова Мария Петровна</h5>
+                <p class="text-muted mb-3">Главный врач</p>
+                <div class="d-flex justify-content-center mb-3">
+                    <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-info btn-sm me-2">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Статус</span>
+                    <span class="badge bg-success">Активен</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Отдел</span>
+                    <span>Руководство</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Дата приёма</span>
+                    <span>15.01.2020</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#all" data-bs-toggle="tab">Все сотрудники</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#doctors" data-bs-toggle="tab">Врачи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#nurses" data-bs-toggle="tab">Медсёстры</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#admin" data-bs-toggle="tab">Администрация</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="all">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ФИО</th>
+                                        <th>Должность</th>
+                                        <th>Отдел</th>
+                                        <th>Телефон</th>
+                                        <th>Статус</th>
+                                        <th class="text-end">Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Аватар">
+                                                <div>
+                                                    <div class="fw-bold">Петров А.В.</div>
+                                                    <small class="text-muted">petrov@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Врач-реабилитолог</td>
+                                        <td>Реабилитация</td>
+                                        <td>+7 (999) 123-45-67</td>
+                                        <td><span class="badge bg-success">Активен</span></td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Аватар">
+                                                <div>
+                                                    <div class="fw-bold">Сидорова Е.К.</div>
+                                                    <small class="text-muted">sidorova@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Медсестра</td>
+                                        <td>Процедурный кабинет</td>
+                                        <td>+7 (999) 987-65-43</td>
+                                        <td><span class="badge bg-success">Активен</span></td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="Аватар">
+                                                <div>
+                                                    <div class="fw-bold">Кузнецов Д.М.</div>
+                                                    <small class="text-muted">kuznetsov@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Физиотерапевт</td>
+                                        <td>Физиотерапия</td>
+                                        <td>+7 (999) 456-78-90</td>
+                                        <td><span class="badge bg-warning">В отпуске</span></td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-outline-primary me-1">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

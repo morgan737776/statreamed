@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:p-6 space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">{{ title }}</h1>
+        <a href="{% url 'core:patient_add' %}" class="mt-4 md:mt-0 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <i class="fas fa-plus mr-2"></i>
+            Добавить пациента
+        </a>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <form method="get" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+                <label for="search-input" class="sr-only">Поиск</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" id="search-input" name="q" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Поиск по ФИО, телефону..." value="{{ request.GET.q }}">
+                </div>
+            </div>
+            <div>
+                <label for="status-select" class="sr-only">Статус</label>
+                <select id="status-select" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="">Все статусы</option>
+                    {% for key, value in PATIENT_STATUS_CHOICES %}
+                        <option value="{{ key }}" {% if request.GET.status == key %}selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Фильтр</button>
+                <a href="{% url 'core:patient_list' %}" class="w-full text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600">Сброс</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Patients Table -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Пациент</th>
+                    <th scope="col" class="px-6 py-3">Дата рождения</th>
+                    <th scope="col" class="px-6 py-3">Телефон</th>
+                    <th scope="col" class="px-6 py-3">Статус</th>
+                    <th scope="col" class="px-6 py-3 text-right">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <div class="h-10 w-10 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center font-bold">
+                                    {{ patient.first_name|first }}{{ patient.last_name|first }}
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <a href="{% url 'core:patient_detail' patient.pk %}" class="hover:underline text-blue-600 dark:text-blue-500 font-semibold">{{ patient.get_full_name }}</a>
+                                <div class="text-sm text-gray-500">ID: {{ patient.id }}</div>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="px-6 py-4">{{ patient.date_of_birth|date:"d.m.Y" }}</td>
+                    <td class="px-6 py-4">{{ patient.phone_number|default:"—" }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2.5 py-1 text-xs font-semibold leading-tight rounded-full
+                            {% if patient.status == 'active' %} bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100
+                            {% elif patient.status == 'discharged' %} bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100
+                            {% else %} bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100
+                            {% endif %}">
+                            {{ patient.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <a href="{% url 'core:patient_edit' patient.pk %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-pencil-alt"></i></a>
+                        <button data-modal-target="delete-modal-{{ patient.pk }}" data-modal-toggle="delete-modal-{{ patient.pk }}" type="button" class="font-medium text-red-600 dark:text-red-500 hover:underline p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+                {% include 'includes/delete_modal.html' with object=patient delete_url='core:patient_delete' object_id=patient.pk %}
+                {% empty %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td colspan="5" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-user-injured text-5xl mb-4 text-gray-400"></i>
+                            <h3 class="text-lg font-semibold">Пациенты не найдены</h3>
+                            <p class="text-sm">Попробуйте изменить фильтры или добавьте нового пациента.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if patients.has_other_pages %}
+    <nav class="flex items-center justify-between pt-4" aria-label="Table navigation">
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Показано <span class="font-semibold text-gray-900 dark:text-white">{{ patients.start_index }}-{{ patients.end_index }}</span> из <span class="font-semibold text-gray-900 dark:text-white">{{ patients.paginator.count }}</span></span>
+        <ul class="inline-flex -space-x-px text-sm h-8">
+            {% if patients.has_previous %}
+            <li>
+                <a href="?page={{ patients.previous_page_number }}{{ request.GET.urlencode | cut:'page=' }}" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Назад</a>
+            </li>
+            {% endif %}
+            {% for i in patients.paginator.page_range %}
+                {% if patients.number == i %}
+                <li>
+                    <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{ i }}</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="?page={{ i }}{{ request.GET.urlencode | cut:'page=' }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ i }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            {% if patients.has_next %}
+            <li>
+                <a href="?page={{ patients.next_page_number }}{{ request.GET.urlencode | cut:'page=' }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Вперед</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

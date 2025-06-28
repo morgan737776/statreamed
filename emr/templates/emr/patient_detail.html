@@ -1,0 +1,221 @@
+{% extends 'emr/base_emr.html' %}
+{% load static %}
+
+{% block page_title %}{{ patient.user.get_full_name }} | Карта пациента{% endblock %}
+
+{% block page_actions %}
+<div class="btn-group">
+    <a href="{% url 'emr:patient_edit' pk=patient.pk %}" class="btn btn-sm btn-outline-primary">
+        <i class="bi bi-pencil me-1"></i> Редактировать
+    </a>
+    <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-split" 
+            data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">Действия</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Распечатать карту</a></li>
+        <li><a class="dropdown-item" href="#">Экспорт в PDF</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" href="#">Удалить пациента</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block emr_content %}
+<div class="row">
+    <!-- Левая колонка - Профиль -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-emr h-100">
+            <div class="card-body text-center">
+                <div class="position-relative d-inline-block mb-3">
+                    <img src="{{ patient.user.avatar.url|default:'/static/img/default-avatar.png' }}" 
+                         class="rounded-circle mb-2" width="120" height="120" style="object-fit: cover;">
+                    {% if patient.blood_type %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ patient.get_blood_type_display }}{% if patient.rh_factor is not None %}{{ patient.rh_factor|yesno:'+,-' }}{% endif %}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <h4 class="mb-1">{{ patient.user.get_full_name }}</h4>
+                <p class="text-muted mb-3">ID: {{ patient.id|stringformat:"06d" }}</p>
+                
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    <a href="tel:{{ patient.phone }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-telephone me-1"></i> Позвонить
+                    </a>
+                    <a href="mailto:{{ patient.user.email }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-envelope me-1"></i> Email
+                    </a>
+                </div>
+                
+                <div class="list-group list-group-flush text-start">
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Дата рождения:</span>
+                            <span>{{ patient.user.birth_date|date:'d.m.Y'|default:'—' }}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Возраст:</span>
+                            <span>{% if patient.user.birth_date %}{{ patient.user.birth_date|timesince }}{% else %}—{% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Пол:</span>
+                            <span>{{ patient.user.get_gender_display|default:'—' }}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">СНИЛС:</span>
+                            <span>{{ patient.insurance_number|default:'—' }}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Телефон:</span>
+                            <span>{{ patient.phone|default:'—' }}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Email:</span>
+                            <span>{{ patient.user.email|default:'—' }}</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Адрес:</span>
+                            <span class="text-end">{{ patient.address|default:'—' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Медицинская информация -->
+        <div class="card card-emr mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Медицинская информация</h5>
+                <a href="{% url 'emr:medical_record_edit' patient_pk=patient.pk %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <h6 class="small text-uppercase text-muted mb-2">Аллергии</h6>
+                <p class="mb-3">{{ medical_record.allergies|default:'Не указаны'|linebreaksbr }}</p>
+                
+                <h6 class="small text-uppercase text-muted mb-2">Хронические заболевания</h6>
+                <p class="mb-3">{{ medical_record.chronic_diseases|default:'Не указаны'|linebreaksbr }}</p>
+                
+                <h6 class="small text-uppercase text-muted mb-2">Инвалидность</h6>
+                <p class="mb-0">
+                    {% if medical_record.disability != 'no' %}
+                        {{ medical_record.get_disability_display }}
+                        {% if medical_record.disability_details %}
+                            <br><small class="text-muted">{{ medical_record.disability_details }}</small>
+                        {% endif %}
+                    {% else %}
+                        Нет инвалидности
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Правая колонка - Основное содержимое -->
+    <div class="col-md-8">
+        <!-- Быстрый доступ -->
+        <div class="row mb-4">
+            <div class="col-6 col-lg-3 mb-3">
+                <a href="{% url 'emr:entry_create' patient_pk=patient.pk %}" class="card card-emr h-100 text-decoration-none text-center p-3">
+                    <div class="text-primary mb-2">
+                        <i class="bi bi-journal-text display-6"></i>
+                    </div>
+                    <h6 class="mb-0">Новая запись</h6>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <a href="{% url 'emr:prescription_create' patient_pk=patient.pk %}" class="card card-emr h-100 text-decoration-none text-center p-3">
+                    <div class="text-success mb-2">
+                        <i class="bi bi-capsule display-6"></i>
+                    </div>
+                    <h6 class="mb-0">Назначение</h6>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a href="{% url 'emr:testresult_create' patient_pk=patient.pk %}" class="card card-emr h-100 text-decoration-none text-center p-3">
+                    <div class="text-info mb-2">
+                        <i class="bi bi-clipboard2-pulse display-6"></i>
+                    </div>
+                    <h6 class="mb-0">Анализы</h6>
+                </a>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a href="#" class="card card-emr h-100 text-decoration-none text-center p-3">
+                    <div class="text-warning mb-2">
+                        <i class="bi bi-file-earmark-medical display-6"></i>
+                    </div>
+                    <h6 class="mb-0">Документы</h6>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Вкладки -->
+        <ul class="nav nav-tabs mb-4" id="patientTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" 
+                        data-bs-target="#overview" type="button" role="tab" aria-controls="overview" 
+                        aria-selected="true">
+                    <i class="bi bi-house-door me-1"></i> Обзор
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" 
+                        data-bs-target="#history" type="button" role="tab" aria-controls="history">
+                    <i class="bi bi-journal-text me-1"></i> История
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="prescriptions-tab" data-bs-toggle="tab" 
+                        data-bs-target="#prescriptions" type="button" role="tab" 
+                        aria-controls="prescriptions">
+                    <i class="bi bi-capsule me-1"></i> Назначения
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tests-tab" data-bs-toggle="tab" 
+                        data-bs-target="#tests" type="button" role="tab">
+                    <i class="bi bi-clipboard2-pulse me-1"></i> Анализы
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Содержимое вкладок -->
+        <div class="tab-content" id="patientTabsContent">
+            <!-- Вкладка Обзор -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                {% include 'emr/partials/patient_overview.html' %}
+            </div>
+            
+            <!-- Вкладка История -->
+            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                {% include 'emr/partials/patient_history.html' %}
+            </div>
+            
+            <!-- Вкладка Назначения -->
+            <div class="tab-pane fade" id="prescriptions" role="tabpanel" aria-labelledby="prescriptions-tab">
+                {% include 'emr/partials/patient_prescriptions.html' %}
+            </div>
+            
+            <!-- Вкладка Анализы -->
+            <div class="tab-pane fade" id="tests" role="tabpanel" aria-labelledby="tests-tab">
+                {% include 'emr/partials/patient_tests.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

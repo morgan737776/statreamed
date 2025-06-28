@@ -1,0 +1,96 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Отчет по востребованности процедур" %}{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% trans "Отчет по востребованности процедур" %}</h1>
+
+    <!-- Форма для выбора дат -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label for="start_date" class="form-label">{% trans "Дата начала" %}</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ start_date|default:'' }}">
+                </div>
+                <div class="col-md-5">
+                    <label for="end_date" class="form-label">{% trans "Дата окончания" %}</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ end_date|default:'' }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Показать" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Диаграмма -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {% if labels|safe != '[]' and data|safe != '[]' %}
+                <canvas id="programEffectivenessChart"></canvas>
+            {% elif start_date and end_date %}
+                <div class="alert alert-info">{% trans "Нет данных для отображения за выбранный период." %}</div>
+            {% else %}
+                <div class="alert alert-secondary">{% trans "Пожалуйста, выберите период для формирования отчета." %}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = {{ labels|safe }};
+        const data = {{ data|safe }};
+
+        if (labels.length > 0 && data.length > 0) {
+            const ctx = document.getElementById('programEffectivenessChart').getContext('2d');
+            
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)',
+                'rgba(199, 199, 199, 0.7)',
+                'rgba(83, 102, 255, 0.7)',
+                'rgba(40, 159, 64, 0.7)',
+                'rgba(210, 99, 132, 0.7)'
+            ];
+
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '{% trans "Количество назначений" %}',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '{% trans "Востребованность реабилитационных процедур" %}',
+                            font: { size: 18 }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

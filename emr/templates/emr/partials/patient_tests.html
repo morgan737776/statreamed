@@ -1,0 +1,270 @@
+<div class="card card-emr">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Результаты анализов и исследований</h5>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterTestsModal">
+                <i class="bi bi-funnel"></i> Фильтры
+            </button>
+            <a href="{% url 'emr:testresult_create' patient_pk=patient.pk %}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Добавить результат
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        {% if test_results %}
+            <div class="list-group list-group-flush">
+                {% for test in test_results %}
+                <div class="list-group-item border-0">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="me-3">
+                            <div class="d-flex align-items-center mb-1">
+                                <h6 class="mb-0">
+                                    {% if test.is_abnormal %}
+                                    <i class="bi bi-exclamation-triangle-fill text-danger me-2" 
+                                       data-bs-toggle="tooltip" 
+                                       title="Результат вне референсных значений"></i>
+                                    {% endif %}
+                                    {{ test.test_name }}
+                                </h6>
+                                {% if test.is_critical %}
+                                <span class="badge bg-danger ms-2">Критично</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="small text-muted mb-2">
+                                <i class="bi bi-calendar3 me-1"></i> 
+                                {{ test.collected_at|date:'d.m.Y H:i' }} 
+                                <span class="mx-2">•</span>
+                                <i class="bi bi-person me-1"></i>
+                                {{ test.ordered_by.get_full_name|default:test.ordered_by.username }}
+                            </div>
+                            
+                            {% if test.result_type == 'numeric' %}
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Результат: <strong>{{ test.numeric_value }} {{ test.unit|default:'' }}</strong></span>
+                                    {% if test.reference_range %}
+                                    <span class="text-muted small">Референс: {{ test.reference_range }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if test.reference_range %}
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-{{ test.is_abnormal|yesno:'danger,success' }}" 
+                                         role="progressbar" 
+                                         style="width: {{ test.percentage_of_range|default:50 }}%"
+                                         aria-valuenow="{{ test.percentage_of_range|default:50 }}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% elif test.result_type == 'text' %}
+                            <div class="mb-2">
+                                <div class="fw-bold mb-1">Результат:</div>
+                                <div class="bg-light p-2 rounded">
+                                    {{ test.text_result|linebreaksbr }}
+                                </div>
+                            </div>
+                            {% elif test.result_file %}
+                            <div class="mb-2">
+                                <div class="fw-bold mb-1">Файл с результатом:</div>
+                                <a href="{{ test.result_file.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="bi bi-file-earmark-text me-1"></i> {{ test.result_file.name|slice:"-20:" }}
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                            {% if test.notes %}
+                            <div class="alert alert-light p-2 small mb-0">
+                                <i class="bi bi-chat-square-text me-1"></i> 
+                                <strong>Примечание:</strong> {{ test.notes }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="btn-group btn-group-sm flex-shrink-0">
+                            <a href="{% url 'emr:testresult_detail' pk=test.pk %}" 
+                               class="btn btn-outline-primary" 
+                               data-bs-toggle="tooltip" 
+                               title="Просмотр">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'emr:testresult_edit' pk=test.pk %}" 
+                               class="btn btn-outline-secondary" 
+                               data-bs-toggle="tooltip" 
+                               title="Редактировать">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'emr:testresult_download' pk=test.pk %}" 
+                               class="btn btn-outline-success" 
+                               data-bs-toggle="tooltip" 
+                               title="Скачать"
+                               {% if not test.result_file %}disabled{% endif %}>
+                                <i class="bi bi-download"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-divider my-0"></div>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if is_paginated %}
+            <div class="card-footer">
+                <nav aria-label="Навигация по страницам">
+                    <ul class="pagination pagination-sm justify-content-center mb-0">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Первая">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+            
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-clipboard2-pulse display-4 text-muted mb-3"></i>
+                <h5>Результаты анализов не найдены</h5>
+                <p class="text-muted">Добавьте результаты лабораторных и инструментальных исследований</p>
+                <a href="{% url 'emr:testresult_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Добавить результат
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно фильтров -->
+<div class="modal fade" id="filterTestsModal" tabindex="-1" aria-labelledby="filterTestsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterTestsModalLabel">Фильтры результатов</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <form method="get" id="filterTestsForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="test_type" class="form-label">Тип исследования</label>
+                        <select class="form-select" id="test_type" name="test_type">
+                            <option value="">Все типы</option>
+                            {% for value, label in test_types %}
+                            <option value="{{ value }}" {% if request.GET.test_type == value|stringformat:'s' %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="date_from" class="form-label">Дата с</label>
+                            <input type="date" class="form-control" id="date_from" name="date_from" 
+                                   value="{{ request.GET.date_from }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="date_to" class="form-label">Дата по</label>
+                            <input type="date" class="form-control" id="date_to" name="date_to"
+                                   value="{{ request.GET.date_to }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ordered_by" class="form-label">Назначил</label>
+                        <select class="form-select" id="ordered_by" name="ordered_by">
+                            <option value="">Все врачи</option>
+                            {% for doctor in doctors %}
+                            <option value="{{ doctor.id }}" {% if request.GET.ordered_by == doctor.id|stringformat:'s' %}selected{% endif %}>
+                                {{ doctor.get_full_name|default:doctor.username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="abnormal_only" name="abnormal_only"
+                               {% if request.GET.abnormal_only %}checked{% endif %}>
+                        <label class="form-check-label" for="abnormal_only">
+                            Только с отклонениями
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="critical_only" name="critical_only"
+                               {% if request.GET.critical_only %}checked{% endif %}>
+                        <label class="form-check-label" for="critical_only">
+                            Только критические
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <a href="?" class="btn btn-outline-danger me-2">Сбросить</a>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Инициализация тултипов
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    
+    // Обработка формы фильтров
+    document.getElementById('filterTestsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        
+        // Добавляем только заполненные поля
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                params.append(key, value);
+            }
+        }
+        
+        // Перенаправляем с новыми параметрами
+        window.location.href = '?' + params.toString();
+    });
+</script>
+{% endblock %}

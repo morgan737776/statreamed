@@ -1,0 +1,22 @@
+{% extends "services/base_services.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>{% trans "Договор на услуги" %}</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="mt-3">
+                    <a href="{{ cancel_url|default:'/services/contracts/' }}" class="btn btn-secondary">{% trans "Отмена" %}</a>
+                    <button type="submit" class="btn btn-primary">{% trans "Сохранить" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

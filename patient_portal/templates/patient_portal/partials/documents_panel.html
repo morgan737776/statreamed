@@ -1,0 +1,27 @@
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Ваши документы</h3>
+{% if patient_documents %}
+<div class="space-y-4">
+    {% for doc in patient_documents %}
+    <a href="{{ doc.file.url }}" target="_blank" class="block p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-file-alt fa-lg text-gray-500 dark:text-gray-400 mr-4"></i>
+                <div>
+                    <p class="font-semibold text-gray-900 dark:text-white">{{ doc.description|default:"Документ без описания" }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Нажмите, чтобы открыть файл</p>
+                </div>
+            </div>
+            <span class="text-sm text-gray-500 dark:text-gray-400">{{ doc.uploaded_at|date:"d.m.Y" }}</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-10 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+        <i class="fas fa-folder-open fa-lg text-blue-600"></i>
+    </div>
+    <h4 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Документы не найдены</h4>
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">У вас нет загруженных документов.</p>
+</div>
+{% endif %}

@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Удалить действие</h2>
+    <p>Вы уверены, что хотите удалить действие <strong>{{ object.activity }}</strong> для пациента <strong>{{ object.program.patient }}</strong>?</p>
+    <form method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{% url 'rehab_programs:calendar' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

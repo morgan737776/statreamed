@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Управление документами" %}{% endblock %}
+
+{% block content %}
+<main class="p-4 md:p-6 2xl:p-10">
+    <!-- Page Header -->
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">{% trans "Управление документами" %}</h1>
+            <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">{% trans "Поиск, просмотр и управление документами пациентов." %}</p>
+        </div>
+        {% if perms.documents.add_document %}
+        <a href="{% url 'documents:document_create' %}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 dark:bg-primary-500 dark:hover:bg-primary-600 focus:outline-none dark:focus:ring-primary-800">
+            <i class="fas fa-plus mr-2"></i>
+            {% trans "Загрузить документ" %}
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Filter and Search Panel -->
+    <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <form method="get" action="{% url 'documents:document_list' %}">
+            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6">
+                <div class="sm:col-span-2 md:col-span-2 lg:col-span-2">
+                    <label for="search-query" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{% trans "Поиск" %}</label>
+                    <input type="text" name="q" id="search-query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="{% trans 'По названию, пациенту...' %}" value="{{ request.GET.q|default:'' }}">
+                </div>
+                <div>
+                    <label for="category-filter" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{% trans "Категория" %}</label>
+                    <select id="category-filter" name="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                        <option value="">{% trans "Все категории" %}</option>
+                        {% for category in categories %}
+                        <option value="{{ category.pk }}" {% if request.GET.category|add:'0' == category.pk %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-500 dark:hover:bg-primary-600 dark:focus:ring-primary-800">
+                        <i class="fas fa-search mr-1"></i> {% trans "Применить" %}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Documents Table -->
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">{% trans "Название" %}</th>
+                        <th scope="col" class="px-6 py-3">{% trans "Пациент" %}</th>
+                        <th scope="col" class="px-6 py-3">{% trans "Категория" %}</th>
+                        <th scope="col" class="px-6 py-3">{% trans "Статус" %}</th>
+                        <th scope="col" class="px-6 py-3">{% trans "Загрузил" %}</th>
+                        <th scope="col" class="px-6 py-3">{% trans "Дата" %}</th>
+                        <th scope="col" class="px-6 py-3"><span class="sr-only">{% trans "Действия" %}</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents %}
+                    <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <a href="{% url 'documents:document_detail' doc.pk %}" class="hover:underline">{{ doc.title }}</a>
+                        </td>
+                        <td class="px-6 py-4">{{ doc.patient.get_full_name }}</td>
+                        <td class="px-6 py-4">
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ doc.category.name|default:"-" }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-1 font-semibold leading-tight rounded-full 
+                                {% if doc.status == 'approved' %}bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100
+                                {% elif doc.status == 'pending_approval' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-100
+                                {% elif doc.status == 'archived' %}bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-100
+                                {% else %}bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100{% endif %}">
+                                {{ doc.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">{{ doc.uploaded_by.username|default:"System" }}</td>
+                        <td class="px-6 py-4">{{ doc.created_at|date:"d.m.Y H:i" }}</td>
+                        <td class="px-6 py-4 flex items-center justify-end space-x-2">
+                            <a href="{% url 'documents:document_detail' doc.pk %}" class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white" title="{% trans 'Просмотр' %}"><i class="fas fa-eye"></i></a>
+                            {% if perms.documents.change_document %}
+                            <a href="{% url 'documents:document_update' doc.pk %}" class="text-yellow-400 hover:text-yellow-600 dark:text-yellow-300 dark:hover:text-yellow-500" title="{% trans 'Редактировать' %}"><i class="fas fa-edit"></i></a>
+                            {% endif %}
+                            {% if perms.documents.delete_document %}
+                            <a href="{% url 'documents:document_delete' doc.pk %}" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-600" title="{% trans 'Удалить' %}"><i class="fas fa-trash"></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-16 text-center text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-folder-open fa-3x mb-3"></i>
+                            <p class="text-lg">{% trans "Документы не найдены." %}</p>
+                            <p class="text-sm">{% trans "Попробуйте изменить фильтры или загрузить новый документ." %}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                {% trans "Показано" %} <span class="font-semibold text-gray-900 dark:text-white">{{ page_obj.start_index }}-{{ page_obj.end_index }}</span> {% trans "из" %} <span class="font-semibold text-gray-900 dark:text-white">{{ page_obj.paginator.count }}</span>
+            </span>
+            <ul class="inline-flex items-stretch -space-x-px">
+                {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                <li>
+                    <a href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="flex items-center justify-center text-sm py-2 px-3 leading-tight {% if page_obj.number == i %}text-primary-600 bg-primary-50 border-primary-300 dark:bg-gray-700 dark:text-white{% else %}text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white{% endif %}">
+                        {{ i }}
+                    </a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

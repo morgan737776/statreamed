@@ -1,0 +1,6 @@
+@echo off
+echo Activating virtual environment...
+call .\venv\Scripts\activate
+echo Starting Django development server...
+.\venv\Scripts\python.exe manage.py runserver
+pause

@@ -1,0 +1,37 @@
+Перейдите в папку с проектом, где есть manage.py
+Например:
+At mention
+cd D:\15.06\1234
+Активируйте виртуальное окружение
+Если оно находится в папке venv:
+At mention
+.\venv\Scripts\activate
+Проверьте, что python доступен                                        .\start_dev_server.bat
+Введите:
+At mention
+python --version
+Если видите версию Python — всё хорошо.
+Запустите сервер Django
+At mention
+python manage.py runserver
+
+
+
+Понял, у вас установлен Python 3.10. Давайте проверим его доступность и настроим окружение:
+
+Проверим установку Python 3.10:
+powershell
+py -3.10 --version
+Создадим виртуальное окружение:
+powershell
+cd d:\15.06\1234
+py -3.10 -m venv venv
+Активируем виртуальное окружение:
+powershell
+.\venv\Scripts\Activate.ps1
+Установим Django и другие зависимости:
+powershell
+pip install django pillow
+Запустим сервер:
+powershell
+python manage.py runserver

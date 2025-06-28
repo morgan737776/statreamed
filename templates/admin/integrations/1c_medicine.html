@@ -1,0 +1,96 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block title %}Интеграция с 1С:Медицина{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" class="card">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_settings">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Настройки подключения</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_name" class="form-label">Название</label>
+                        <input type="text" class="form-control" id="id_name" name="name" value="{{ settings.name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_api_url" class="form-label">URL API</label>
+                        <input type="url" class="form-control" id="id_api_url" name="api_url" value="{{ settings.api_url }}">
+                        <small class="form-text text-muted">URL-адрес для подключения к API 1С.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_login" class="form-label">Логин</label>
+                        <input type="text" class="form-control" id="id_login" name="login" value="{{ settings.login }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="id_password" name="password" placeholder="Введите новый пароль, чтобы изменить его">
+                        <small class="form-text text-muted">Оставьте поле пустым, если не хотите менять текущий пароль.</small>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active" {% if settings.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="id_is_active">Активировать интеграцию</label>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    <a href="{% url 'admin_panel:dashboard' %}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Статус и управление</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Последняя синхронизация</h6>
+                    {% if settings.last_sync_time %}
+                        <p>
+                            <strong>Время:</strong> {{ settings.last_sync_time|date:"d.m.Y H:i:s" }}<br>
+                            <strong>Статус:</strong> 
+                            <span class="badge {% if settings.last_sync_status == 'Успешно' %}bg-success{% else %}bg-danger{% endif %}">
+                                {{ settings.last_sync_status }}
+                            </span>
+                        </p>
+                        <p><strong>Детали:</strong></p>
+                        <pre class="bg-light p-2 rounded"><code>{{ settings.last_sync_details|default:"Нет деталей." }}</code></pre>
+                    {% else %}
+                        <p>Синхронизация еще не проводилась.</p>
+                    {% endif %}
+                    <hr>
+                    <h6>Ручной запуск</h6>
+                    <p>Вы можете запустить процессы обмена данными с 1С вручную.</p>
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="sync_patients" class="btn btn-info">Синхронизировать пациентов</button>
+                    </form>
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="sync_appointments" class="btn btn-warning">Синхронизировать записи</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

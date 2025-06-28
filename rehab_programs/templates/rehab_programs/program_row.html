@@ -1,0 +1,15 @@
+<tr>
+    <td>{{ program.id }}</td>
+    <td>{{ program.patient }}</td>
+    <td>{{ program.get_program_type_display }}</td>
+    <td>{{ program.specialist.get_full_name|default:program.specialist.username }}</td>
+    <td>{{ program.start_date }} — {{ program.end_date }}</td>
+    <td>{{ program.get_status_display }}</td>
+    <td>
+        <a href="{% url 'rehab_programs:rehab_program_detail' program_pk=program.id %}" class="btn btn-info btn-sm" data-bs-toggle="tooltip" title="Детали"><i class="fas fa-eye"></i></a>
+        <a href="{% url 'rehab_programs:rehab_program_edit' pk=program.id %}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Редактировать"><i class="fas fa-edit"></i></a>
+        <button type="button" class="btn btn-danger btn-sm btn-delete-program" data-program-id="{{ program.id }}" data-program-name="{{ program }}" data-bs-toggle="tooltip" title="Удалить">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </td>
+</tr>

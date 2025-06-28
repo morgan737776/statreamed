@@ -1,0 +1,78 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Вход в систему" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="text-center">{% trans "Вход в систему" %}</h3>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% trans "Ваше имя пользователя и пароль не совпали. Пожалуйста, попробуйте еще раз." %}
+                        </div>
+                    {% endif %}
+
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                            <p>{% blocktrans %}Ваша учетная запись не имеет доступа к этой странице. Чтобы продолжить, войдите в систему с учетной записью, у которой есть доступ.{% endblocktrans %}</p>
+                        {% else %}
+                            <p>{% trans "Пожалуйста, войдите, чтобы увидеть эту страницу." %}</p>
+                        {% endif %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'login' %}" autocomplete="on">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_username" class="form-label">{% trans "Имя пользователя" %}</label>
+        {{ form.username }}
+    </div>
+    <div class="mb-3 position-relative">
+        <label for="id_password" class="form-label">{% trans "Пароль" %}</label>
+        <div class="input-group">
+            {{ form.password }}
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword" tabindex="-1" style="border-top-left-radius:0;border-bottom-left-radius:0;">
+                <span id="togglePasswordIcon" class="bi bi-eye"></span>
+            </button>
+        </div>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="remember" id="rememberMe" {% if request.POST.remember %}checked{% endif %}>
+        <label class="form-check-label" for="rememberMe">{% trans "Запомнить меня" %}</label>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <button type="submit" class="btn btn-primary w-100">{% trans "Войти" %}</button>
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('id_password');
+        const togglePassword = document.getElementById('togglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePasswordIcon.className = type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+            });
+        }
+    });
+</script>
+                </div>
+                <div class="card-footer text-center">
+                    <small><a href="{% url 'password_reset' %}">{% trans "Забыли пароль?" %}</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Госпитализация пациента{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Госпитализация пациента</h1>
+        
+        <form method="post" class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.patient.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Пациент</label>
+                        {{ form.patient }}
+                        {% if form.patient.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.patient.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.ward.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Палата</label>
+                        {{ form.ward }}
+                        {% if form.ward.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.ward.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.bed.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Койка</label>
+                        {{ form.bed }}
+                        {% if form.bed.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.bed.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.date_admitted.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Дата госпитализации</label>
+                        {{ form.date_admitted }}
+                        {% if form.date_admitted.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.date_admitted.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Госпитализировать
+                    </button>
+                    <a href="{% url 'inpatient:dashboard' %}" class="ml-4 text-blue-600 hover:text-blue-800">
+                        Отмена
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

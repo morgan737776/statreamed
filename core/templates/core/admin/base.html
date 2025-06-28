@@ -1,0 +1,116 @@
+{% extends 'core/base.html' %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    /* Admin specific styles */
+    .admin-sidebar {
+        min-height: calc(100vh - 56px);
+        background: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        padding: 1rem 0;
+    }
+    .admin-sidebar .nav-link {
+        color: #333;
+        border-radius: 0.25rem;
+        margin: 0.25rem 1rem;
+        padding: 0.5rem 1rem;
+    }
+    .admin-sidebar .nav-link:hover, .admin-sidebar .nav-link.active {
+        background: #e9ecef;
+        color: #0d6efd;
+    }
+    .admin-sidebar .nav-link i {
+        width: 1.5rem;
+        text-align: center;
+        margin-right: 0.5rem;
+    }
+    .admin-content {
+        padding: 2rem;
+    }
+    .stat-card {
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .stat-card .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+    .stat-card .stat-label {
+        color: #6c757d;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block admin-sidebar collapse
+            {% if not request.user.is_authenticated or not request.user.is_staff %}
+                show
+            {% endif %}
+        ">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+                           href="{% url 'admin_panel:dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i> Панель управления
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'patients' in request.path %}active{% endif %}" 
+                           href="{% url 'admin_panel:patient_list' %}">
+                            <i class="fas fa-users"></i> Пациенты
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'bed-management' in request.path %}active{% endif %}" 
+                           href="{% url 'core:bed_management' %}">
+                            <i class="fas fa-bed"></i> Управление койками
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-calendar-alt"></i> Расписание
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line"></i> Отчеты
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'django-admin:index' %}" target="_blank">
+                            <i class="fas fa-cogs"></i> Администрирование
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 admin-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block admin_content %}
+            <!-- Page content will be inserted here -->
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

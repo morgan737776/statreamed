@@ -1,0 +1,41 @@
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">История медицинских записей</h3>
+{% if medical_records %}
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Дата визита</th>
+                <th scope="col" class="px-6 py-3">Врач</th>
+                <th scope="col" class="px-6 py-3">Диагноз</th>
+                <th scope="col" class="px-6 py-3">Рекомендации</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in medical_records %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ record.date_of_visit|date:"d.m.Y" }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ record.doctor.get_full_name|default:"Не указан" }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ record.diagnosis }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ record.notes|linebreaksbr }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-10 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+        <i class="fas fa-file-medical fa-lg text-blue-600"></i>
+    </div>
+    <h4 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">Записи отсутствуют</h4>
+    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">У вас пока нет медицинских записей.</p>
+</div>
+{% endif %}

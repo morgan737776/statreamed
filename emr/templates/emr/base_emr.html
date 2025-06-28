@@ -1,0 +1,231 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{% block page_title %}{% endblock %} | Электронная медицинская карта{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+    .emr-sidebar {
+        min-width: 250px;
+        background-color: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        height: calc(100vh - 56px);
+        position: sticky;
+        top: 56px;
+        overflow-y: auto;
+    }
+    .emr-content {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+    .emr-sidebar .nav-link {
+        border-radius: 0.25rem;
+        margin: 0.25rem 0.5rem;
+        color: #495057;
+    }
+    .emr-sidebar .nav-link.active {
+        background-color: #0d6efd;
+        color: white;
+    }
+    .emr-sidebar .nav-link:hover:not(.active) {
+        background-color: #e9ecef;
+    }
+    .card-emr {
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+    .card-emr .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        font-weight: 600;
+    }
+    .patient-info {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .patient-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .timeline {
+        position: relative;
+        padding-left: 1.5rem;
+        margin: 0 0 0 1rem;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #dee2e6;
+    }
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -0.5rem;
+        top: 0.25rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: #0d6efd;
+        border: 2px solid white;
+    }
+    .badge-emr {
+        font-weight: 500;
+        padding: 0.35em 0.65em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block emr-sidebar collapse" id="emrSidebar">
+            <div class="position-sticky pt-3">
+                {% if patient %}
+                <div class="text-center mb-4">
+                    <img src="{{ patient.user.avatar.url|default:'/static/img/default-avatar.png' }}" 
+                         alt="{{ patient.user.get_full_name }}" 
+                         class="patient-avatar mb-2">
+                    <h5 class="mb-1">{{ patient.user.get_full_name }}</h5>
+                    <p class="text-muted small mb-0">ID: {{ patient.id|stringformat:"06d" }}</p>
+                    {% if patient.blood_type %}
+                    <span class="badge bg-light text-dark mt-1">
+                        {{ patient.get_blood_type_display }}{% if patient.rh_factor is not None %}({{ patient.rh_factor|yesno:'+,-' }}){% endif %}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}" 
+                           href="{% url 'emr:dashboard' %}">
+                            <i class="bi bi-speedometer2 me-2"></i>Панель управления
+                        </a>
+                    </li>
+                    
+                    {% if perms.emr.view_patient %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'patients' %}active{% endif %}" 
+                           href="{% url 'emr:patient_list' %}">
+                            <i class="bi bi-people me-2"></i>Пациенты
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if patient %}
+                    <li class="nav-item mt-3">
+                        <span class="nav-link fw-bold text-uppercase small text-muted">
+                            <i class="bi bi-person me-2"></i>Карта пациента
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'overview' %}active{% endif %}" 
+                           href="{% url 'emr:patient_detail' pk=patient.pk %}">
+                            <i class="bi bi-file-earmark-text me-2"></i>Обзор
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'entries' %}active{% endif %}" 
+                           href="{% url 'emr:entry_list' patient_pk=patient.pk %}">
+                            <i class="bi bi-journal-text me-2"></i>Записи
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'prescriptions' %}active{% endif %}" 
+                           href="{% url 'emr:prescription_list' patient_pk=patient.pk %}">
+                            <i class="bi bi-capsule me-2"></i>Назначения
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'tests' %}active{% endif %}" 
+                           href="{% url 'emr:testresult_list' patient_pk=patient.pk %}">
+                            <i class="bi bi-clipboard2-pulse me-2"></i>Анализы
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'documents' %}active{% endif %}" 
+                           href="#">
+                            <i class="bi bi-files me-2"></i>Документы
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if perms.emr.view_statistics %}
+                    <li class="nav-item mt-3">
+                        <span class="nav-link fw-bold text-uppercase small text-muted">
+                            <i class="bi bi-graph-up me-2"></i>Отчеты
+                        </span>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-file-earmark-bar-graph me-2"></i>Статистика
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-file-earmark-medical me-2"></i>Медицинские отчеты
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 emr-content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block page_header %}{% endblock %}</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+            
+            {% include 'includes/messages.html' %}
+            
+            {% block emr_content %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}

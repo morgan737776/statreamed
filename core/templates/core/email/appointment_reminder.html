@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Напоминание о записи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0056b3;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .details-table th, .details-table td {
+            padding: 10px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+        .details-table th {
+            background-color: #f9f9f9;
+            width: 30%;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Напоминание о предстоящем визите
+        </div>
+        <p>Здравствуйте, {{ client_name }}!</p>
+        <p>Напоминаем вам, что завтра у вас запланирован прием. Пожалуйста, проверьте детали ниже:</p>
+        
+        <table class="details-table">
+            <tr>
+                <th>Услуга</th>
+                <td>{{ appointment.service.name }}</td>
+            </tr>
+            <tr>
+                <th>Специалист</th>
+                <td>{{ appointment.specialist.user.get_full_name }}</td>
+            </tr>
+            <tr>
+                <th>Дата</th>
+                <td>{{ appointment.appointment_date|date:"d.m.Y" }} (Завтра)</td>
+            </tr>
+            <tr>
+                <th>Время</th>
+                <td>с {{ appointment.start_time|time:"H:i" }} до {{ appointment.end_time|time:"H:i" }}</td>
+            </tr>
+        </table>
+
+        <p>Пожалуйста, приходите за 5-10 минут до начала приема. Если ваши планы изменились, пожалуйста, сообщите нам как можно скорее.</p>
+        <p>С нетерпением ждем вас!<br>Ваша клиника</p>
+
+        <div class="footer">
+            <p>Это автоматически сгенерированное письмо, на него не нужно отвечать.</p>
+        </div>
+    </div>
+</body>
+</html>

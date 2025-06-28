@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="fa fa-exclamation-triangle fa-2x me-3"></i>
+        <div>
+            <h4 class="alert-heading mb-2">{% trans "Подтверждение удаления пациента" %}</h4>
+            <p class="mb-1">{% trans "Вы уверены, что хотите удалить этого пациента?" %}</p>
+            <ul class="mb-3">
+                <li><strong>{% trans "ФИО" %}:</strong> {{ object.get_full_name }}</li>
+                <li><strong>{% trans "Дата рождения" %}:</strong> {{ object.date_of_birth }}</li>
+                <li><strong>{% trans "Телефон" %}:</strong> {{ object.phone_number }}</li>
+            </ul>
+            <form method="post" class="d-flex gap-2">{% csrf_token %}
+                <a href="{{ object.get_absolute_url|default:'/patients/' }}" class="btn btn-secondary">
+                    <i class="fa fa-times me-1"></i>{% trans "Отмена" %}
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash me-1"></i>{% trans "Удалить" %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

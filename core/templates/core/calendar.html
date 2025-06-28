@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}Календарь приёмов{% endblock %}
+
+{% block page_title %}
+<div class="d-flex justify-content-between align-items-center">
+    <h1>Календарь приёмов</h1>
+    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-appointment-modal-static">
+        <i class="fas fa-plus me-1"></i> Новая запись
+    </a>
+</div>
+{% endblock %}
+
+{% block page_content %}
+<div class="card">
+    <div class="card-body">
+        <div id="calendar" 
+     data-events-url="{% url 'core:api_all_appointments' %}"
+     data-create-url="{% url 'core:create_appointment' %}">
+</div>
+    </div>
+</div>
+
+<!-- Add Appointment Modal -->
+<div id="add-appointment-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 transition-opacity duration-300">
+  <div class="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="mt-3">
+      <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Создать новую запись</h3>
+        <button id="close-modal-btn" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+          <span class="sr-only">Close modal</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="mt-4 text-left">
+        <div id="appointment-form-container">
+            <!-- Form will be loaded here via AJAX -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ru.js"></script>
+<script>
+$(document).ready(function() {
+    console.log('jQuery is working!');
+    
+    const calendarEl = document.getElementById('calendar');
+    if (!calendarEl) {
+        console.error('Calendar element not found!');
+        return;
+    }
+    
+    const eventsUrl = calendarEl.dataset.eventsUrl;
+    const createUrl = calendarEl.dataset.createUrl;
+    const modal = document.getElementById('add-appointment-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const formContainer = document.getElementById('appointment-form-container');
+    
+    console.log('Calendar elements:', { calendarEl, eventsUrl, createUrl, modal, closeModalBtn, formContainer });
+
+    // Проверяем, загружен ли FullCalendar
+    if (typeof FullCalendar === 'undefined') {
+        console.error('FullCalendar is not loaded!');
+        return;
+    }
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ru',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: eventsUrl,
+        selectable: true,
+
+        dateClick: function(info) {
+            console.log('Date clicked:', info.dateStr);
+            console.log('Fetching form from:', `${createUrl}?date=${info.dateStr}`);
+            
+            fetch(`${createUrl}?date=${info.dateStr}`)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log('HTML received, first 100 chars:', html.substring(0, 100));
+                    if (!html) {
+                        throw new Error('Empty response received');
+                    }
+                    formContainer.innerHTML = html;
+                    modal.classList.remove('hidden');
+                    console.log('Form should be visible now');
+                })
+                .catch(error => {
+                    console.error('Error in dateClick handler:', error);
+                    alert('Ошибка при загрузке формы: ' + error.message);
+                });
+        },
+
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            if (info.event.url) {
+                window.location.href = info.event.url;
+            }
+        }
+    });
+    
+    // Сохраняем календарь в глобальной области видимости для отладки
+    window.calendar = calendar;
+    
+    calendar.render();
+    console.log('Calendar initialized');
+
+    function hideModal() {
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        if (formContainer) {
+            formContainer.innerHTML = ''; // Clear form on close
+        }
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', hideModal);
+    } else {
+        console.warn('Close modal button not found');
+    }
+
+    $(window).on('click', function(event) {
+        if (event.target == modal) {
+            hideModal();
+        }
+    });
+
+    $(document).on('keydown', function(event) {
+        if (event.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+            hideModal();
+        }
+    });
+
+    $(document).on('submit', '#appointment-form', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        
+        console.log('Submitting form to:', form.action);
+
+        $.ajax({
+            url: form.action,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                console.log('Form submission successful:', data);
+                if (data.success) {
+                    hideModal();
+                    if (window.calendar) {
+                        window.calendar.refetchEvents();
+                    }
+                } else {
+                    if (formContainer) {
+                        formContainer.innerHTML = data.form_html || 'Ошибка: форма не может быть обновлена';
+                    }
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Form submission error:', status, error);
+                alert('Ошибка при отправке формы: ' + error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

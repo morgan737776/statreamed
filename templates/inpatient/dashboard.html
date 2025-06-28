@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Коечный фонд{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Статистика -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
+                    <i class="fas fa-bed text-green-600 dark:text-green-400 text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Свободных коек</h3>
+                    <p class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ free_beds_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                    <i class="fas fa-user-injured text-blue-600 dark:text-blue-400 text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Занятых коек</h3>
+                    <p class="text-2xl font-semibold text-blue-600 dark:text-blue-400">{{ occupied_beds_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
+                    <i class="fas fa-clock text-yellow-600 dark:text-yellow-400 text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">В очереди</h3>
+                    <p class="text-2xl font-semibold text-yellow-600 dark:text-yellow-400">{{ admission_requests|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Палаты -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Палаты</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for ward in wards %}
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+                <h3 class="text-lg font-semibold mb-2">{{ ward.name }}</h3>
+                <div class="space-y-2">
+                    {% for bed in ward.beds.all %}
+                    <div class="flex items-center justify-between p-2 {% if bed.status == 'OCCUPIED' %}bg-blue-50 dark:bg-blue-900{% elif bed.status == 'CLEANING' %}bg-yellow-50 dark:bg-yellow-900{% elif bed.status == 'REPAIR' %}bg-red-50 dark:bg-red-900{% endif %} rounded">
+                        <span class="flex-1">Койка {{ bed.bed_number }}</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">
+                            {% if bed.patient %}
+                            {{ bed.patient.get_full_name }}
+                            {% else %}
+                            {{ bed.get_status_display }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-8">
+                <p class="text-gray-600 dark:text-gray-400">Нет палат. <a href="{% url 'admin:inpatient_ward_add' %}" class="text-blue-600 hover:text-blue-800">Добавить палату</a></p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Заявки на госпитализацию -->
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Заявки на госпитализацию</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Ожидающие госпитализации</h3>
+                <a href="{% url 'inpatient:add_admission_request' %}" class="text-sm text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-plus mr-1"></i>Добавить заявку
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Пациент</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Желаемая палата</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Дата подачи</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for request in admission_requests %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ request.patient.get_full_name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if request.requested_ward %}
+                                {{ request.requested_ward.name }}
+                                {% else %}
+                                Любой
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ request.date_requested|date:"d.m.Y" }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="{% url 'inpatient:hospitalize_patient' %}?patient_id={{ request.patient.id }}" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-hospital-user mr-1"></i>Госпитализировать
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                Нет заявок на госпитализацию
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// График занятости коек
+const ctx = document.getElementById('bedOccupancyChart');
+if (ctx) {
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Свободные', 'Занятые'],
+            datasets: [{
+                data: [{{ free_beds_count }}, {{ occupied_beds_count }}],
+                backgroundColor: ['#4CAF50', '#2196F3']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Занятость коек'
+                }
+            }
+        }
+    });
+}
+</script>
+{% endblock %}

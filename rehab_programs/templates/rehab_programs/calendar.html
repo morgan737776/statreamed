@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Календарь расписания{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom styles for print media */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #calendar-container, #calendar-container * {
+            visibility: visible;
+        }
+        #calendar-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Header and Filters -->
+    <div class="no-print flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Календарь расписания</h1>
+        
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+            <!-- Specialist Filter -->
+            <div class="w-full sm:w-auto">
+                <label for="specialist-filter" class="sr-only">Специалист</label>
+                <select id="specialist-filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="">Все специалисты</option>
+                    {% for specialist in specialists %}
+                        <option value="{{ specialist.id }}">{{ specialist.get_full_name|default:specialist.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Patient Filter -->
+            <div class="w-full sm:w-auto">
+                <label for="patient-filter" class="sr-only">Пациент</label>
+                <select id="patient-filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="">Все пациенты</option>
+                    {% for patient in patients %}
+                        <option value="{{ patient.id }}">{{ patient.get_full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Print Button -->
+            <button id="print-button" class="inline-flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-25 transition ease-in-out duration-150">
+                <i class="fas fa-print mr-2"></i>
+                Печать
+            </button>
+        </div>
+    </div>
+
+    <!-- Calendar Container -->
+    <div id="calendar-container" class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <div id='calendar'></div>
+    </div>
+</div>
+
+{{ calendar_api_url|json_script:"calendar-api-url" }}
+{% endblock %}
+
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src="{% static 'rehab_programs/js/calendar.js' %}"></script>
+{% endblock %}
+

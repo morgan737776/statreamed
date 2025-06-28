@@ -1,0 +1,14 @@
+{% extends 'core/base_dashboard.html' %}
+{% block title %}Удалить сотрудника{% endblock %}
+
+{% block page_title %}
+<h1>Удалить сотрудника</h1>
+{% endblock %}
+
+{% block page_content %}
+<p>Вы уверены, что хотите удалить сотрудника <strong>{{ object.last_name }} {{ object.first_name }} {{ object.middle_name }}</strong>?</p>
+<form method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a href="{% url 'core:staff_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

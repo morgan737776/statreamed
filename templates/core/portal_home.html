@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Портал управления - {{ SITE_NAME }}{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="portal-animated-bg d-flex flex-column min-vh-100" style="min-height:100vh; display:flex; flex-direction:column;">
+<div class="portal-container d-flex align-items-center justify-content-center flex-grow-1" style="flex:1 0 auto;">
+    <div class="portal-box animate-fade-in">
+        {% if user.is_authenticated %}
+            <h1>Добро пожаловать, {{ user.get_full_name|default:user.username }}!</h1>
+            <p class="lead">Вы вошли в систему управления реабилитационным центром.</p>
+            <a href="{% url 'core:dashboard' %}" class="btn btn-primary btn-lg btn-dashboard">
+                <i class="fas fa-tachometer-alt me-2"></i>Перейти в панель управления
+            </a>
+        {% else %}
+            <h1>Портал управления</h1>
+            <p class="lead">Пожалуйста, войдите, чтобы продолжить</p>
+            <form method="post" action="{% url 'core:login' %}" class="login-form-portal">
+                {% csrf_token %}
+                <div class="mb-3 text-start">
+                    <label for="username" class="form-label">Имя пользователя</label>
+                    <input type="text" name="username" id="username" class="form-control" required>
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                </div>
+                {% if form.errors %}
+                    <div class="alert alert-danger p-2">
+                        Неверное имя пользователя или пароль.
+                    </div>
+                {% endif %}
+                <input type="hidden" name="next" value="{% url 'core:dashboard' %}">
+                <button type-="submit" class="btn btn-primary btn-lg btn-login">Войти</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+</div>
+<footer class="portal-footer">
+    <div class="container text-center">
+        <div class="portal-footer-title">Контакты</div>
+        <div><i class="fas fa-map-marker-alt"></i> Адрес: г. Москва, ул. Ореховый бульвар, д. 55/16</div>
+        <div><i class="fas fa-phone"></i> Телефон: <a href="tel:+79999713031" style="color:#fff; text-decoration:underline;">+7 (999) 971-30-31</a></div>
+        <div><i class="fas fa-envelope"></i> Email: <a href="mailto:azharkov73@gmail.com" style="color:#fff; text-decoration:underline;">azharkov73@gmail.com</a></div>
+        <div class="portal-footer-copyright">2025 Центр Реабилитации <span class="footer-divider">|</span> <span class="footer-statreamed">STATREAMED</span>. Все права защищены.</div>
+    </div>
+</footer>
+{% endblock %}

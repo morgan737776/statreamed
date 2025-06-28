@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+    {{ wizard.form.media.css }}
+{% endblock %}
+
+{% block extra_js %}
+    {{ wizard.form.media.js }}
+{% endblock %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Регистрация пациента - Шаг 2" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h4 class="mb-0">{% trans "Регистрация нового пациента: Шаг 2 из 2 - Реабилитационная карта" %}</h4>
+        </div>
+        <div class="card-body">
+            <p>{% blocktrans %}Заполните данные для реабилитационной карты. Вы можете пропустить этот шаг и заполнить карту позже.{% endblocktrans %}</p>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+
+                                <div class="accordion" id="rehabCardAccordion">
+                    
+                    <!-- Сведения о клинике -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingClinic">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClinic" aria-expanded="true" aria-controls="collapseClinic">
+                                <strong>Сведения о медицинской организации</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseClinic" class="accordion-collapse collapse show" aria-labelledby="headingClinic" data-bs-parent="#rehabCardAccordion">
+                            <div class="accordion-body">
+                                {{ wizard.form.clinic_name|as_crispy_field }}
+                                {{ wizard.form.clinic_address|as_crispy_field }}
+                                {{ wizard.form.clinic_ogrn|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Диагнозы -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingDiagnosis">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiagnosis" aria-expanded="false" aria-controls="collapseDiagnosis">
+                                <strong>Раздел 1: Диагнозы</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseDiagnosis" class="accordion-collapse collapse" aria-labelledby="headingDiagnosis" data-bs-parent="#rehabCardAccordion">
+                            <div class="accordion-body">
+                                {{ wizard.form.primary_diagnosis|as_crispy_field }}
+                                {{ wizard.form.primary_diagnosis_icd10|as_crispy_field }}
+                                {{ wizard.form.concomitant_diagnosis|as_crispy_field }}
+                                {{ wizard.form.complications|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Реабилитационный диагноз (МКФ) -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingRehabDiagnosis">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRehabDiagnosis" aria-expanded="false" aria-controls="collapseRehabDiagnosis">
+                                <strong>Раздел 2: Реабилитационный диагноз (по МКФ)</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseRehabDiagnosis" class="accordion-collapse collapse" aria-labelledby="headingRehabDiagnosis" data-bs-parent="#rehabCardAccordion">
+                            <div class="accordion-body">
+                                {{ wizard.form.rehab_diagnosis_b|as_crispy_field }}
+                                {{ wizard.form.rehab_diagnosis_s|as_crispy_field }}
+                                {{ wizard.form.rehab_diagnosis_d|as_crispy_field }}
+                                {{ wizard.form.environmental_factors|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Цели, Команда и План -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingGoalsAndPlan">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGoalsAndPlan" aria-expanded="false" aria-controls="collapseGoalsAndPlan">
+                                <strong>Разделы 3, 4, 5: Цели, Команда и План реабилитации</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseGoalsAndPlan" class="accordion-collapse collapse" aria-labelledby="headingGoalsAndPlan" data-bs-parent="#rehabCardAccordion">
+                            <div class="accordion-body">
+                                {{ wizard.form.long_term_goal|as_crispy_field }}
+                                {{ wizard.form.short_term_goals|as_crispy_field }}
+                                {{ wizard.form.rehab_team|as_crispy_field }}
+                                {{ wizard.form.rehab_plan|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> {% trans "Назад" %}
+                    </button>
+                    <div>
+                        <button type="submit" class="btn btn-success">{% trans "Завершить регистрацию" %} <i class="fas fa-check"></i></button>
+                        <button name="wizard_skip_step" type="submit" class="btn btn-link">{% trans "Пропустить и завершить" %}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

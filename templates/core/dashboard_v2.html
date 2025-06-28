@@ -1,0 +1,660 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}Панель управления - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<!-- Preload critical CSS -->
+<link rel="preload" href="{% static 'css/dashboard.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{% static 'css/dashboard.css' %}"></noscript>
+
+<!-- Defer non-critical CSS -->
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css"></noscript>
+
+<!-- Load Font Awesome asynchronously -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+<style>
+    /* Базовые стили для светлой темы */
+    :root {
+        --primary-bg: #f8f9fa;
+        --secondary-bg: #ffffff;
+        --text-primary: #212529;
+        --text-secondary: #6c757d;
+        --border-color: #dee2e6;
+        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --font-family: 'Inter', sans-serif;
+    }
+
+    /* Стили для темной темы */
+    .dark {
+        --primary-bg: #1a1a1a;
+        --secondary-bg: #2d2d2d;
+        --text-primary: #f8f9fa;
+        --text-secondary: #adb5bd;
+        --border-color: #495057;
+    }
+
+    /* Общие стили */
+    body {
+        font-family: var(--font-family);
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Карточки статистики */
+    .stat-card {
+        background: var(--secondary-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid var(--border-color);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    .stat-value {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0.25rem 0;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    .stat-change {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    .stat-change.positive {
+        color: #10b981;
+    }
+
+    .stat-change.negative {
+        color: #ef4444;
+    }
+
+    /* Контейнеры и секции */
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    /* Адаптивные отступы */
+    @media (min-width: 768px) {
+        .container {
+            padding: 0 2rem;
+        }
+    }
+
+    /* Стили для графика */
+    .chart-container {
+        background: var(--secondary-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    /* Карточки с приемами */
+    .appointment-card {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.2s;
+    }
+
+    .appointment-card:last-child {
+        border-bottom: none;
+    }
+
+    .appointment-card:hover {
+        background-color: var(--border-color);
+    }
+
+    /* Кнопки */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2563eb;
+    }
+
+    /* Заголовки */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-primary);
+        margin-top: 0;
+    }
+
+    /* Иконки */
+    .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Анимации */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <!-- Заголовок и приветствие -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Добро пожаловать, {{ request.user.get_full_name|default:request.user.username }}!</h1>
+            <p class="text-gray-600 dark:text-gray-300 mt-1">Вот обзор вашей деятельности за {{ today|date:"d F Y" }}</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+            <div class="flex items-center space-x-2">
+                <button id="darkModeToggle" onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Новый приём
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карточки с метриками -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Карточка: Всего пациентов -->
+        <div class="stat-card group" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="stat-label">Всего пациентов</p>
+                    <p class="stat-value">1,248</p>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up mr-1"></i> 12.5%
+                        <span class="text-gray-500 dark:text-gray-400 ml-1 text-xs">за месяц</span>
+                    </div>
+                </div>
+                <div class="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка: Запланировано приемов -->
+        <div class="stat-card group" data-aos="fade-up" data-aos-delay="150">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="stat-label">На сегодня</p>
+                    <p class="stat-value">18</p>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up mr-1"></i> 2 новых
+                    </div>
+                </div>
+                <div class="p-3 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <i class="fas fa-calendar-check text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка: Доход -->
+        <div class="stat-card group" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="stat-label">Доход за месяц</p>
+                    <p class="stat-value">248,500 <span class="text-lg">₽</span></p>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up mr-1"></i> 8.2%
+                    </div>
+                </div>
+                <div class="p-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                    <i class="fas fa-wallet text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка: Новые пациенты -->
+        <div class="stat-card group" data-aos="fade-up" data-aos-delay="250">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="stat-label">Новые пациенты</p>
+                    <p class="stat-value">42</p>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down mr-1"></i> 5.7%
+                        <span class="text-gray-500 dark:text-gray-400 ml-1 text-xs">за месяц</span>
+                    </div>
+                </div>
+                <div class="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
+                    <i class="fas fa-user-plus text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- График статистики -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="lg:col-span-2">
+            <div class="chart-container" data-aos="fade-up">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Статистика за месяц</h3>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 text-sm font-medium rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" data-period="week">Неделя</button>
+                        <button class="px-3 py-1 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300" data-period="month">Месяц</button>
+                        <button class="px-3 py-1 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300" data-period="year">Год</button>
+                    </div>
+                </div>
+                <div class="h-80">
+                    <canvas id="statisticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Приемы сегодня -->
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="stat-label">Приемы сегодня</p>
+                    <h3 class="stat-value">{{ todays_appointments_count|default:'0' }}</h3>
+                    <a href="{% url 'appointments:list' %}" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mt-2">
+                        Просмотреть все <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <i class="fas fa-calendar-check text-2xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Новые пациенты -->
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="150">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="stat-label">Новые пациенты</p>
+                    <h3 class="stat-value">{{ new_patients_monthly|default:'0' }}</h3>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up mr-1"></i> 5.2%
+                        <span class="text-gray-500 dark:text-gray-400 ml-1">за неделю</span>
+                    </span>
+                </div>
+                <div class="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                    <i class="fas fa-user-plus text-2xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Доход -->
+        <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="stat-label">Доход (месяц)</p>
+                    <h3 class="stat-value">{{ hospital_earning|default:'0'|intcomma }} ₽</h3>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up mr-1"></i> 8.3%
+                        <span class="text-gray-500 dark:text-gray-400 ml-1">за месяц</span>
+                    </span>
+                </div>
+                <div class="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+                    <i class="fas fa-ruble-sign text-2xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Контент в две колонки -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Левая колонка -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- График статистики за месяц -->
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Статистика за месяц</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-400">
+                                Неделя
+                            </button>
+                            <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-600 text-white">
+                                Месяц
+                            </button>
+                            <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-400">
+                                Год
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="h-80">
+                        <canvas id="monthlyStatsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Сегодняшние приемы -->
+            <div class="card" data-aos="fade-up" data-aos-delay="150">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Ближайшие приёмы</h2>
+                    <span class="text-sm text-gray-500">{{ today|date:"d E Y" }}</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Пациент</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Время</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Услуга</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Специалист</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-700">
+                            {% for appt in todays_appointments %}
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ appt.patient.get_full_name|default:"Пациент" }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ appt.start_datetime|time:"H:i" }} - {{ appt.end_datetime|time:"H:i" }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ appt.title }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ appt.doctor }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">
+                                    {% if appt.status == 'scheduled' %}
+                                        <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">Запланирован</span>
+                                    {% elif appt.status == 'completed' %}
+                                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">Завершен</span>
+                                    {% else %}
+                                        <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Отменён</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="px-4 py-6 text-center text-gray-500">На сегодня приёмов нет</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Недавние пациенты -->
+            <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+                <div class="px-6 py-4 border-b dark:border-gray-700">
+                    <h2 class="text-lg font-semibold">Недавние пациенты</h2>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Имя</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Дата</th>
+                                <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Контакт</th>
+                                <th class="px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-700">
+                            {% for patient in recent_patients %}
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ patient.full_name }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ patient.created_at|date:"d.m.Y" }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap">{{ patient.phone|default:patient.email }}</td>
+                                <td class="px-4 py-2 text-right"><a href="{% url 'core:patient_detail' patient.id %}" class="text-sm text-blue-600 hover:underline">Просмотр</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="px-4 py-6 text-center text-gray-500">Нет данных</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Боковая колонка -->
+        <div class="space-y-6">
+            <!-- Активные программы -->
+            <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+                <div class="px-6 py-4 border-b dark:border-gray-700">
+                    <h2 class="text-lg font-semibold">Активные программы реабилитации</h2>
+                </div>
+                <ul class="divide-y divide-gray-100 dark:divide-gray-700">
+                    {% for prog in active_programs %}
+                    <li class="px-6 py-3 flex justify-between items-center">
+                        <span>{{ prog.patient.full_name }}</span>
+                        <span class="text-sm text-gray-500">{{ prog.get_program_type_display }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="px-6 py-4 text-center text-gray-500">Нет активных программ</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Лучшие специалисты -->
+            <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+                <div class="px-6 py-4 border-b dark:border-gray-700">
+                    <h2 class="text-lg font-semibold">Топ специалисты</h2>
+                </div>
+                <ul class="divide-y divide-gray-100 dark:divide-gray-700">
+                    {% for s in top_specialists %}
+                    <li class="px-6 py-3 flex justify-between">
+                        <span>{{ s.specialist.get_full_name }}</span>
+                        <span class="text-sm text-gray-500">{{ s.completed_count }} приёмов</span>
+                    </li>
+                    {% empty %}
+                    <li class="px-6 py-4 text-center text-gray-500">Нет данных</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+        
+<!-- Доход -->
+<div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="stat-label">Доход (месяц)</p>
+            <h3 class="stat-value">{{ hospital_earning|default:'0'|intcomma }} ₽</h3>
+            <span class="stat-change positive">
+                <i class="fas fa-arrow-up mr-1"></i> 8.3%
+                <span class="text-gray-500 dark:text-gray-400 ml-1">за месяц</span>
+            </span>
+        </div>
+        <div class="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+            <i class="fas fa-ruble-sign text-2xl"></i>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Контент в две колонки -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Левая колонка -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- График статистики за месяц -->
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Статистика за месяц</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-400">
+                            Неделя
+                        </button>
+                        <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-600 text-white">
+                            Месяц
+                        </button>
+                        <button class="px-3 py-1 text-sm font-medium rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-400">
+                            Год
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="h-80">
+                    <canvas id="monthlyStatsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Сегодняшние приемы -->
+        <div class="card" data-aos="fade-up" data-aos-delay="150">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Ближайшие приёмы</h2>
+                <span class="text-sm text-gray-500">{{ today|date:"d E Y" }}</span>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Пациент</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Время</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Услуга</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Специалист</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-700">
+                        {% for appt in todays_appointments %}
+                        <tr>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ appt.patient.get_full_name|default:"Пациент" }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ appt.start_datetime|time:"H:i" }} - {{ appt.end_datetime|time:"H:i" }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ appt.title }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ appt.doctor }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">
+                                {% if appt.status == 'scheduled' %}
+                                    <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">Запланирован</span>
+                                {% elif appt.status == 'completed' %}
+                                    <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded">Завершен</span>
+                                {% else %}
+                                    <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded">Отменён</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-4 py-6 text-center text-gray-500">На сегодня приёмов нет</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Недавние пациенты -->
+        <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+            <div class="px-6 py-4 border-b dark:border-gray-700">
+                <h2 class="text-lg font-semibold">Недавние пациенты</h2>
+            </div>
+            <div class="p-6 overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Имя</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Дата</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 dark:text-gray-300">Контакт</th>
+                            <th class="px-4 py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100 dark:bg-gray-800 dark:divide-gray-700">
+                        {% for patient in recent_patients %}
+                        <tr>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ patient.full_name }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ patient.created_at|date:"d.m.Y" }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{{ patient.phone|default:patient.email }}</td>
+                            <td class="px-4 py-2 text-right"><a href="{% url 'core:patient_detail' patient.id %}" class="text-sm text-blue-600 hover:underline">Просмотр</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-4 py-6 text-center text-gray-500">Нет данных</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Боковая колонка -->
+    <div class="space-y-6">
+        <!-- Активные программы -->
+        <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+            <div class="px-6 py-4 border-b dark:border-gray-700">
+                <h2 class="text-lg font-semibold">Активные программы реабилитации</h2>
+            </div>
+            <ul class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for prog in active_programs %}
+                <li class="px-6 py-3 flex justify-between items-center">
+                    <span>{{ prog.patient.full_name }}</span>
+                    <span class="text-sm text-gray-500">{{ prog.get_program_type_display }}</span>
+                </li>
+                {% empty %}
+                <li class="px-6 py-4 text-center text-gray-500">Нет активных программ</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Лучшие специалисты -->
+        <div class="bg-white shadow rounded-lg dark:bg-gray-800">
+            <div class="px-6 py-4 border-b dark:border-gray-700">
+                <h2 class="text-lg font-semibold">Топ специалисты</h2>
+            </div>
+            <ul class="divide-y divide-gray-100 dark:divide-gray-700">
+                {% for s in top_specialists %}
+                <li class="px-6 py-3 flex justify-between">
+                    <span>{{ s.specialist.get_full_name }}</span>
+                    <span class="text-sm text-gray-500">{{ s.completed_count }} приёмов</span>
+                </li>
+                {% empty %}
+                <li class="px-6 py-4 text-center text-gray-500">Нет данных</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Load scripts with defer -->
+<img src="{{ STATIC_URL }}images/logo.png" alt="Logo" loading="lazy" width="150" height="50">
+<script src="{% static 'js/dashboard.js' %}" defer></script>
+<script>
+    // Инициализация AOS для анимаций
+    AOS.init({
+        duration: 600,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        {% trans "Редактирование услуги" %}
+    {% else %}
+        {% trans "Добавление услуги" %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+            {% if form.instance.pk %}
+                {% trans "Редактирование услуги" %}
+            {% else %}
+                {% trans "Добавление услуги" %}
+            {% endif %}
+        </h1>
+        <a href="{% if form.instance.pk %}{% url 'services:service_detail' form.instance.pk %}{% else %}{% url 'services:service_list' %}{% endif %}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-25 transition ease-in-out duration-150 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <i class="fas fa-arrow-left mr-2"></i>
+            {% trans "Назад" %}
+        </a>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="p-6">
+                {% if form.non_field_errors %}
+                    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">{% trans "Ошибка!" %}</strong>
+                        <span class="block sm:inline">{{ form.non_field_errors }}</span>
+                    </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for field in form %}
+                        {% if field.name == 'description' %}
+                             <div class="md:col-span-2">
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ field.label }}
+                                    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                                </label>
+                                {{ field }}
+                                {% if field.help_text %}<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                {% if field.errors %}<div class="mt-1 text-sm text-red-600">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% elif field.field.widget.input_type == 'checkbox' %}
+                            <div class="md:col-span-2">
+                                <label for="{{ field.id_for_label }}" class="flex items-center">
+                                    {{ field }}
+                                    <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ field.label }}</span>
+                                </label>
+                                {% if field.help_text %}<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                {% if field.errors %}<div class="mt-1 text-sm text-red-600">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% else %}
+                            <div>
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {{ field.label }}
+                                    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                                </label>
+                                {{ field }}
+                                {% if field.help_text %}<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                {% if field.errors %}<div class="mt-1 text-sm text-red-600">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end space-x-3">
+                <a href="{% url 'services:service_list' %}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-25 transition ease-in-out duration-150 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+                    {% trans "Отмена" %}
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-800 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    <i class="fas fa-save mr-2"></i>
+                    {% trans "Сохранить" %}
+                </button>
+                {% if form.instance.pk %}
+                <a href="{% url 'services:service_delete' form.instance.pk %}" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-800 focus:outline-none focus:border-red-800 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    <i class="fas fa-trash-alt mr-2"></i>
+                    {% trans "Удалить" %}
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if form.instance.pk %}
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">{% trans "Подтверждение удаления" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "Вы уверены, что хотите удалить услугу" %} <strong>{{ form.instance.name }}</strong>?</p>
+                {% if form.instance.appointments.exists %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {% trans "Внимание! С этой услугой связаны записи на прием. Удаление может затронуть историю записей." %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Отмена" %}</button>
+                <form action="{% url 'services:service_delete' form.instance.pk %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-1"></i>
+                        {% trans "Удалить" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

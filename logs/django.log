@@ -1,0 +1,1473 @@
+INFO 2025-06-27 13:02:06,493 autoreload 17516 9716 Watching for file changes with StatReloader
+INFO 2025-06-27 13:02:19,530 autoreload 17516 9716 D:\20.06 Ч копи€\1234\rehab_center\optimizations.py changed, reloading.
+INFO 2025-06-27 13:02:20,703 autoreload 2356 11808 Watching for file changes with StatReloader
+WARNING 2025-06-27 13:06:10,223 log 2356 6752 Forbidden (CSRF cookie not set.): /login/
+WARNING 2025-06-27 13:06:10,224 basehttp 2356 6752 "POST /login/ HTTP/1.1" 403 3331
+WARNING 2025-06-27 13:06:10,331 log 2356 6752 Not Found: /favicon.ico
+WARNING 2025-06-27 13:06:10,332 basehttp 2356 6752 "GET /favicon.ico HTTP/1.1" 404 18655
+INFO 2025-06-27 13:30:18,637 autoreload 5768 8416 Watching for file changes with StatReloader
+WARNING 2025-06-27 13:30:27,725 log 2356 8704 Forbidden (CSRF cookie not set.): /login/
+WARNING 2025-06-27 13:30:27,725 basehttp 2356 8704 "POST /login/ HTTP/1.1" 403 3331
+ERROR 2025-06-27 13:30:34,404 log 2356 8704 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 13:30:34,409 basehttp 2356 8704 "GET / HTTP/1.1" 500 196978
+INFO 2025-06-27 13:30:51,699 basehttp 2356 14904 "GET / HTTP/1.1" 200 12556
+WARNING 2025-06-27 13:30:51,768 basehttp 2356 14904 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:31:09,769 basehttp 2356 10504 "GET / HTTP/1.1" 200 12556
+WARNING 2025-06-27 13:31:09,820 basehttp 2356 10504 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:31:16,550 basehttp 2356 13476 "GET /dashboard/ HTTP/1.1" 200 12800
+WARNING 2025-06-27 13:31:16,604 basehttp 2356 13476 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:31:16,604 basehttp 2356 18084 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+INFO 2025-06-27 13:32:40,380 basehttp 2356 18084 "GET /dashboard/ HTTP/1.1" 200 12800
+INFO 2025-06-27 13:32:40,397 basehttp 2356 11844 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:32:40,401 basehttp 2356 18084 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:32:41,702 basehttp 2356 11844 "GET /dashboard/ HTTP/1.1" 200 12800
+INFO 2025-06-27 13:32:41,717 basehttp 2356 9532 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:32:41,720 basehttp 2356 11844 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:32:43,025 basehttp 2356 9532 "GET /inpatient/ HTTP/1.1" 200 15524
+WARNING 2025-06-27 13:32:43,043 basehttp 2356 9532 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:32:51,385 basehttp 2356 9808 "GET /dashboard/ HTTP/1.1" 200 12800
+INFO 2025-06-27 13:32:51,399 basehttp 2356 8428 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:32:51,403 basehttp 2356 9808 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:33:56,543 autoreload 2356 11808 D:\20.06 Ч копи€\1234\core\urls.py changed, reloading.
+INFO 2025-06-27 13:33:57,227 autoreload 5768 8416 D:\20.06 Ч копи€\1234\core\urls.py changed, reloading.
+INFO 2025-06-27 13:33:57,813 autoreload 7288 13668 Watching for file changes with StatReloader
+INFO 2025-06-27 13:33:58,481 autoreload 13416 7508 Watching for file changes with StatReloader
+ERROR 2025-06-27 13:36:04,382 log 7288 9836 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 13:36:04,387 basehttp 7288 9836 "GET / HTTP/1.1" 500 197115
+INFO 2025-06-27 13:36:10,078 basehttp 7288 7396 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:36:10,095 basehttp 7288 11252 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:36:10,098 basehttp 7288 7396 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:36:13,283 basehttp 7288 11252 "GET /patients/ HTTP/1.1" 200 23540
+WARNING 2025-06-27 13:36:13,300 basehttp 7288 11252 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:36:18,022 basehttp 7288 12496 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:36:18,039 basehttp 7288 7588 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:36:18,042 basehttp 7288 12496 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:38:29,880 autoreload 15024 16068 Watching for file changes with StatReloader
+INFO 2025-06-27 13:38:54,359 basehttp 7288 7588 "GET / HTTP/1.1" 200 12861
+WARNING 2025-06-27 13:38:54,416 basehttp 7288 7588 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:38:57,590 basehttp 7288 15968 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:38:57,610 basehttp 7288 4328 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:38:57,610 basehttp 7288 15968 "GET /static/css/theme.css HTTP/1.1" 404 1966
+ERROR 2025-06-27 13:40:35,008 log 7288 4328 Internal Server Error: /security/
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\engine.py", line 163, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: core/base.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\core\views_security.py", line 38, in security_dashboard
+    return render(request, 'core/security/dashboard.html', context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: core/base.html
+ERROR 2025-06-27 13:40:35,012 basehttp 7288 4328 "GET /security/ HTTP/1.1" 500 245832
+INFO 2025-06-27 13:41:19,960 basehttp 7288 4328 "GET /security/ HTTP/1.1" 200 31120
+WARNING 2025-06-27 13:41:19,978 basehttp 7288 4328 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:41:35,675 basehttp 7288 2296 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:41:35,694 basehttp 7288 7240 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:41:35,698 basehttp 7288 2296 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:45:22,716 basehttp 7288 7240 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:45:22,736 basehttp 7288 8008 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:45:22,736 basehttp 7288 7240 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:45:24,417 basehttp 7288 8008 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:45:24,432 basehttp 7288 16560 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:45:24,436 basehttp 7288 8008 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:47:45,217 basehttp 7288 16560 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:47:45,231 basehttp 7288 7248 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:47:45,234 basehttp 7288 16560 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:49:53,794 basehttp 7288 7248 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:49:53,811 basehttp 7288 3704 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:49:53,811 basehttp 7288 7248 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:05,146 basehttp 7288 3704 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:50:05,166 basehttp 7288 9080 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:50:05,171 basehttp 7288 3704 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:06,862 basehttp 7288 9080 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:50:06,881 basehttp 7288 18664 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:50:06,881 basehttp 7288 9080 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:10,172 basehttp 7288 18664 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:50:10,186 basehttp 7288 13016 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:50:10,190 basehttp 7288 18664 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:12,485 basehttp 7288 13016 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:50:12,504 basehttp 7288 4796 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:50:12,507 basehttp 7288 13016 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:23,130 basehttp 7288 4796 "GET /security/ HTTP/1.1" 200 39776
+WARNING 2025-06-27 13:50:23,147 basehttp 7288 4796 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:27,698 basehttp 7288 6916 "GET /security/ HTTP/1.1" 200 39776
+WARNING 2025-06-27 13:50:27,719 basehttp 7288 6916 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:50:35,196 basehttp 7288 3640 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:50:35,209 basehttp 7288 10352 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:50:35,213 basehttp 7288 3640 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:52:18,497 basehttp 7288 10352 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:52:18,513 basehttp 7288 5400 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:52:18,516 basehttp 7288 10352 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:52:19,507 basehttp 7288 5400 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:52:19,525 basehttp 7288 18068 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:52:19,526 basehttp 7288 5400 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:52:21,690 basehttp 7288 18068 "GET /security/ HTTP/1.1" 200 39776
+WARNING 2025-06-27 13:52:21,710 basehttp 7288 18068 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:52:25,909 basehttp 7288 13188 "GET /dashboard/ HTTP/1.1" 200 13105
+INFO 2025-06-27 13:52:25,928 basehttp 7288 5484 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+WARNING 2025-06-27 13:52:25,928 basehttp 7288 13188 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 13:53:14,142 basehttp 7288 5484 "GET /dashboard/ HTTP/1.1" 200 15548
+INFO 2025-06-27 13:53:14,155 basehttp 7288 5484 "GET /static/css/dashboard.css?v=1.4 HTTP/1.1" 200 7291
+INFO 2025-06-27 13:58:01,437 basehttp 7288 5484 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 13:58:03,809 basehttp 7288 5484 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 13:58:47,937 autoreload 8680 18628 Watching for file changes with StatReloader
+ERROR 2025-06-27 13:59:10,524 log 7288 1596 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 13:59:10,528 basehttp 7288 1596 "GET / HTTP/1.1" 500 196817
+INFO 2025-06-27 14:00:32,293 basehttp 7288 5484 "GET / HTTP/1.1" 200 15304
+ERROR 2025-06-27 14:00:36,157 log 7288 1596 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:00:36,160 basehttp 7288 1596 "GET / HTTP/1.1" 500 196954
+ERROR 2025-06-27 14:00:37,246 log 7288 1596 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:00:37,250 basehttp 7288 1596 "GET / HTTP/1.1" 500 196954
+ERROR 2025-06-27 14:01:04,604 log 7288 1596 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:01:04,608 basehttp 7288 1596 "GET / HTTP/1.1" 500 196954
+ERROR 2025-06-27 14:01:06,201 log 7288 1596 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:01:06,205 basehttp 7288 1596 "GET / HTTP/1.1" 500 197082
+WARNING 2025-06-27 14:01:06,284 log 7288 1596 Not Found: /favicon.ico
+WARNING 2025-06-27 14:01:06,285 basehttp 7288 1596 "GET /favicon.ico HTTP/1.1" 404 19489
+INFO 2025-06-27 14:05:27,022 autoreload 4760 11032 Watching for file changes with StatReloader
+ERROR 2025-06-27 14:05:33,802 log 4760 18576 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:05:33,807 basehttp 4760 18576 "GET / HTTP/1.1" 500 198669
+ERROR 2025-06-27 14:06:32,198 log 4760 18576 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:06:32,202 basehttp 4760 18576 "GET / HTTP/1.1" 500 198669
+ERROR 2025-06-27 14:06:33,304 log 4760 18576 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:06:33,307 basehttp 4760 18576 "GET / HTTP/1.1" 500 198669
+ERROR 2025-06-27 14:06:34,346 log 4760 18576 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:06:34,350 basehttp 4760 18576 "GET / HTTP/1.1" 500 198669
+ERROR 2025-06-27 14:06:35,486 log 4760 18576 Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login' not found. 'login' is not a valid view function or pattern name.
+ERROR 2025-06-27 14:06:35,489 basehttp 4760 18576 "GET / HTTP/1.1" 500 198669
+INFO 2025-06-27 14:09:04,574 basehttp 4760 18576 "GET / HTTP/1.1" 200 12520
+WARNING 2025-06-27 14:09:04,642 basehttp 4760 18576 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-27 14:09:08,135 basehttp 4760 916 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-27 14:09:08,201 basehttp 4760 916 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 14:10:15,126 basehttp 4760 916 "GET / HTTP/1.1" 200 15304
+INFO 2025-06-27 14:11:47,629 basehttp 4760 916 "GET / HTTP/1.1" 200 15304
+INFO 2025-06-27 14:11:48,519 basehttp 4760 916 "GET / HTTP/1.1" 200 15304
+INFO 2025-06-27 14:11:59,080 basehttp 4760 916 "GET / HTTP/1.1" 200 15304
+INFO 2025-06-27 14:12:03,162 basehttp 4760 916 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 14:13:20,566 autoreload 19276 17352 Watching for file changes with StatReloader
+INFO 2025-06-27 14:13:25,221 basehttp 19276 10544 "GET / HTTP/1.1" 200 15304
+INFO 2025-06-27 14:13:29,207 basehttp 19276 10544 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 14:13:30,945 basehttp 19276 10544 "POST /logout/ HTTP/1.1" 302 0
+INFO 2025-06-27 14:13:30,978 basehttp 19276 10544 "GET /login/ HTTP/1.1" 200 5049
+WARNING 2025-06-27 14:13:31,026 basehttp 19276 10544 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 14:13:33,804 basehttp 19276 11020 "GET /login/ HTTP/1.1" 200 5049
+WARNING 2025-06-27 14:13:33,828 basehttp 19276 11020 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 14:13:35,357 basehttp 19276 6344 "GET /login/ HTTP/1.1" 200 5049
+WARNING 2025-06-27 14:13:35,380 basehttp 19276 6344 "GET /static/css/theme.css HTTP/1.1" 404 1966
+WARNING 2025-06-27 14:13:35,418 basehttp 19276 13424 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-27 14:15:07,787 basehttp 19276 8828 "GET /login/ HTTP/1.1" 200 5049
+WARNING 2025-06-27 14:15:07,811 basehttp 19276 8828 "GET /static/css/theme.css HTTP/1.1" 404 1966
+INFO 2025-06-27 14:15:13,699 autoreload 19276 17352 D:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-27 14:15:14,952 autoreload 8856 17156 Watching for file changes with StatReloader
+INFO 2025-06-27 14:15:49,625 autoreload 8856 17156 D:\20.06 Ч копи€\1234\rehab_center\urls.py changed, reloading.
+INFO 2025-06-27 14:15:50,848 autoreload 10900 10676 Watching for file changes with StatReloader
+ERROR 2025-06-27 14:16:26,343 log 10900 1632 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\engine.py", line 163, in find_template
+    raise TemplateDoesNotExist(name, tried=tried)
+django.template.exceptions.TemplateDoesNotExist: core/base.html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 109, in render
+    reraise(exc, self.backend)
+  File "D:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 130, in reraise
+    raise new from exc
+django.template.exceptions.TemplateDoesNotExist: core/base.html
+ERROR 2025-06-27 14:16:26,349 basehttp 10900 1632 "GET /login/ HTTP/1.1" 500 156857
+WARNING 2025-06-27 14:16:26,467 log 10900 1632 Not Found: /favicon.ico
+WARNING 2025-06-27 14:16:26,468 basehttp 10900 1632 "GET /favicon.ico HTTP/1.1" 404 20584
+INFO 2025-06-27 14:20:23,869 basehttp 10900 16104 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:21:58,101 basehttp 10900 16104 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:37:14,270 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:37:33,373 basehttp 10900 6772 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-27 14:37:33,442 basehttp 10900 6772 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-27 14:37:52,744 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:38:56,990 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:38:57,910 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:39:12,400 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:39:26,593 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:39:27,583 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:39:28,484 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:39:55,918 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:43:05,752 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:43:06,568 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:46:11,079 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:46:11,776 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:46:12,501 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:48:09,321 basehttp 10900 6772 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-27 14:49:33,914 basehttp 10900 7260 "GET /login/ HTTP/1.1" 200 6839
+INFO 2025-06-28 17:30:07,973 autoreload 2576 14140 Watching for file changes with StatReloader
+INFO 2025-06-28 17:30:25,160 basehttp 2576 2876 "GET / HTTP/1.1" 200 12520
+WARNING 2025-06-28 17:30:25,681 basehttp 2576 2876 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-28 17:30:58,447 basehttp 2576 8136 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-28 17:30:58,471 basehttp 2576 5808 - Broken pipe from ('127.0.0.1', 50970)
+INFO 2025-06-28 17:30:58,802 basehttp 2576 8140 - Broken pipe from ('127.0.0.1', 50975)
+INFO 2025-06-28 17:31:09,890 basehttp 2576 8136 "GET /dashboard/ HTTP/1.1" 200 23823
+INFO 2025-06-28 17:35:36,370 basehttp 2576 8136 "GET /dashboard/ HTTP/1.1" 200 29516
+INFO 2025-06-28 18:31:29,870 autoreload 11376 12976 Watching for file changes with StatReloader
+INFO 2025-06-28 18:31:47,586 basehttp 11376 2756 "GET /dashboard/ HTTP/1.1" 200 29516
+INFO 2025-06-28 18:31:47,662 basehttp 11376 1628 - Broken pipe from ('127.0.0.1', 58249)
+INFO 2025-06-28 18:32:00,861 basehttp 11376 2756 "GET /patients/ HTTP/1.1" 200 31676
+INFO 2025-06-28 18:34:47,728 basehttp 11376 2756 - Broken pipe from ('127.0.0.1', 58276)
+INFO 2025-06-28 18:34:47,764 basehttp 11376 13476 - Broken pipe from ('127.0.0.1', 58633)
+INFO 2025-06-28 18:34:47,794 basehttp 11376 4160 - Broken pipe from ('127.0.0.1', 58642)
+INFO 2025-06-28 18:34:47,819 basehttp 11376 12020 "GET /dashboard/ HTTP/1.1" 200 29516
+INFO 2025-06-28 18:35:13,936 autoreload 7644 2064 Watching for file changes with StatReloader
+INFO 2025-06-28 18:35:33,342 basehttp 7644 15100 "GET / HTTP/1.1" 200 20997
+INFO 2025-06-28 18:37:32,453 basehttp 7644 15100 "GET / HTTP/1.1" 200 20997
+INFO 2025-06-28 18:38:31,574 basehttp 7644 15100 "GET / HTTP/1.1" 200 20997
+WARNING 2025-06-28 18:38:31,753 basehttp 7644 15100 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-28 18:38:45,440 basehttp 7644 14240 - Broken pipe from ('127.0.0.1', 59147)
+INFO 2025-06-28 18:38:45,485 basehttp 7644 8384 "GET / HTTP/1.1" 200 18213
+WARNING 2025-06-28 18:38:45,954 basehttp 7644 8384 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+WARNING 2025-06-28 18:38:46,076 basehttp 7644 15340 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-28 18:40:53,583 basehttp 7644 2644 "GET / HTTP/1.1" 200 18213
+WARNING 2025-06-28 18:40:53,883 basehttp 7644 2644 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-28 18:41:12,306 basehttp 7644 3952 "GET / HTTP/1.1" 200 18213
+WARNING 2025-06-28 18:41:12,579 basehttp 7644 3952 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+WARNING 2025-06-28 18:41:12,633 basehttp 7644 9296 "GET /static/images/favicon.ico HTTP/1.1" 404 1981
+INFO 2025-06-28 18:41:28,526 autoreload 13596 11524 Watching for file changes with StatReloader
+INFO 2025-06-28 18:41:46,232 basehttp 13596 5284 "GET / HTTP/1.1" 200 20997
+INFO 2025-06-28 18:42:39,236 autoreload 13596 11524 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 18:42:42,878 autoreload 1860 8400 Watching for file changes with StatReloader
+INFO 2025-06-28 18:43:01,391 basehttp 1860 12432 "GET / HTTP/1.1" 200 20997
+INFO 2025-06-28 18:43:04,064 autoreload 1860 8400 E:\20.06 Ч копи€\1234\rehab_center\urls.py changed, reloading.
+INFO 2025-06-28 18:43:08,622 autoreload 252 4176 Watching for file changes with StatReloader
+INFO 2025-06-28 18:45:18,325 autoreload 13192 4760 Watching for file changes with StatReloader
+ERROR 2025-06-28 18:45:37,488 log 13192 3128 Internal Server Error: /
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'extra_js' appears more than once
+ERROR 2025-06-28 18:45:37,489 log 13192 4944 Internal Server Error: /
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'extra_js' appears more than once
+INFO 2025-06-28 18:45:37,522 basehttp 13192 3128 - Broken pipe from ('127.0.0.1', 60058)
+ERROR 2025-06-28 18:45:37,540 basehttp 13192 4944 "GET / HTTP/1.1" 500 185000
+WARNING 2025-06-28 18:45:49,510 log 13192 4944 Not Found: /favicon.ico
+WARNING 2025-06-28 18:45:49,512 basehttp 13192 4944 "GET /favicon.ico HTTP/1.1" 404 20737
+INFO 2025-06-28 18:46:46,579 basehttp 13192 4944 "GET / HTTP/1.1" 200 21260
+INFO 2025-06-28 18:46:46,652 basehttp 13192 4944 "GET /static/js/main.js HTTP/1.1" 200 552
+INFO 2025-06-28 18:46:46,692 basehttp 13192 4944 "GET /static/images/favicon.ico HTTP/1.1" 200 0
+WARNING 2025-06-28 18:47:09,900 log 13192 4944 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-06-28 18:47:09,900 basehttp 13192 4944 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 20848
+INFO 2025-06-28 18:56:37,098 autoreload 10736 3144 Watching for file changes with StatReloader
+INFO 2025-06-28 18:56:52,346 basehttp 10736 6940 "GET / HTTP/1.1" 200 21260
+WARNING 2025-06-28 18:57:03,677 log 10736 6940 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-06-28 18:57:03,677 basehttp 10736 6940 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 20848
+INFO 2025-06-28 18:57:23,982 basehttp 10736 6940 "GET /dashboard/ HTTP/1.1" 200 29779
+WARNING 2025-06-28 18:57:35,240 log 10736 6940 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-06-28 18:57:35,242 basehttp 10736 6940 - Broken pipe from ('127.0.0.1', 49289)
+WARNING 2025-06-28 18:57:35,277 log 10736 9400 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-06-28 18:57:35,278 basehttp 10736 9400 - Broken pipe from ('127.0.0.1', 49413)
+INFO 2025-06-28 18:57:35,322 basehttp 10736 8316 "GET /patients/ HTTP/1.1" 200 31939
+INFO 2025-06-28 18:57:48,998 basehttp 10736 8316 "GET /dashboard/ HTTP/1.1" 200 29779
+INFO 2025-06-28 20:10:54,926 autoreload 13832 3540 Watching for file changes with StatReloader
+INFO 2025-06-28 20:11:13,142 basehttp 13832 8616 "GET /patients/ HTTP/1.1" 200 28456
+INFO 2025-06-28 20:11:13,213 basehttp 13832 8616 "GET /static/js/main.js HTTP/1.1" 200 552
+INFO 2025-06-28 20:11:27,829 basehttp 13832 8616 "GET /programs/ HTTP/1.1" 302 0
+INFO 2025-06-28 20:11:39,191 basehttp 13832 8616 "GET /login/?next=/programs/ HTTP/1.1" 200 7547
+INFO 2025-06-28 20:12:04,497 basehttp 13832 8616 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-28 20:12:15,860 basehttp 13832 8616 "GET /programs/ HTTP/1.1" 200 23025
+INFO 2025-06-28 20:12:48,175 basehttp 13832 8616 "GET /security/ HTTP/1.1" 200 48866
+INFO 2025-06-28 21:08:27,062 autoreload 13504 5272 Watching for file changes with StatReloader
+INFO 2025-06-28 21:14:51,546 autoreload 15572 8240 Watching for file changes with StatReloader
+INFO 2025-06-28 21:15:11,975 basehttp 15572 1436 "GET /dashboard/ HTTP/1.1" 302 0
+INFO 2025-06-28 21:15:23,354 basehttp 15572 1436 "GET /login/?next=/dashboard/ HTTP/1.1" 200 2269
+INFO 2025-06-28 21:15:54,595 basehttp 15572 1436 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-28 21:16:05,865 basehttp 15572 1436 "GET /dashboard/ HTTP/1.1" 200 5937
+INFO 2025-06-28 21:16:25,324 basehttp 15572 1436 "GET /patients/ HTTP/1.1" 200 6495
+INFO 2025-06-28 21:17:24,424 basehttp 15572 1436 "GET /dashboard/ HTTP/1.1" 200 5988
+INFO 2025-06-28 21:18:50,611 basehttp 15572 1436 "GET /security/ HTTP/1.1" 200 7507
+INFO 2025-06-28 21:19:07,870 basehttp 15572 1436 "GET /dashboard/ HTTP/1.1" 200 6020
+INFO 2025-06-28 21:20:15,948 autoreload 15572 8240 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:20:17,868 autoreload 8940 11204 Watching for file changes with StatReloader
+INFO 2025-06-28 21:20:37,775 autoreload 8940 11204 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:20:39,705 autoreload 16064 8348 Watching for file changes with StatReloader
+INFO 2025-06-28 21:20:52,414 autoreload 16064 8348 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:20:54,257 autoreload 13528 8668 Watching for file changes with StatReloader
+INFO 2025-06-28 21:21:12,251 autoreload 13528 8668 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:21:14,098 autoreload 5904 8828 Watching for file changes with StatReloader
+INFO 2025-06-28 21:21:31,523 autoreload 5904 8828 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:21:33,395 autoreload 16364 9288 Watching for file changes with StatReloader
+INFO 2025-06-28 21:23:37,526 autoreload 16364 9288 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:23:39,376 autoreload 5956 9752 Watching for file changes with StatReloader
+INFO 2025-06-28 21:23:55,956 autoreload 5956 9752 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:23:57,769 autoreload 6204 9544 Watching for file changes with StatReloader
+INFO 2025-06-28 21:24:14,045 autoreload 6204 9544 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:24:16,008 autoreload 5512 14528 Watching for file changes with StatReloader
+INFO 2025-06-28 21:24:26,477 autoreload 5512 14528 E:\20.06 Ч копи€\1234\rehab_center\settings.py changed, reloading.
+INFO 2025-06-28 21:24:28,434 autoreload 4272 14068 Watching for file changes with StatReloader
+INFO 2025-06-28 21:46:01,339 autoreload 10520 4720 Watching for file changes with StatReloader
+ERROR 2025-06-28 21:46:20,769 log 10520 7240 Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such column: core_appointment.service_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1075, in render
+    output = self.filter_expression.resolve(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 749, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaultfilters.py", line 838, in default
+    return value or arg
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 398, in __bool__
+    self._fetch_all()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such column: core_appointment.service_id
+ERROR 2025-06-28 21:46:20,769 log 10520 1896 Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such column: core_appointment.service_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1075, in render
+    output = self.filter_expression.resolve(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 749, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaultfilters.py", line 838, in default
+    return value or arg
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 398, in __bool__
+    self._fetch_all()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such column: core_appointment.service_id
+INFO 2025-06-28 21:46:20,817 basehttp 10520 7240 - Broken pipe from ('127.0.0.1', 54187)
+INFO 2025-06-28 21:46:20,818 basehttp 10520 1896 - Broken pipe from ('127.0.0.1', 54178)
+INFO 2025-06-28 21:46:45,961 basehttp 10520 5896 "GET /dashboard/ HTTP/1.1" 302 0
+WARNING 2025-06-28 21:46:45,966 log 10520 2840 Not Found: /favicon.ico
+WARNING 2025-06-28 21:46:45,968 basehttp 10520 2840 "GET /favicon.ico HTTP/1.1" 404 2033
+INFO 2025-06-28 21:46:57,172 basehttp 10520 4040 "GET /login/?next=/dashboard/ HTTP/1.1" 200 2338
+INFO 2025-06-28 21:46:57,825 basehttp 10520 4040 "GET /static/images/favicon.ico HTTP/1.1" 304 0
+INFO 2025-06-28 21:47:22,772 basehttp 10520 14856 "POST /login/ HTTP/1.1" 302 0
+ERROR 2025-06-28 21:47:34,007 log 10520 11800 Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such column: core_appointment.service_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1075, in render
+    output = self.filter_expression.resolve(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 749, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaultfilters.py", line 838, in default
+    return value or arg
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 398, in __bool__
+    self._fetch_all()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such column: core_appointment.service_id
+ERROR 2025-06-28 21:47:34,037 basehttp 10520 11800 "GET /dashboard/ HTTP/1.1" 500 27477
+WARNING 2025-06-28 21:47:45,519 log 10520 11800 Not Found: /favicon.ico
+WARNING 2025-06-28 21:47:45,521 basehttp 10520 11800 "GET /favicon.ico HTTP/1.1" 404 2084
+INFO 2025-06-28 21:58:56,873 autoreload 8024 10292 Watching for file changes with StatReloader
+ERROR 2025-06-28 21:59:13,665 log 8024 14568 Internal Server Error: /dashboard/
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such column: core_appointment.service_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\test\utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 1075, in render
+    output = self.filter_expression.resolve(context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\base.py", line 749, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\template\defaultfilters.py", line 838, in default
+    return value or arg
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 398, in __bool__
+    self._fetch_all()
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "E:\20.06 Ч копи€\1234\venv\lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such column: core_appointment.service_id
+ERROR 2025-06-28 21:59:13,696 basehttp 8024 14568 "GET /dashboard/ HTTP/1.1" 500 27430
+INFO 2025-06-28 22:03:54,607 autoreload 10600 2492 Watching for file changes with StatReloader
+INFO 2025-06-28 22:04:11,144 basehttp 10600 7796 "GET /dashboard/ HTTP/1.1" 200 6043
+INFO 2025-06-28 22:04:43,867 basehttp 10600 7796 "GET /patients/ HTTP/1.1" 200 6523
+INFO 2025-06-28 22:04:58,341 basehttp 10600 7796 "GET /services/services/ HTTP/1.1" 200 5742
+INFO 2025-06-28 22:05:16,272 basehttp 10600 7796 "GET /reports/ HTTP/1.1" 200 4979

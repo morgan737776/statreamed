@@ -1,0 +1,181 @@
+{% extends 'services/base.html' %}
+{% load widget_tweaks %}
+
+{% block page_title %}{% if form.instance.pk %}Редактирование категории{% else %}Добавление категории{% endif %}{% endblock %}
+
+{% block page_actions %}
+<a href="{% if form.instance.pk %}{% url 'services:category_detail' form.instance.pk %}{% else %}{% url 'services:category_list' %}{% endif %}" 
+   class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i> Назад
+</a>
+{% endblock %}
+
+{% block content_inner %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">{% if form.instance.pk %}Редактирование категории{% else %}Добавление новой категории{% endif %}</h5>
+            </div>
+            <form method="post" class="needs-validation" novalidate>
+                <div class="card-body">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            {{ form.name.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {% render_field form.name class="form-control" %}
+                        {% if form.name.help_text %}
+                            <div class="form-text">{{ form.name.help_text }}</div>
+                        {% endif %}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.name.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }}
+                        </label>
+                        {% render_field form.description class="form-control" rows="4" %}
+                        {% if form.description.help_text %}
+                            <div class="form-text">{{ form.description.help_text }}</div>
+                        {% endif %}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            {% render_field form.is_active class="form-check-input" %}
+                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                {{ form.is_active.label }}
+                            </label>
+                        </div>
+                        {% if form.is_active.help_text %}
+                            <div class="form-text">{{ form.is_active.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Поля, отмеченные <span class="text-danger">*</span>, обязательны для заполнения.
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Сохранить
+                        </button>
+                        {% if form.instance.pk %}
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" 
+                                data-bs-target="#deleteModal" {% if form.instance.service_count > 0 %}disabled{% endif %}>
+                            <i class="fas fa-trash-alt me-1"></i> Удалить
+                        </button>
+                        {% else %}
+                        <a href="{% url 'services:category_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i> Отмена
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if form.instance.pk %}
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить категорию <strong>{{ form.instance.name }}</strong>?</p>
+                {% if form.instance.service_count > 0 %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Внимание! В этой категории есть услуги. Удаление невозможно.
+                </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                {% if form.instance.service_count == 0 %}
+                <form action="{% url 'services:category_delete' form.instance.pk %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-1"></i> Удалить
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize form validation
+    const forms = document.querySelectorAll('.needs-validation');
+    
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        }, false);
+    });
+    
+    // Character counter for description
+    const descriptionField = document.getElementById('{{ form.description.id_for_label }}');
+    if (descriptionField) {
+        const maxLength = descriptionField.getAttribute('maxlength');
+        if (maxLength) {
+            const counter = document.createElement('div');
+            counter.className = 'form-text text-end';
+            counter.id = 'description-counter';
+            descriptionField.parentNode.insertBefore(counter, descriptionField.nextSibling);
+            
+            function updateCounter() {
+                const remaining = maxLength - descriptionField.value.length;
+                counter.textContent = `${descriptionField.value.length}/${maxLength} символов`;
+                
+                if (remaining < 10) {
+                    counter.classList.add('text-danger');
+                } else {
+                    counter.classList.remove('text-danger');
+                }
+            }
+            
+            descriptionField.addEventListener('input', updateCounter);
+            updateCounter(); // Initial call
+        }
+    }
+});
+</script>
+{% endblock %}

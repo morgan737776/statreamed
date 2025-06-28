@@ -1,0 +1,31 @@
+[Unit]
+Description=gunicorn daemon for Rehab Center
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/rehab_center
+ExecStart=/opt/rehab_center/venv/bin/gunicorn -c /opt/rehab_center/gunicorn_config.py rehab_center.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+Restart=on-failure
+RestartSec=5s
+
+# Security options
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+PrivateDevices=true
+CapabilityBoundingSet=
+SecureBits=noroot
+ReadWritePaths=/var/log/gunicorn /run/gunicorn.sock
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gunicorn
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,80 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block content %}
+<div id="content-main">
+    {% if app_list %}
+    <div class="dashboard" id="app-list">
+        {% for app in app_list %}
+        <div class="app app-{{ app.app_label }}">
+            <div class="app-title">
+                <i class="fas fa-{{ app.icon|default:'cog' }}"></i>
+                <a href="{{ app.app_url }}" class="section">
+                    {{ app.name }}
+                </a>
+            </div>
+            <div class="app-models">
+                {% for model in app.models %}
+                <div class="app-model">
+                    <a href="{{ model.admin_url }}" class="model-name">
+                        {{ model.name }}
+                    </a>
+                    <div class="model-actions">
+                        {% if model.add_url %}
+                        <a href="{{ model.add_url }}" class="addlink" title="{% trans 'Add' %}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                        {% endif %}
+                        {% if model.admin_url %}
+                        <a href="{{ model.admin_url }}" class="viewlink" title="{% trans 'View' %}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Commissions Tile -->
+        <div class="app app-commissions">
+            <div class="app-title">
+                <i class="fas fa-users"></i>
+                <a href="#" class="section">Комиссии</a>
+            </div>
+            <div class="app-models">
+                <div class="app-model">
+                    <a href="{% url 'admin:commissions_selectioncommitteeapplication_changelist' %}" class="model-name">
+                        Заявки на отбор
+                    </a>
+                    <div class="model-actions">
+                        <a href="{% url 'admin:commissions_selectioncommitteeapplication_add' %}" class="addlink" title="{% trans 'Add' %}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                        <a href="{% url 'admin:commissions_selectioncommitteeapplication_changelist' %}" class="viewlink" title="{% trans 'View' %}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="app-model">
+                    <a href="{% url 'admin:commissions_medicalcommitteeconclusion_changelist' %}" class="model-name">
+                        Заключения комиссии
+                    </a>
+                    <div class="model-actions">
+                        <a href="{% url 'admin:commissions_medicalcommitteeconclusion_add' %}" class="addlink" title="{% trans 'Add' %}">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                        <a href="{% url 'admin:commissions_medicalcommitteeconclusion_changelist' %}" class="viewlink" title="{% trans 'View' %}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>{% trans "You don't have permission to view or edit anything." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

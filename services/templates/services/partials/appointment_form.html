@@ -1,0 +1,79 @@
+{% load i18n %}
+
+<form method="post" enctype="multipart/form-data" id="appointment-form">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% for field in form %}
+        <div class="form-group mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+            {% if field.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ field.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <div class="d-flex justify-content-end mt-4">
+        <button type="button" class="btn btn-secondary me-2" onclick="hideModal()">
+            {% trans "Отмена" %}
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-1"></i> {% trans "Сохранить запись" %}
+        </button>
+    </div>
+</form>
+
+<script>
+// Добавляем обработчик отправки формы через AJAX
+document.getElementById('appointment-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Закрываем модальное окно и обновляем календарь
+            hideModal();
+            if (typeof calendar !== 'undefined') {
+                calendar.refetchEvents();
+            }
+            // Показываем уведомление об успешном сохранении
+            alert('Запись успешно сохранена');
+        } else {
+            // Обновляем форму с ошибками
+            const formContainer = document.getElementById('appointment-form-container');
+            if (formContainer) {
+                formContainer.innerHTML = data.form_html;
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Произошла ошибка при сохранении записи');
+    });
+});
+</script>

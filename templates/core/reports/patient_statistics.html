@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:p-6 space-y-8">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">{{ title }}</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Аналитический отчет по демографии и статусам пациентов.</p>
+        </div>
+        <a href="{% url 'core:reports_home' %}" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+            <i class="fas fa-arrow-left mr-2"></i>
+            К центру отчетов
+        </a>
+    </div>
+
+    <!-- Key Metric -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center">
+        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Общее количество пациентов</p>
+        <p class="mt-1 text-5xl font-bold text-blue-600 dark:text-blue-400">{{ total_patients }}</p>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Gender Distribution -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Распределение по полу</h2>
+            <canvas id="genderChart"></canvas>
+        </div>
+
+        <!-- Age Distribution -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Распределение по возрасту</h2>
+            <canvas id="ageChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ gender_data|json_script:"gender-data" }}
+{{ age_data|json_script:"age-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const genderData = JSON.parse(document.getElementById('gender-data').textContent);
+        const ageData = JSON.parse(document.getElementById('age-data').textContent);
+
+        const isDarkMode = document.body.classList.contains('dark');
+        const legendColor = isDarkMode ? '#E5E7EB' : '#4B5563';
+        const gridColor = isDarkMode ? '#374151' : '#E5E7EB';
+        const tickColor = isDarkMode ? '#9CA3AF' : '#6B7280';
+        const chartBorderColor = isDarkMode ? '#1F2937' : '#FFFFFF';
+
+        const chartOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: legendColor,
+                    }
+                }
+            }
+        };
+
+        // Gender Chart
+        const genderCtx = document.getElementById('genderChart').getContext('2d');
+        new Chart(genderCtx, {
+            type: 'pie',
+            data: {
+                labels: genderData.labels,
+                datasets: [{
+                    label: 'Пол',
+                    data: genderData.counts,
+                    backgroundColor: ['#EC4899', '#3B82F6', '#8B5CF6'],
+                    borderColor: chartBorderColor,
+                    borderWidth: 2
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Age Chart
+        const ageCtx = document.getElementById('ageChart').getContext('2d');
+        new Chart(ageCtx, {
+            type: 'bar',
+            data: {
+                labels: ageData.labels,
+                datasets: [{
+                    label: 'Количество пациентов',
+                    data: ageData.counts,
+                    backgroundColor: '#14B8A6',
+                    borderColor: '#0F766E',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                ...chartOptions,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: tickColor,
+                        },
+                        grid: {
+                            color: gridColor
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: tickColor,
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Page Header -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Личный кабинет</h1>
+        <p class="mt-1 text-lg text-gray-600 dark:text-gray-400">Добро пожаловать, {{ patient.get_full_name }}!</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="portalTab" data-tabs-toggle="#portalTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="schedule-tab" data-tabs-target="#schedule" type="button" role="tab" aria-controls="schedule" aria-selected="true">Расписание</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="records-tab" data-tabs-target="#records" type="button" role="tab" aria-controls="records" aria-selected="false">Мед. записи</button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="documents-tab" data-tabs-target="#documents" type="button" role="tab" aria-controls="documents" aria-selected="false">Документы</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="portalTabContent">
+        <!-- Schedule Tab -->
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+            {% include 'patient_portal/partials/schedule_panel.html' %}
+        </div>
+        <!-- Medical Records Tab -->
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="records" role="tabpanel" aria-labelledby="records-tab">
+            {% include 'patient_portal/partials/records_panel.html' %}
+        </div>
+        <!-- Documents Tab -->
+        <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+            {% include 'patient_portal/partials/documents_panel.html' %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

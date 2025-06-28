@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if form.instance.pk %}Редактировать действие{% else %}Добавить действие{% endif %}</h2>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="{% url 'rehab_programs:calendar' %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

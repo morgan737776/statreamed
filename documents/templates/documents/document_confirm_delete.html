@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block content_inner %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ page_title }}</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <p>{% blocktrans with title=document.title %}Are you sure you want to delete the document "<strong>{{ title }}</strong>"?{% endblocktrans %}</p>
+            <p class="text-danger">{% trans "This action cannot be undone." %}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> {% trans "Confirm Delete" %}
+                </button>
+                <a href="{% url 'documents:document_detail' document.pk %}" class="btn btn-secondary">
+                    {% trans "Cancel" %}
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

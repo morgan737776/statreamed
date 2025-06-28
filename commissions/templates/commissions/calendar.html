@@ -1,0 +1,76 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block vendor_css %}
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+<style>
+    /* Стили для улучшения внешнего вида календаря */
+    #calendar {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 10px;
+    }
+    .fc-event {
+        cursor: pointer;
+        border: 1px solid #fff;
+    }
+    .fc-event-title {
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">{{ page_title }}</h1>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div id='calendar'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block vendor_js %}
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ru.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'ru', // Включаем русскую локализацию
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            events: '{% url "commissions:events_api" %}', // URL для получения событий
+            eventClick: function(info) {
+                info.jsEvent.preventDefault(); // не даем браузеру перейти по стандартной ссылке
+                if (info.event.url) {
+                    window.open(info.event.url, "_self");
+                }
+            },
+            eventDidMount: function(info) {
+                // Добавляем всплывающую подсказку (tooltip) с описанием
+                if (info.event.extendedProps.description) {
+                    var tooltip = new bootstrap.Tooltip(info.el, {
+                        title: info.event.extendedProps.description,
+                        placement: 'top',
+                        trigger: 'hover',
+                        container: 'body'
+                    });
+                }
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

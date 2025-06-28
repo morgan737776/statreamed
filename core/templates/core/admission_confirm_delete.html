@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4>{% trans "Подтверждение удаления госпитализации" %}</h4>
+        </div>
+        <div class="card-body">
+            <p>{% trans "Вы уверены, что хотите удалить запись о госпитализации?" %}</p>
+            <ul>
+                <li><strong>{% trans "Пациент" %}:</strong> {{ object.patient.get_full_name }}</li>
+                <li><strong>{% trans "Палата" %}:</strong> {{ object.bed.ward }}</li>
+                <li><strong>{% trans "Койка" %}:</strong> {{ object.bed.number }}</li>
+                <li><strong>{% trans "Дата поступления" %}:</strong> {{ object.admission_date }}</li>
+            </ul>
+            <form method="post">{% csrf_token %}
+                <a href="{{ object.patient.get_absolute_url|default:'/bed-management/' }}" class="btn btn-secondary">{% trans "Отмена" %}</a>
+                <button type="submit" class="btn btn-danger">{% trans "Удалить" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

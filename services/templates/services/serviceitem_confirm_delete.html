@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Подтверждение удаления" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-lg mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            {% trans "Подтверждение удаления" %}
+        </h1>
+        
+        <p class="text-gray-700 dark:text-gray-300 mb-6">
+            {% blocktrans with object_name=object.name %}
+                Вы уверены, что хотите удалить услугу <strong>"{{ object_name }}"</strong>?
+            {% endblocktrans %}
+        </p>
+        
+        <p class="text-sm text-red-600 dark:text-red-400 mb-6">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            {% trans "Это действие нельзя будет отменить." %}
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex justify-end space-x-3">
+                <a href="{% url 'services:service_list' %}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-25 transition ease-in-out duration-150 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+                    {% trans "Отмена" %}
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-800 focus:outline-none focus:border-red-800 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    <i class="fas fa-trash-alt mr-2"></i>
+                    {% trans "Удалить" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

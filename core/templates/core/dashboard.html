@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Панель управления
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300">
+            Добро пожаловать в систему управления реабилитационным центром
+        </p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Patients -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Всего пациентов</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ total_patients|default:0 }}</p>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                    <i class="fas fa-users text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Appointments -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Приемы сегодня</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ todays_appointments|default:0 }}</p>
+                </div>
+                <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                    <i class="fas fa-calendar-check text-green-600 dark:text-green-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Occupied Beds -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Занятые койки</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ occupied_beds|default:0 }}</p>
+                </div>
+                <div class="bg-orange-100 dark:bg-orange-900 p-3 rounded-full">
+                    <i class="fas fa-bed text-orange-600 dark:text-orange-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Staff -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Активный персонал</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ active_staff|default:0 }}</p>
+                </div>
+                <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
+                    <i class="fas fa-user-md text-purple-600 dark:text-purple-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Patients -->
+        <a href="{% url 'core:patient_list' %}" class="group bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-users text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Пациенты</h3>
+            <p class="text-blue-100 text-sm">Управление пациентами и их данными</p>
+        </a>
+
+        <!-- Staff -->
+        <a href="#" class="group bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-user-md text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Персонал</h3>
+            <p class="text-green-100 text-sm">Управление медицинским персоналом</p>
+        </a>
+
+        <!-- Inpatient -->
+        <a href="{% url 'inpatient:dashboard' %}" class="group bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-bed text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Коечный фонд</h3>
+            <p class="text-purple-100 text-sm">Управление стационарным лечением</p>
+        </a>
+
+        <!-- Services -->
+        <a href="{% url 'services:service_list' %}" class="group bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-stethoscope text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Услуги</h3>
+            <p class="text-orange-100 text-sm">Медицинские услуги и процедуры</p>
+        </a>
+
+        <!-- Calendar -->
+        <a href="{% url 'core:calendar' %}" class="group bg-gradient-to-br from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-calendar-alt text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Календарь</h3>
+            <p class="text-teal-100 text-sm">Расписание и appointments</p>
+        </a>
+
+        <!-- Reports -->
+        <a href="{% url 'core:statistics' %}" class="group bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-chart-bar text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Отчеты</h3>
+            <p class="text-pink-100 text-sm">Статистика и аналитика</p>
+        </a>
+
+        <!-- Integrations -->
+        <a href="#" class="group bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-plug text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Интеграции</h3>
+            <p class="text-indigo-100 text-sm">Внешние системы и API</p>
+        </a>
+
+        <!-- Security -->
+        {% if user.is_superuser %}
+        <a href="{% url 'core:security_dashboard' %}" class="group bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl shadow-lg p-6 transition-all duration-300 transform hover:scale-105">
+            <div class="flex items-center justify-between mb-4">
+                <i class="fas fa-shield-alt text-3xl opacity-80"></i>
+                <i class="fas fa-arrow-right text-lg opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Безопасность</h3>
+            <p class="text-red-100 text-sm">Мониторинг безопасности системы</p>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <i class="fas fa-clock mr-2 text-gray-500"></i>
+                Последняя активность
+            </h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-3">
+                {% if recent_activity %}
+                    {% for activity in recent_activity %}
+                    <div class="flex items-center space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ activity.description }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ activity.timestamp|timesince }} назад</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-history text-gray-400 text-4xl mb-3"></i>
+                    <p class="text-gray-500 dark:text-gray-400">Нет недавней активности</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

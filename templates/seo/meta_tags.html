@@ -1,0 +1,22 @@
+<!-- Primary Meta Tags -->
+<title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_name }}</title>
+<meta name="title" content="{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_name }}">
+<meta name="description" content="{{ meta.description|default:'' }}">
+{% if meta.keywords %}<meta name="keywords" content="{{ meta.keywords }}">{% endif %}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="{{ meta.og_type|default:'website' }}">
+<meta property="og:url" content="{{ meta.og_url }}">
+<meta property="og:title" content="{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_name }}">
+<meta property="og:description" content="{{ meta.description|default:'' }}">
+{% if meta.og_image %}<meta property="og:image" content="{{ meta.og_image }}">{% endif %}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="{{ meta.twitter_card|default:'summary_large_image' }}">
+<meta property="twitter:url" content="{{ meta.og_url }}">
+<meta property="twitter:title" content="{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_name }}">
+<meta property="twitter:description" content="{{ meta.description|default:'' }}">
+{% if meta.og_image %}<meta property="twitter:image" content="{{ meta.og_image }}">{% endif %}
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ meta.canonical_url|default:meta.og_url }}" />

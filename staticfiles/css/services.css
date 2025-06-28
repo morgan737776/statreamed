@@ -1,0 +1,157 @@
+/* Services Module Styles */
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+    padding: 0.5rem 1rem;
+}
+
+.sidebar .nav-link:hover {
+    color: #4e73df;
+    background-color: rgba(78, 115, 223, 0.1);
+}
+
+.sidebar .nav-link.active {
+    color: #4e73df;
+    font-weight: 600;
+    border-left: 3px solid #4e73df;
+}
+
+.sidebar .nav-link i {
+    margin-right: 4px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Dashboard Cards */
+.card {
+    border: none;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Calendar Styles */
+.fc {
+    background-color: #fff;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.fc-header-toolbar {
+    padding: 1rem;
+    margin-bottom: 0.5rem !important;
+}
+
+.fc-event {
+    cursor: pointer;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Forms */
+.form-control:focus, .form-select:focus {
+    border-color: #bac8f3;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Tables */
+.table th {
+    border-top: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: #5a5c69;
+}
+
+/* Status Badges */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+}
+
+.badge-success {
+    background-color: #1cc88a;
+}
+
+.badge-warning {
+    background-color: #f6c23e;
+    color: #000;
+}
+
+.badge-danger {
+    background-color: #e74a3b;
+}
+
+.badge-info {
+    background-color: #36b9cc;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        height: auto;
+        padding-top: 0;
+    }
+    
+    .sidebar-sticky {
+        position: static;
+        height: auto;
+        padding-top: 0;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print, .sidebar, .navbar, .btn {
+        display: none !important;
+    }
+    
+    .container-fluid {
+        padding: 0;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: none;
+    }
+}

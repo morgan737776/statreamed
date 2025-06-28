@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Диаграмма Ганта - Стационар{% endblock %}
+
+{% block extra_head %}
+<style>
+    #gantt_chart {
+        width: 100%;
+        height: 80vh; /* 80% of viewport height */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Диаграмма Ганта: Загрузка стационара</h1>
+        <a href="{% url 'inpatient:dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-tachometer-alt me-1"></i> Вернуться к панели
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="gantt_chart"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        fetch("{% url 'inpatient:gantt_data_api' %}")
+            .then(response => response.json())
+            .then(jsonData => {
+                const data = new google.visualization.DataTable();
+                data.addColumn('string', 'Task ID');
+                data.addColumn('string', 'Task Name');
+                data.addColumn('string', 'Resource');
+                data.addColumn('date', 'Start Date');
+                data.addColumn('date', 'End Date');
+                data.addColumn('number', 'Duration');
+                data.addColumn('number', 'Percent Complete');
+                data.addColumn('string', 'Dependencies');
+
+                const rows = jsonData.map(item => {
+                    return [
+                        item.id,
+                        item.name,
+                        item.resource,
+                        new Date(item.start),
+                        new Date(item.end),
+                        null, // Duration
+                        item.progress,
+                        null // Dependencies
+                    ];
+                });
+
+                if (rows.length === 0) {
+                    document.getElementById('gantt_chart').innerHTML = '<p class="text-center text-muted">Нет данных для отображения диаграммы.</p>';
+                    return;
+                }
+
+                data.addRows(rows);
+
+                const options = {
+                    height: data.getNumberOfRows() * 41 + 50,
+                    gantt: {
+                        trackHeight: 40,
+                        sortTasks: false,
+                        criticalPathEnabled: false,
+                        palette: [
+                            {
+                                "color": "#76A7FA", // Planned (0% progress)
+                                "dark": "#4285F4",
+                                "light": "#C5D9F8"
+                            },
+                            {
+                                "color": "#DB4437", // Occupied (100% progress)
+                                "dark": "#A52714",
+                                "light": "#E67C73"
+                            }
+                        ]
+                    }
+                };
+
+                const chart = new google.visualization.Gantt(document.getElementById('gantt_chart'));
+                chart.draw(data, options);
+            });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Центр отчетов{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:p-6 space-y-8">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Центр отчетов</h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Аналитика и статистика по ключевым показателям клиники.</p>
+        </div>
+    </div>
+
+    <!-- Reports Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
+        <!-- Report Card: Patient Statistics -->
+        <a href="{% url 'core:report_patient_statistics' %}" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-4">
+                <i class="fas fa-users text-xl text-blue-600 dark:text-blue-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Статистика по пациентам</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Демография, диагнозы, история поступлений и выписок.</p>
+        </a>
+
+        <!-- Report Card: Bed Occupancy -->
+        <a href="#" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full mb-4">
+                <i class="fas fa-bed text-xl text-green-600 dark:text-green-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Загруженность коечного фонда</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Анализ занятости коек по палатам и отделениям.</p>
+        </a>
+
+        <!-- Report Card: Financial Reports -->
+        <a href="#" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 dark:bg-yellow-900/50 rounded-full mb-4">
+                <i class="fas fa-file-invoice-dollar text-xl text-yellow-600 dark:text-yellow-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Финансовые отчеты</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Отчеты по доходам, расходам и страховым выплатам.</p>
+        </a>
+
+        <!-- Report Card: Staff Performance -->
+        <a href="#" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full mb-4">
+                <i class="fas fa-user-md text-xl text-purple-600 dark:text-purple-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Эффективность персонала</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Анализ нагрузки на врачей и другой персонал.</p>
+        </a>
+
+        <!-- Report Card: Appointments -->
+        <a href="#" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-full mb-4">
+                <i class="fas fa-calendar-check text-xl text-indigo-600 dark:text-indigo-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Аналитика записей</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Статистика по записям на прием, отменам и ожиданиям.</p>
+        </a>
+
+        <!-- Report Card: Program Outcomes -->
+        <a href="#" class="block p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <div class="flex items-center justify-center w-12 h-12 bg-pink-100 dark:bg-pink-900/50 rounded-full mb-4">
+                <i class="fas fa-chart-line text-xl text-pink-600 dark:text-pink-300"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Результаты программ</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Эффективность реабилитационных программ и курсов.</p>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

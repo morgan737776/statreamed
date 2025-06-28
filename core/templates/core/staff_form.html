@@ -1,0 +1,83 @@
+{% extends 'core/base_dashboard.html' %}
+{% block title %}{{ view.object.pk|yesno:'Редактировать,Добавить' }} сотрудника{% endblock %}
+
+{% block page_title %}
+<h1>{{ view.object.pk|yesno:'Редактировать,Добавить' }} сотрудника</h1>
+{% endblock %}
+
+{% block page_content %}
+<form method="post" class="needs-validation" novalidate>{% csrf_token %}
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-light fw-bold"><i class="fas fa-user"></i> Личные данные</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_last_name" class="form-label">Фамилия</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_first_name" class="form-label">Имя</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_middle_name" class="form-label">Отчество</label>
+                        {{ form.middle_name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-light fw-bold"><i class="fas fa-briefcase"></i> Должность и отдел</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_position" class="form-label">Должность</label>
+                        {{ form.position }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_department" class="form-label">Отдел</label>
+                        {{ form.department }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_status" class="form-label">Статус</label>
+                        {{ form.status }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header bg-light fw-bold"><i class="fas fa-envelope"></i> Контакты</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_phone" class="form-label">Телефон</label>
+                        {{ form.phone }}
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header bg-light fw-bold"><i class="fas fa-calendar-alt"></i> Даты</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="id_hire_date" class="form-label">Дата приёма</label>
+                        {{ form.hire_date }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_fire_date" class="form-label">Дата увольнения</label>
+                        {{ form.fire_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-success px-4"><i class="fas fa-save me-1"></i>Сохранить</button>
+        <a href="{% url 'core:staff_list' %}" class="btn btn-secondary px-4">Отмена</a>
+    </div>
+</form>
+{% endblock %}

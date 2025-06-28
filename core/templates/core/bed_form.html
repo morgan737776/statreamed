@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}{% if form.instance.pk %}{% trans "Редактировать кровать" %}{% else %}{% trans "Добавить кровать" %}{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom-0">
+                    <h4 class="mb-0">{% if form.instance.pk %}{% trans "Редактировать кровать" %}{% else %}{% trans "Добавить кровать" %}{% endif %}</h4>
+                </div>
+                <div class="card-body">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{% trans "Пожалуйста, исправьте ошибки в форме:" %}</strong>
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li><b>{{ field.label }}:</b> {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <form method="post" enctype="multipart/form-data" autocomplete="off">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save me-1"></i>{% trans "Сохранить" %}</button>
+                            <a href="{% url 'core:ward_list' %}" class="btn btn-secondary ms-2">{% trans "Отмена" %}</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

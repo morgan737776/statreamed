@@ -1,0 +1,27 @@
+<!-- Main modal -->
+<div id="delete-modal-{{ object_id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="delete-modal-{{ object_id }}">
+                <i class="fas fa-times"></i>
+                <span class="sr-only">Закрыть</span>
+            </button>
+            <div class="p-6 text-center">
+                <i class="fas fa-exclamation-triangle text-gray-400 dark:text-gray-200 text-5xl mx-auto mb-4"></i>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Вы уверены, что хотите удалить этот объект?</h3>
+                <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">Это действие необратимо.</p>
+                
+                <form action="{% url delete_url object_id %}" method="post" class="inline-block">
+                    {% csrf_token %}
+                    <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                        Да, я уверен
+                    </button>
+                </form>
+                
+                <button data-modal-hide="delete-modal-{{ object_id }}" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Нет, отмена
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

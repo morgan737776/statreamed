@@ -1,0 +1,482 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% trans 'Карта пациента' %}: {{ patient.last_name }} {{ patient.first_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Индикатор загрузки */
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    /* Предпросмотр изображений */
+    .image-preview-container {
+        margin-top: 15px;
+        text-align: center;
+    }
+    .image-preview {
+        max-width: 100%;
+        max-height: 200px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        display: none;
+    }
+    .file-info {
+        margin-top: 5px;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    /* Улучшенное отображение ошибок */
+    .errorlist {
+        color: #dc3545;
+        padding-left: 0;
+        list-style: none;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #dc3545;
+    }
+    
+    /* Стили для документов */
+    .document-card {
+        transition: all 0.3s ease;
+        margin-bottom: 1rem;
+    }
+    .document-card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .document-icon {
+        font-size: 2rem;
+        margin-right: 1rem;
+        color: #6c757d;
+    }
+    .document-actions {
+        margin-top: 0.5rem;
+    }
+    
+    /* Адаптивные таблицы */
+    .table-responsive {
+        overflow-x: auto;
+    }
+    
+    /* Улучшенные карточки */
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+    }
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Индикатор загрузки -->
+<div class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Загрузка...</span>
+    </div>
+</div>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3"><i class="fa fa-user me-2"></i>Карта пациента: {{ patient_data.last_name }} {{ patient_data.first_name }}</h1>
+        <div>
+            <a href="{% url 'core:patient_edit' patient_data.id %}" class="btn btn-warning me-2">
+                <i class="fa fa-edit"></i> Редактировать
+            </a>
+            <a href="{% url 'core:patient_list' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Назад к списку
+            </a>
+        </div>
+    </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fa fa-id-card me-2"></i>Основная информация</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">ФИО</dt>
+                <dd class="col-sm-9">{{ patient_data.last_name }} {{ patient_data.first_name }} {{ patient_data.middle_name }}</dd>
+                <dt class="col-sm-3">Дата рождения</dt>
+                <dd class="col-sm-9">
+                    {% if patient_data.date_of_birth %}
+                        {{ patient_data.date_of_birth|date:"d.m.Y" }}
+                    {% else %}-
+                    {% endif %}
+                </dd>
+                <dt class="col-sm-3">Пол</dt>
+                <dd class="col-sm-9">{{ patient_data.gender|default:"-" }}</dd>
+                <dt class="col-sm-3">Адрес</dt>
+                <dd class="col-sm-9">{{ patient_data.address|default:"-" }}</dd>
+                <dt class="col-sm-3">Телефон</dt>
+                <dd class="col-sm-9">{{ patient_data.phone_number|default:"Не указан" }}</dd>
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">{{ patient_data.email|default:"Не указан" }}</dd>
+                <dt class="col-sm-3">Куратор</dt>
+                <dd class="col-sm-9">{{ patient_data.curator|default:"Не назначен" }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fa fa-notes-medical me-2"></i>Медицинская история</h5>
+        </div>
+        <div class="card-body">
+            <h6 class="card-title mb-3">Добавить диагноз</h6>
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="medical_record">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="{{ medical_record_form.disease.id_for_label }}" class="form-label">{% trans 'Диагноз (МКБ-10)' %}</label>
+                        {{ medical_record_form.disease }}
+                        {% if medical_record_form.disease.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ medical_record_form.disease.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ medical_record_form.diagnosis_date.id_for_label }}" class="form-label">{% trans 'Дата постановки диагноза' %}</label>
+                        {{ medical_record_form.diagnosis_date }}
+                        {% if medical_record_form.diagnosis_date.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ medical_record_form.diagnosis_date.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+                        <label for="{{ medical_record_form.notes.id_for_label }}" class="form-label">{% trans 'Примечания' %}</label>
+                        {{ medical_record_form.notes }}
+                        {% if medical_record_form.notes.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ medical_record_form.notes.errors|join:", " }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-plus me-1"></i>{% trans 'Добавить запись' %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <h6 class="card-title mb-3">История диагнозов</h6>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Диагноз (МКБ-10)</th>
+                    <th>Примечания</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in medical_records %}
+                <tr>
+                    <td>{{ record.diagnosis_date|date:"d.m.Y" }}</td>
+                    <td>{{ record.disease.code }} - {{ record.disease.name }}</td>
+                    <td>{{ record.notes|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">Записи отсутствуют.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Раздел документов -->
+<div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Документы</h5>
+        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#uploadDocumentCollapse">
+            <i class="fas fa-upload me-1"></i> Загрузить документ
+        </button>
+    </div>
+    
+    <!-- Форма загрузки документа -->
+    <div class="collapse" id="uploadDocumentCollapse">
+        <div class="card-body border-bottom">
+            <form method="post" enctype="multipart/form-data" id="documentForm">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="document">
+                
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="{{ document_form.document_type.id_for_label }}" class="form-label">
+                                {{ document_form.document_type.label }}
+                                {% if document_form.document_type.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ document_form.document_type }}
+                            {% if document_form.document_type.help_text %}
+                                <small class="form-text text-muted">{{ document_form.document_type.help_text }}</small>
+                            {% endif %}
+                            {{ document_form.document_type.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="{{ document_form.document.id_for_label }}" class="form-label">
+                                {{ document_form.document.label }}
+                                {% if document_form.document.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            <div class="custom-file">
+                                <input type="file" 
+                                       class="form-control {% if document_form.document.errors %}is-invalid{% endif %}" 
+                                       id="{{ document_form.document.id_for_label }}" 
+                                       name="{{ document_form.document.name }}" 
+                                       accept="{{ document_form.document.field.widget.attrs.accept }}"
+                                       onchange="updateImagePreview(this)">
+                                <div class="invalid-feedback">
+                                    {{ document_form.document.errors|join:", " }}
+                                </div>
+                                <div class="form-text">
+                                    {{ document_form.document.help_text }}
+                                </div>
+                                
+                                <!-- Блок предпросмотра изображения -->
+                                <div class="image-preview-container mt-2">
+                                    <img id="imagePreview" class="image-preview" src="#" alt="Предпросмотр" style="display: none;">
+                                    <div id="fileInfo" class="file-info"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="{{ document_form.description.id_for_label }}" class="form-label">
+                                {{ document_form.description.label }}
+                                {% if document_form.description.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ document_form.description }}
+                            {% if document_form.description.help_text %}
+                                <small class="form-text text-muted">{{ document_form.description.help_text }}</small>
+                            {% endif %}
+                            {{ document_form.description.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="form-check form-switch mb-3">
+                            {{ document_form.is_private }}
+                            <label class="form-check-label" for="{{ document_form.is_private.id_for_label }}">
+                                {{ document_form.is_private.label }}
+                            </label>
+                            {% if document_form.is_private.help_text %}
+                                <small class="form-text text-muted">{{ document_form.is_private.help_text }}</small>
+                            {% endif %}
+                            {{ document_form.is_private.errors }}
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#uploadDocumentCollapse">
+                                <i class="fas fa-times me-1"></i> Отмена
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-1"></i> Загрузить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Список документов -->
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Загруженные документы</h5>
+            <div class="input-group" style="max-width: 300px;">
+                <input type="text" class="form-control" placeholder="Поиск по документам..." id="documentSearch">
+                <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Таблица документов -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Тип</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Дата загрузки</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in documents_page %}
+                    <tr>
+                        <td>{{ doc.get_document_type_display }}</td>
+                        <td>
+                            <a href="{{ doc.document.url }}" target="_blank" class="text-decoration-none">
+                                <i class="fas fa-file me-1"></i> {{ doc.get_filename }}
+                            </a>
+                        </td>
+                        <td>{{ doc.description|default:"-"|truncatechars:30 }}</td>
+                        <td>{{ doc.uploaded_at|date:"d.m.Y H:i" }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ doc.document.url }}" class="btn btn-outline-primary" title="Просмотреть" data-bs-toggle="tooltip" data-bs-placement="top">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ doc.document.url }}" download class="btn btn-outline-secondary" title="Скачать" data-bs-toggle="tooltip" data-bs-placement="top">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <button type="button" class="btn btn-outline-danger" title="Удалить" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        onclick="confirmDeleteDocument('{{ doc.id }}', '{{ doc.get_filename }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Нет загруженных документов</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Пагинация -->
+        {% if documents_page.paginator.num_pages > 1 %}
+        <nav aria-label="Навигация по страницам" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if documents_page.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Первая">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ documents_page.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Предыдущая">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ documents_page.previous_page_number }}" aria-label="Предыдущая">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;&laquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                {% endif %}
+                
+                {% for i in documents_page.paginator.page_range %}
+                    {% if documents_page.number == i %}
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">{{ i }}</span>
+                        </li>
+                    {% elif i > documents_page.number|add:'-3' and i < documents_page.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% elif i == 1 or i == documents_page.paginator.num_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% elif i == documents_page.number|add:'-4' or i == documents_page.number|add:'4' %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if documents_page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ documents_page.next_page_number }}" aria-label="Следующая">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ documents_page.paginator.num_pages }}" aria-label="Последняя">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Программы реабилитации</h5>
+        <button type="button" class="btn btn-success btn-sm" id="openAddProgramModal">
+            <i class="fas fa-plus"></i> Добавить программу
+        </button>
+    </div>
+    <div class="card-body">
+        {% include 'rehab_programs/rehab_program_list.html' with programs=rehab_programs only %}
+    </div>
+</div>
+
+{% include 'rehab_programs/program_create_modal.html' with form=rehab_program_form patient=patient only %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'rehab_programs/program_create_ajax.js' %}"></script>
+<script>
+    // Включение Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+{% endblock %}
+
+{% endblock %}

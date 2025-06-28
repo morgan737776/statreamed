@@ -1,0 +1,43 @@
+{% extends "services/base.html" %}
+{% load i18n %}
+
+{% block title %}Платежи по услугам{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Платежи по платным услугам</h2>
+    <a href="{% url 'services:payment_add' %}" class="btn btn-success mb-3"><i class="fas fa-plus me-1"></i> Новый платёж</a>
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Пациент</th>
+                <th>Сумма</th>
+                <th>Статус</th>
+                <th>Способ</th>
+                <th>Договор</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for payment in object_list %}
+            <tr>
+                <td>{{ payment.pk }}</td>
+                <td>{{ payment.payment_date|date:"d.m.Y" }}</td>
+                <td>{{ payment.patient.get_full_name }}</td>
+                <td>{{ payment.amount }} ₽</td>
+                <td>{{ payment.get_status_display }}</td>
+                <td>{{ payment.get_payment_method_display }}</td>
+                <td>{% if payment.contract %}<a href="{% url 'services:contract_detail' payment.contract.pk %}">№{{ payment.contract.pk }}</a>{% endif %}</td>
+                <td>
+                    <a href="{% url 'services:payment_detail' payment.pk %}" class="btn btn-sm btn-info">Подробнее</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="8" class="text-center text-muted">Нет платежей</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ SITE_NAME }} - Профессиональная медицинская реабилитация{% endblock %}
+
+{% block meta_description %}Профессиональная медицинская реабилитация в {{ SITE_NAME }}. Квалифицированные специалисты, современное оборудование, индивидуальный подход.{% endblock %}
+
+{% block og_title %}{{ SITE_NAME }} - Профессиональная медицинская реабилитация{% endblock %}
+
+{% block og_description %}Верните себе радость движения с нашими программами реабилитации.{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Добро пожаловать в {{ SITE_NAME }}</h1>
+            <p class="lead">Профессиональная медицинская реабилитация для вашего здоровья и благополучия</p>
+            <div class="hero-buttons">
+                <a href="{% url 'services:service_list' %}" class="btn btn-primary btn-lg">Наши услуги</a>
+                <a href="{% url 'core:contact' %}" class="btn btn-outline btn-lg">Записаться на консультацию</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section features-section bg-light">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2>Почему выбирают нас</h2>
+            <p class="lead">Инновационные методы и индивидуальный подход к каждому пациенту</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Квалифицированные специалисты</h3>
+                <p>Наши врачи с многолетним опытом работы в области медицинской реабилитации.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-medkit"></i>
+                </div>
+                <h3>Современное оборудование</h3>
+                <p>Используем только новейшие технологии и методики для эффективного лечения.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>Индивидуальный подход</h3>
+                <p>Программы, разработанные специально под потребности каждого пациента.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Комфортные условия</h3>
+                <p>Уютная обстановка и внимательный персонал для вашего комфортного пребывания.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="section about-section">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>О нашем центре</h2>
+                <p>{{ SITE_NAME }} - это современный медицинский центр, специализирующийся на комплексной реабилитации пациентов с различными заболеваниями опорно-двигательного аппарата, неврологическими нарушениями и последствиями травм.</p>
+                <p>Наша миссия - помочь каждому пациенту вернуться к полноценной жизни, используя современные методы лечения и индивидуальный подход.</p>
+                <a href="{% url 'core:about' %}" class="btn btn-primary">Узнать больше</a>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/about-image.jpg' %}" alt="Наш медицинский центр" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Preview -->
+<section class="section services-section bg-light">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2>Наши услуги</h2>
+            <p class="lead">Комплексный подход к восстановлению здоровья</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-bone"></i>
+                </div>
+                <h3>Ортопедическая реабилитация</h3>
+                <p>Восстановление после травм и операций на опорно-двигательном аппарате.</p>
+                <a href="#" class="read-more">Подробнее <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Неврологическая реабилитация</h3>
+                <p>Лечение и восстановление при заболеваниях нервной системы.</p>
+                <a href="#" class="read-more">Подробнее <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Кардиологическая реабилитация</h3>
+                <p>Восстановление после сердечно-сосудистых заболеваний.</p>
+                <a href="#" class="read-more">Подробнее <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'services:service_list' %}" class="btn btn-outline">Все услуги</a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section testimonials-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2>Отзывы наших пациентов</h2>
+            <p class="lead">Что говорят о нас те, кто уже прошел курс реабилитации</p>
+        </div>
+        
+        <div class="testimonials-slider">
+            <!-- Testimonial items will be added here via JavaScript -->
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p>Благодарю коллектив центра за профессиональный подход и внимательное отношение. После курса реабилитации почувствовал значительное улучшение состояния.</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Иванов Иван</h4>
+                            <span>Пациент</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section cta-section bg-primary text-white">
+    <div class="container">
+        <div class="cta-content text-center">
+            <h2>Готовы начать путь к выздоровлению?</h2>
+            <p class="lead mb-4">Запишитесь на консультацию к нашим специалистам прямо сейчас</p>
+            <a href="{% url 'core:contact' %}" class="btn btn-light btn-lg">Записаться на прием</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Initialize any sliders or interactive elements
+    // For example, you can initialize a testimonial slider here
+    
+    // Example:
+    // $('.testimonials-slider').slick({
+    //     dots: true,
+    //     infinite: true,
+    //     speed: 300,
+    //     slidesToShow: 1,
+    //     adaptiveHeight: true
+    // });
+});
+</script>
+{% endblock %}

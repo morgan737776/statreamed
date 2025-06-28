@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center">
+                <i class="fas fa-shield-alt mr-3 text-blue-600"></i>
+                Дашборд безопасности
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Мониторинг безопасности и системных событий</p>
+        </div>
+        <button 
+            onclick="refreshSecurityData()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+        >
+            <i class="fas fa-sync-alt"></i>
+            <span>Обновить</span>
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Active Sessions -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Активные сессии</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" id="active-sessions">{{ active_sessions }}</p>
+                </div>
+                <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                    <i class="fas fa-users text-green-600 dark:text-green-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Logins -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Входы за 24ч</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" id="recent-logins">{{ recent_logins|length }}</p>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                    <i class="fas fa-sign-in-alt text-blue-600 dark:text-blue-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Warnings -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Предупреждения</p>
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400" id="security-warnings">{{ security_warnings|length }}</p>
+                </div>
+                <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Статус системы</p>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400" id="system-health">Активна</p>
+                </div>
+                <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                    <i class="fas fa-heartbeat text-green-600 dark:text-green-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Security Warnings -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>
+                    Предупреждения безопасности
+                </h3>
+            </div>
+            <div class="p-6">
+                <div id="security-warnings-list" class="space-y-3">
+                    {% for warning in security_warnings %}
+                    <div class="flex items-start space-x-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 mt-0.5"></i>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">{{ warning }}</p>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-8">
+                        <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+                        <p class="text-gray-500 dark:text-gray-400">Предупреждений нет</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Logins -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                    <i class="fas fa-sign-in-alt mr-2 text-blue-500"></i>
+                    Последние входы
+                </h3>
+            </div>
+            <div class="p-6">
+                <div id="recent-logins-list" class="space-y-3 max-h-64 overflow-y-auto">
+                    {% for login in recent_logins %}
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600 dark:text-blue-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ login.username }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ login.ip|default:"Неизвестно" }}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ login.timestamp|timesince }} назад</span>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-8">
+                        <i class="fas fa-user-clock text-gray-400 text-4xl mb-3"></i>
+                        <p class="text-gray-500 dark:text-gray-400">Нет данных о входах</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audit Logs -->
+    <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                <i class="fas fa-clipboard-list mr-2 text-purple-500"></i>
+                Журнал аудита
+            </h3>
+            <a 
+                href="{% url 'core:export_audit_logs' %}" 
+                class="text-blue-600 hover:text-blue-700 text-sm flex items-center space-x-1"
+            >
+                <i class="fas fa-download"></i>
+                <span>Экспорт CSV</span>
+            </a>
+        </div>
+        <div class="p-6">
+            <div id="audit-logs-list" class="space-y-2 max-h-96 overflow-y-auto">
+                {% for log in audit_logs %}
+                <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ log.action }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ log.user|default:"Система" }}</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ log.timestamp|timesince }} назад</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-12">
+                    <i class="fas fa-clipboard text-gray-400 text-4xl mb-3"></i>
+                    <p class="text-gray-500 dark:text-gray-400">Журнал аудита пуст</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshSecurityData() {
+    // Show loading state
+    const refreshBtn = document.querySelector('button[onclick="refreshSecurityData()"]');
+    const originalContent = refreshBtn.innerHTML;
+    refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Обновление...</span>';
+    refreshBtn.disabled = true;
+
+    fetch('{% url "core:security_api_stats" %}')
+        .then(response => response.json())
+        .then(data => {
+            // Update stats
+            document.getElementById('active-sessions').textContent = data.active_sessions || 0;
+            document.getElementById('recent-logins').textContent = data.recent_logins?.length || 0;
+            document.getElementById('security-warnings').textContent = data.security_warnings?.length || 0;
+            
+            // Update warnings list
+            const warningsList = document.getElementById('security-warnings-list');
+            if (data.security_warnings && data.security_warnings.length > 0) {
+                warningsList.innerHTML = data.security_warnings.map(warning => `
+                    <div class="flex items-start space-x-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 mt-0.5"></i>
+                        <p class="text-sm text-gray-700 dark:text-gray-300">${warning}</p>
+                    </div>
+                `).join('');
+            } else {
+                warningsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+                        <p class="text-gray-500 dark:text-gray-400">Предупреждений нет</p>
+                    </div>
+                `;
+            }
+
+            // Update recent logins
+            const loginsList = document.getElementById('recent-logins-list');
+            if (data.recent_logins && data.recent_logins.length > 0) {
+                loginsList.innerHTML = data.recent_logins.map(login => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600 dark:text-blue-400 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">${login.username}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${login.ip || 'Неизвестно'}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">${login.time_ago}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Update audit logs if present
+            if (data.audit_logs) {
+                const auditList = document.getElementById('audit-logs-list');
+                if (data.audit_logs.length > 0) {
+                    auditList.innerHTML = data.audit_logs.map(log => `
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">${log.action}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">${log.user || 'Система'}</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">${log.time_ago}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при обновлении данных:', error);
+            // Show error notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = 'Ошибка при обновлении данных';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        })
+        .finally(() => {
+            // Restore button state
+            refreshBtn.innerHTML = originalContent;
+            refreshBtn.disabled = false;
+        });
+}
+
+// Auto-refresh every 30 seconds
+setInterval(refreshSecurityData, 30000);
+
+// Initial load
+document.addEventListener('DOMContentLoaded', function() {
+    // Add some initial animations
+    const cards = document.querySelectorAll('.bg-white, .dark\\:bg-gray-800');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+</script>
+{% endblock %}

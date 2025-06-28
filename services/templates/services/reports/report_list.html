@@ -1,0 +1,20 @@
+{% extends 'services/base_services.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>Отчёты по услугам</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{% url 'services:service_report' %}">Отчёт по услугам</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="{% url 'services:payment_report' %}">Отчёт по платежам</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

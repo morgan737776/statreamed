@@ -1,0 +1,236 @@
+<div class="card card-emr">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">История болезни</h5>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="bi bi-funnel"></i> Фильтры
+            </button>
+            <a href="{% url 'emr:entry_create' patient_pk=patient.pk %}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Новая запись
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if entries %}
+            <div class="timeline">
+                {% for entry in entries %}
+                <div class="timeline-item">
+                    <div class="card card-emr mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">
+                                    <i class="bi bi-{{ entry.entry_type|default:'journal-text' }} me-2"></i>
+                                    {{ entry.title }}
+                                </h6>
+                                <small class="text-muted">
+                                    {{ entry.created_at|date:'d.m.Y H:i' }} • 
+                                    {{ entry.created_by.get_full_name|default:entry.created_by.username }}
+                                </small>
+                            </div>
+                            <div>
+                                {% if entry.is_confidential %}
+                                <span class="badge bg-warning text-dark me-1" data-bs-toggle="tooltip" title="Конфиденциально">
+                                    <i class="bi bi-shield-lock"></i>
+                                </span>
+                                {% endif %}
+                                {% if entry.is_important %}
+                                <span class="badge bg-danger" data-bs-toggle="tooltip" title="Важно">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                {{ entry.content|linebreaksbr }}
+                            </div>
+                            
+                            {% if entry.diagnosis.exists %}
+                            <div class="mb-3">
+                                <h6 class="text-muted small mb-2">Диагнозы:</h6>
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% for diagnosis in entry.diagnosis.all %}
+                                    <span class="badge bg-light text-dark">
+                                        {{ diagnosis.code }} - {{ diagnosis.description_ru }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if entry.attachments.exists %}
+                            <div class="mb-3">
+                                <h6 class="text-muted small mb-2">Вложения:</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for attachment in entry.attachments.all %}
+                                    <a href="{{ attachment.file.url }}" class="btn btn-sm btn-outline-secondary" 
+                                       target="_blank" data-bs-toggle="tooltip" title="{{ attachment.filename }}">
+                                        <i class="bi bi-paperclip me-1"></i> 
+                                        {{ attachment.filename|truncatechars:20 }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-light text-dark">
+                                        {{ entry.get_entry_type_display }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <a href="{% url 'emr:entry_edit' pk=entry.pk %}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil-square"></i> Редактировать
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if is_paginated %}
+            <nav aria-label="Навигация по страницам">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Первая">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-journal-text display-4 text-muted mb-3"></i>
+                <h5>Записи не найдены</h5>
+                <p class="text-muted">Создайте первую запись в истории болезни пациента</p>
+                <a href="{% url 'emr:entry_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Добавить запись
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно фильтров -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Фильтры записей</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <form method="get" id="filterForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="entry_type" class="form-label">Тип записи</label>
+                        <select class="form-select" id="entry_type" name="entry_type">
+                            <option value="">Все типы</option>
+                            {% for value, label in entry_types %}
+                            <option value="{{ value }}" {% if request.GET.entry_type == value|stringformat:"s" %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_from" class="form-label">Дата с</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" 
+                               value="{{ request.GET.date_from }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_to" class="form-label">Дата по</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to"
+                               value="{{ request.GET.date_to }}">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="important_only" name="important_only"
+                               {% if request.GET.important_only %}checked{% endif %}>
+                        <label class="form-check-label" for="important_only">
+                            Только важные записи
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="confidential_only" name="confidential_only"
+                               {% if request.GET.confidential_only %}checked{% endif %}>
+                        <label class="form-check-label" for="confidential_only">
+                            Только конфиденциальные
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <a href="?" class="btn btn-outline-danger me-2">Сбросить</a>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Инициализация тултипов
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    
+    // Обработка формы фильтров
+    document.getElementById('filterForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        
+        // Добавляем только заполненные поля
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                params.append(key, value);
+            }
+        }
+        
+        // Перенаправляем с новыми параметрами
+        window.location.href = '?' + params.toString();
+    });
+</script>
+{% endblock %}

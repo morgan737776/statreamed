@@ -1,0 +1,118 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block content_inner %}
+<div class="container-fluid">
+    <!-- Page-header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ document.title }}</h1>
+        <div>
+            {% if document.category.template_content %}
+            <a href="{% url 'documents:document_generate_pdf' document.pk %}" class="btn btn-info btn-sm shadow-sm" target="_blank">
+                <i class="fas fa-file-pdf fa-sm text-white-50"></i> {% trans "Generate PDF" %}
+            </a>
+            {% endif %}
+            {% if document.status == 'pending_approval' and perms.documents.approve_document %}
+            <form action="{% url 'documents:document_approve' document.pk %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm shadow-sm">
+                    <i class="fas fa-check fa-sm text-white-50"></i> {% trans "Approve" %}
+                </button>
+            </form>
+            {% endif %}
+
+            {% if document.status in ['approved', 'draft'] and perms.documents.change_document %}
+            <form action="{% url 'documents:document_archive' document.pk %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-sm shadow-sm">
+                    <i class="fas fa-archive fa-sm text-white-50"></i> {% trans "Archive" %}
+                </button>
+            </form>
+            {% endif %}
+
+            {% if perms.documents.change_document %}
+            <a href="{% url 'documents:document_update' document.pk %}" class="btn btn-warning btn-sm shadow-sm">
+                <i class="fas fa-edit fa-sm text-white-50"></i> {% trans "Edit" %}
+            </a>
+            {% endif %}
+            {% if perms.documents.delete_document %}
+            <a href="{% url 'documents:document_delete' document.pk %}" class="btn btn-danger btn-sm shadow-sm">
+                <i class="fas fa-trash fa-sm text-white-50"></i> {% trans "Delete" %}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">{% trans "Document Details" %}</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>{% trans "Patient" %}</th>
+                            <td>{{ document.patient.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Category" %}</th>
+                            <td>{{ document.category.name|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Status" %}</th>
+                            <td>
+                                <span class="badge 
+                                    {% if document.status == 'approved' %}badge-success
+                                    {% elif document.status == 'pending_approval' %}badge-warning
+                                    {% elif document.status == 'archived' %}badge-dark
+                                    {% else %}badge-info{% endif %}">
+                                    {{ document.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Uploaded By" %}</th>
+                            <td>{{ document.uploaded_by.username|default:"System" }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Uploaded At" %}</th>
+                            <td>{{ document.created_at|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Last Updated" %}</th>
+                            <td>{{ document.updated_at|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                        {% if document.status == 'approved' %}
+                        <tr>
+                            <th>{% trans "Approved by" %}</th>
+                            <td>{{ document.approved_by.username|default:"-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Approved at" %}</th>
+                            <td>{{ document.approved_at|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>{% trans "File" %}</h4>
+                    <i class="fas fa-file-alt fa-5x text-gray-300 mb-3"></i>
+                    <p>{{ document.file.name|cut:"documents/"|cut:document.patient.id|cut:"/" }}</p>
+                    <a href="{{ document.file.url }}" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-download"></i> {% trans "Download / View File" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url 'documents:document_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> {% trans "Back to List" %}
+    </a>
+</div>
+{% endblock %}

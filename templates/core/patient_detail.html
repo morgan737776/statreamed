@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static custom_tags %}
+
+{% block title %}Карта пациента: {{ patient.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="p-4 sm:p-6 space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Карта пациента</h1>
+            <p class="text-sm text-gray-500">ID: {{ patient.id }}</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex items-center space-x-2">
+            <a href="{% url 'core:patient_list' %}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+                <i class="fas fa-arrow-left mr-2"></i>
+                К списку
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-8">
+        <!-- Left-side Patient Info Card -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sticky top-6">
+                <div class="flex flex-col items-center text-center">
+                    {% if patient.photo %}
+                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ patient.photo.url }}" alt="{{ patient.get_full_name }}"/>
+                    {% else %}
+                        <div class="relative inline-flex items-center justify-center w-24 h-24 mb-3 overflow-hidden bg-blue-100 rounded-full dark:bg-blue-600">
+                            <span class="font-medium text-3xl text-blue-600 dark:text-blue-100">{{ patient.first_name|first }}{{ patient.last_name|first }}</span>
+                        </div>
+                    {% endif %}
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ patient.get_full_name }}</h5>
+                    <span class="px-2.5 py-1 text-xs font-semibold leading-tight rounded-full 
+                        {% if patient.status == 'active' %} bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100
+                        {% elif patient.status == 'discharged' %} bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100
+                        {% else %} bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100
+                        {% endif %}">
+                        {{ patient.get_status_display }}
+                    </span>
+                </div>
+                <div class="mt-6 text-sm text-gray-600 dark:text-gray-300">
+                    <h6 class="font-semibold text-gray-800 dark:text-white mb-3 border-b pb-2">Личные данные</h6>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between"><strong>Дата рождения:</strong> <span>{{ patient.date_of_birth|date:"d.m.Y" }} ({{ patient.get_age }} лет)</span></li>
+                        <li class="flex justify-between"><strong>Пол:</strong> <span>{{ patient.get_gender_display }}</span></li>
+                        <li class="flex justify-between"><strong>Телефон:</strong> <span>{{ patient.phone_number|default:"—" }}</span></li>
+                        <li class="flex justify-between"><strong>Email:</strong> <span>{{ patient.email|default:"—" }}</span></li>
+                        <li class="flex justify-between"><strong>Адрес:</strong> <span class="text-right">{{ patient.address|default:"—" }}</span></li>
+                    </ul>
+                </div>
+                <div class="mt-6 flex space-x-3">
+                    <a href="{% url 'core:patient_edit' patient.pk %}" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg shadow-sm hover:bg-blue-700">
+                        <i class="fas fa-pencil-alt mr-2"></i>Редактировать
+                    </a>
+                    <button data-modal-target="delete-modal-{{ patient.pk }}" data-modal-toggle="delete-modal-{{ patient.pk }}" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg shadow-sm hover:bg-red-700">
+                        <i class="fas fa-trash-alt mr-2"></i>Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right-side Tabs -->
+        <div class="lg:col-span-2 mt-6 lg:mt-0">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+                <div class="border-b border-gray-200 dark:border-gray-700">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="records-tab" data-tabs-target="#records" type="button" role="tab" aria-controls="records" aria-selected="true">Мед. записи</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="rehab-tab" data-tabs-target="#rehab" type="button" role="tab" aria-controls="rehab" aria-selected="false">Программы</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="documents-tab" data-tabs-target="#documents" type="button" role="tab" aria-controls="documents" aria-selected="false">Документы</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="myTabContent">
+                    <!-- Medical Records Tab -->
+                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="records" role="tabpanel" aria-labelledby="records-tab">
+                        <h3 class="text-xl font-semibold mb-4">Медицинские записи</h3>
+                        <form method="post" class="mb-6 p-4 border rounded-lg dark:border-gray-600">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="medical_record">
+                            <div class="space-y-4">
+                                {{ medical_record_form.as_p }}
+                            </div>
+                            <button type="submit" class="mt-4 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Добавить запись</button>
+                        </form>
+
+                        <div class="space-y-4">
+                        {% for record in medical_records %}
+                            <div class="p-4 bg-white dark:bg-gray-700 rounded-lg border dark:border-gray-600">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ record.record_date|date:"d.m.Y H:i" }}</p>
+                                <p class="text-gray-800 dark:text-gray-200">{{ record.description }}</p>
+                            </div>
+                        {% empty %}
+                            <p class="text-center text-gray-500 py-8">Медицинских записей пока нет.</p>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Rehab Programs Tab -->
+                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="rehab" role="tabpanel" aria-labelledby="rehab-tab">
+                        <h3 class="text-xl font-semibold mb-4">Программы реабилитации</h3>
+                        <!-- List programs here -->
+                        <div class="space-y-3">
+                        {% for program in rehab_programs %}
+                            <a href="{% url 'core:rehab_program_detail' program.pk %}" class="block p-4 bg-white dark:bg-gray-700 rounded-lg border dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-blue-600 dark:text-blue-400">{{ program.title }}</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ program.get_status_display }}</span>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">С {{ program.start_date|date:"d.m.Y" }} по {{ program.end_date|date:"d.m.Y" }}</p>
+                            </a>
+                        {% empty %}
+                            <p class="text-center text-gray-500 py-8">Пациент не участвует в программах реабилитации.</p>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Documents Tab -->
+                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                        <h3 class="text-xl font-semibold mb-4">Документы</h3>
+                        <form method="post" enctype="multipart/form-data" class="mb-6 p-4 border rounded-lg dark:border-gray-600">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="document">
+                            {{ document_form.as_p }}
+                            <button type="submit" class="mt-4 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Загрузить документ</button>
+                        </form>
+                        <ul class="space-y-3">
+                        {% for doc in documents %}
+                            <li class="p-3 bg-white dark:bg-gray-700 rounded-lg border dark:border-gray-600 flex justify-between items-center">
+                                <div>
+                                    <a href="{{ doc.file.url }}" target="_blank" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">{{ doc.title }}</a>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Загружен: {{ doc.uploaded_at|date:"d.m.Y" }}</p>
+                                </div>
+                                <a href="{{ doc.file.url }}" download class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"><i class="fas fa-download"></i></a>
+                            </li>
+                        {% empty %}
+                            <p class="text-center text-gray-500 py-8">Документы не загружены.</p>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'includes/delete_modal.html' with object=patient delete_url='core:patient_delete' object_id=patient.pk %}
+
+{% endblock %}

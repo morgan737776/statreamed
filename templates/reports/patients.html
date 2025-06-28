@@ -1,0 +1,56 @@
+{% extends 'reports/base_report.html' %}
+{% block summary_cards %}
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-6">
+    <div class="p-5 bg-white shadow rounded-lg dark:bg-gray-800 flex items-center space-x-4">
+        <i class="fas fa-users text-3xl text-blue-600"></i>
+        <div>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Всего пациентов</p>
+            <p class="text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ total_patients }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block chart %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
+        <h3 class="text-lg font-semibold mb-4">Распределение по полу</h3>
+        <canvas id="genderChart"></canvas>
+    </div>
+    <div class="bg-white shadow rounded-lg p-6 dark:bg-gray-800">
+        <h3 class="text-lg font-semibold mb-4">Возрастные группы</h3>
+        <canvas id="ageChart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block chart_js %}
+<script>
+const genderCtx = document.getElementById('genderChart');
+new Chart(genderCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ gender_data.labels|safe }},
+        datasets: [{
+            data: {{ gender_data.counts|safe }},
+            backgroundColor: ['#3b82f6', '#f472b6', '#facc15']
+        }]
+    },
+    options: {plugins:{legend:{position:'bottom'}}}
+});
+
+const ageCtx = document.getElementById('ageChart');
+new Chart(ageCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ age_data.labels|safe }},
+        datasets: [{
+            label: 'Количество',
+            data: {{ age_data.counts|safe }},
+            backgroundColor: '#34d399'
+        }]
+    },
+    options: {plugins:{legend:{display:false}}}
+});
+</script>
+{% endblock %}

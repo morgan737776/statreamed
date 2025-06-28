@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Отчет по загрузке специалистов" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% trans "Отчет по загрузке специалистов" %}</h2>
+
+    <form method="get" class="row g-3 mb-4 p-3 border rounded bg-light">
+        <div class="col-md-4">
+            <label for="start_date" class="form-label">{% trans "Дата начала" %}</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date|default:'' }}" required>
+        </div>
+        <div class="col-md-4">
+            <label for="end_date" class="form-label">{% trans "Дата окончания" %}</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date|default:'' }}" required>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">{% trans "Сформировать отчет" %}</button>
+        </div>
+    </form>
+
+    {% if labels|length > 0 %}
+    <div class="card">
+        <div class="card-body">
+            <canvas id="workloadChart"></canvas>
+        </div>
+    </div>
+    {% elif start_date and end_date %}
+        <div class="alert alert-info" role="alert">
+            {% trans "За выбранный период нет данных для отображения." %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary" role="alert">
+            {% trans "Пожалуйста, выберите период для формирования отчета." %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = {{ labels|safe }};
+        const data = {{ data|safe }};
+
+        if (labels && labels.length > 0) {
+            const ctx = document.getElementById('workloadChart').getContext('2d');
+            const workloadChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '{% trans "Количество проведенных процедур" %}',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '{% trans "Загрузка специалистов за период" %}'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

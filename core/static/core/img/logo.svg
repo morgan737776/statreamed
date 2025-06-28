@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="60" rx="10" fill="#4e73df"/>
+    <path d="M30 15L40 40L50 15H60L45 50H35L20 15H30Z" fill="white"/>
+    <path d="M70 15H90C93.3137 15 96 17.6863 96 21V39C96 42.3137 93.3137 45 90 45H70V15Z" stroke="white" stroke-width="2"/>
+    <path d="M110 15H130V45H110V15Z" fill="white"/>
+    <path d="M150 15L140 40L130 15H120L135 50H145L160 15H150Z" fill="white"/>
+    <text x="30" y="55" font-family="Arial" font-size="14" font-weight="bold" fill="white">StatReaMed</text>
+</svg>

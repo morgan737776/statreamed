@@ -1,0 +1,62 @@
+{% extends 'reports/base_report.html' %}
+{% block summary_cards %}
+<div class="p-5 bg-white shadow rounded-lg dark:bg-gray-800 my-6">
+    <h2 class="text-lg font-semibold">Загруженность коечного фонда</h2>
+    <div class="filters">
+        <form id="beds-filter-form">
+            <select name="ward">
+                <option value="">Все отделения</option>
+                {% for ward in wards %}<option value="{{ ward.id }}">{{ ward.name }}</option>{% endfor %}
+            </select>
+            <select name="room">
+                <option value="">Все палаты</option>
+                {% for room in rooms %}<option value="{{ room.id }}">{{ room.name }}</option>{% endfor %}
+            </select>
+            <button type="submit">Фильтровать</button>
+            <button id="export-csv" type="button">Экспорт CSV</button>
+            <button id="export-xls" type="button">Экспорт Excel</button>
+        </form>
+    </div>
+    <div>
+        <canvas id="bedsChart" height="80"></canvas>
+    </div>
+    <p class="text-gray-500 mt-2">Здесь будет анализ занятости коек по палатам и отделениям.</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Chart.js график занятости коек
+    var ctx = document.getElementById('bedsChart').getContext('2d');
+    var chartData = {{ chart_data|safe }};
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Занятость коек',
+                data: chartData.values,
+                backgroundColor: '#F59E0B',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {legend: {display: false}},
+            scales: {y: {beginAtZero: true}}
+        }
+    });
+    // Экспорт CSV
+    document.getElementById('export-csv').onclick = function() {
+        window.location = '?export=csv';
+    };
+    document.getElementById('export-xls').onclick = function() {
+        window.location = '?export=xls';
+    };
+    // Фильтрация
+    document.getElementById('beds-filter-form').onsubmit = function(e) {
+        e.preventDefault();
+        const params = new URLSearchParams(new FormData(this)).toString();
+        window.location = '?' + params;
+    };
+});
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block page_title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block content_inner %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ page_title }}</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {{ form.non_field_errors }}
+
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.patient_id.id_for_label }}">{{ form.patient_id.label }}</label>
+                    {{ form.patient_id }}
+                    {{ form.patient_id.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.file.id_for_label }}">{{ form.file.label }}</label>
+                    {{ form.file }}
+                    {{ form.file.errors }}
+                </div>
+
+                {{ form.patient }} <!-- Hidden patient field -->
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> {% trans "Upload Document" %}
+                </button>
+                <a href="{% url 'documents:document_list' %}" class="btn btn-secondary">
+                    {% trans "Cancel" %}
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{ form.media }}
+{% endblock %}

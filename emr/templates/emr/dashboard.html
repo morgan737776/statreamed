@@ -1,0 +1,234 @@
+{% extends 'emr/base_emr.html' %}
+{% load static %}
+
+{% block page_title %}Панель управления ЭМК{% endblock %}
+
+{% block page_header %}Панель управления Электронной Медицинской Картой{% endblock %}
+
+{% block emr_content %}
+<div class="row">
+    <!-- Статистика -->
+    <div class="col-12 mb-4">
+        <div class="card card-emr">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Статистика</h5>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active">День</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Неделя</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Месяц</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="h2 mb-1">{{ stats.patients_today|default:'0' }}</div>
+                        <div class="text-muted">Пациентов сегодня</div>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="h2 mb-1">{{ stats.appointments_today|default:'0' }}</div>
+                        <div class="text-muted">Приемов сегодня</div>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <div class="h2 mb-1">{{ stats.prescriptions_active|default:'0' }}</div>
+                        <div class="text-muted">Активных назначений</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="h2 mb-1">{{ stats.tests_pending|default:'0' }}</div>
+                        <div class="text-muted">Анализов в ожидании</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Последние пациенты -->
+    {% if perms.emr.view_patient %}
+    <div class="col-md-6 mb-4">
+        <div class="card card-emr h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Последние пациенты</h5>
+                <a href="{% url 'emr:patient_list' %}" class="btn btn-sm btn-outline-primary">Все пациенты</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for patient in recent_patients %}
+                    <a href="{% url 'emr:patient_detail' pk=patient.pk %}" 
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ patient.user.get_full_name }}</h6>
+                            <small class="text-muted">{{ patient.created_at|date:'d.m.Y' }}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <small class="me-2">
+                                <i class="bi bi-person-badge"></i> {{ patient.insurance_number }}
+                            </small>
+                            {% if patient.blood_type %}
+                            <small class="badge bg-light text-dark ms-2">
+                                {{ patient.get_blood_type_display }}{% if patient.rh_factor is not None %}({{ patient.rh_factor|yesno:'+,-' }}){% endif %}
+                            </small>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="text-center p-3 text-muted">
+                        <i class="bi bi-people display-6 d-block mb-2"></i>
+                        <p class="mb-0">Нет зарегистрированных пациентов</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Последние записи -->
+    <div class="col-md-6 mb-4">
+        <div class="card card-emr h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Последние записи</h5>
+                {% if patient %}
+                <a href="{% url 'emr:entry_list' patient_pk=patient.pk %}" class="btn btn-sm btn-outline-primary">Все записи</a>
+                {% endif %}
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for entry in recent_entries %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <i class="bi bi-{{ entry.entry_type|default:'journal-text' }}"></i>
+                                {{ entry.title }}
+                            </h6>
+                            <small class="text-muted">{{ entry.created_at|date:'d.m.Y H:i' }}</small>
+                        </div>
+                        <p class="mb-1 small text-muted">
+                            {{ entry.content|truncatewords:15 }}
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">
+                                <i class="bi bi-person"></i> {{ entry.created_by.get_full_name|default:entry.created_by.username }}
+                            </small>
+                            {% if entry.is_confidential %}
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-shield-lock"></i> Конфиденциально
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center p-3 text-muted">
+                        <i class="bi bi-journal-text display-6 d-block mb-2"></i>
+                        <p class="mb-0">Нет записей в медицинской карте</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Активные назначения -->
+    {% if active_prescriptions %}
+    <div class="col-12 mb-4">
+        <div class="card card-emr">
+            <div class="card-header">
+                <h5 class="mb-0">Активные назначения</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Периодичность</th>
+                            <th>Дата начала</th>
+                            <th>Дата окончания</th>
+                            <th>Статус</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prescription in active_prescriptions %}
+                        <tr>
+                            <td>{{ prescription.title }}</td>
+                            <td>{{ prescription.get_frequency_display }}</td>
+                            <td>{{ prescription.start_date|date:'d.m.Y' }}</td>
+                            <td>{{ prescription.end_date|date:'d.m.Y'|default:'-' }}</td>
+                            <td>
+                                <span class="badge bg-{{ prescription.status|default:'secondary' }}">
+                                    {{ prescription.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Календарь -->
+    <div class="col-12">
+        <div class="card card-emr">
+            <div class="card-header">
+                <h5 class="mb-0">Календарь приёмов</h5>
+            </div>
+            <div class="card-body">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<!-- FullCalendar -->
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ru.js'></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ru',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+            today: 'Сегодня',
+            month: 'Месяц',
+            week: 'Неделя',
+            day: 'День',
+            list: 'Список'
+        },
+        events: [
+            // Пример событий - замените на реальные данные
+            {
+                title: 'Прием у терапевта',
+                start: new Date(),
+                end: new Date(new Date().setHours(new Date().getHours() + 1)),
+                backgroundColor: '#0d6efd',
+                borderColor: '#0d6efd'
+            },
+            {
+                title: 'Анализы',
+                start: new Date(new Date().setDate(new Date().getDate() + 2)),
+                allDay: true,
+                backgroundColor: '#198754',
+                borderColor: '#198754'
+            }
+        ]
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Госпитализация пациента{% endblock %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Госпитализация пациента</h1>
+    <a href="{% url 'inpatient:dashboard' %}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-left fa-sm"></i> Отмена
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Форма госпитализации</h6>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="form-text text-muted small">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <hr>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check me-1"></i> Госпитализировать
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

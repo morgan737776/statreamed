@@ -1,0 +1,295 @@
+<div class="card card-emr">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Назначения</h5>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterPrescriptionsModal">
+                <i class="bi bi-funnel"></i> Фильтры
+            </button>
+            <a href="{% url 'emr:prescription_create' patient_pk=patient.pk %}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Новое назначение
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if prescriptions %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Название</th>
+                            <th>Период</th>
+                            <th>Статус</th>
+                            <th>Частота</th>
+                            <th>Назначил</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prescription in prescriptions %}
+                        <tr class="{% if prescription.status == 'active' %}table-success{% elif prescription.status == 'completed' %}table-light{% elif prescription.status == 'cancelled' %}table-danger{% endif %}">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if prescription.is_important %}
+                                    <i class="bi bi-exclamation-triangle-fill text-warning me-2" data-bs-toggle="tooltip" title="Важное назначение"></i>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="mb-0">{{ prescription.title }}</h6>
+                                        <small class="text-muted">{{ prescription.medication|default:'' }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>{{ prescription.start_date|date:'d.m.Y' }}</div>
+                                <small class="text-muted">
+                                    {% if prescription.end_date %}
+                                        по {{ prescription.end_date|date:'d.m.Y' }}
+                                    {% else %}
+                                        бессрочно
+                                    {% endif %}
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ prescription.status|default:'secondary' }}">
+                                    {{ prescription.get_status_display }}
+                                </span>
+                                {% if prescription.is_prn %}
+                                <span class="badge bg-info text-dark" data-bs-toggle="tooltip" title="По необходимости">
+                                    PRN
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ prescription.get_frequency_display }}
+                                {% if prescription.timing %}
+                                <div class="small text-muted">{{ prescription.timing }}</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div>{{ prescription.prescribed_by.get_full_name|default:prescription.prescribed_by.username }}</div>
+                                <small class="text-muted">{{ prescription.prescribed_at|date:'d.m.Y' }}</small>
+                            </td>
+                            <td class="text-nowrap">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'emr:prescription_detail' pk=prescription.pk %}" 
+                                       class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Просмотр">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{% url 'emr:prescription_edit' pk=prescription.pk %}" 
+                                       class="btn btn-outline-secondary" data-bs-toggle="tooltip" title="Редактировать">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" 
+                                            data-bs-target="#deletePrescriptionModal{{ prescription.id }}" title="Удалить">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Модальное окно подтверждения удаления -->
+                                <div class="modal fade" id="deletePrescriptionModal{{ prescription.id }}" tabindex="-1" 
+                                     aria-labelledby="deletePrescriptionModalLabel{{ prescription.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deletePrescriptionModalLabel{{ prescription.id }}">
+                                                    Подтверждение удаления
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Вы уверены, что хотите удалить назначение <strong>"{{ prescription.title }}"</strong>?</p>
+                                                {% if prescription.status == 'active' %}
+                                                <div class="alert alert-warning">
+                                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                                    Это назначение активно. Удаление может повлиять на процесс лечения.
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                                <form action="{% url 'emr:prescription_delete' pk=prescription.pk %}" method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="border-top-0">
+                                <div class="ms-4 ps-3 border-start">
+                                    <div class="small text-muted mb-1">Описание:</div>
+                                    <div class="mb-2">{{ prescription.description|linebreaksbr|default:"Без описания" }}</div>
+                                    
+                                    {% if prescription.instructions %}
+                                    <div class="small text-muted mb-1">Инструкции:</div>
+                                    <div class="mb-2">{{ prescription.instructions|linebreaksbr }}</div>
+                                    {% endif %}
+                                    
+                                    {% if prescription.notes %}
+                                    <div class="small text-muted mb-1">Примечания:</div>
+                                    <div class="text-muted small">{{ prescription.notes|linebreaksbr }}</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Пагинация -->
+            {% if is_paginated %}
+            <nav aria-label="Навигация по страницам">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Первая">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-capsule display-4 text-muted mb-3"></i>
+                <h5>Назначения не найдены</h5>
+                <p class="text-muted">Создайте первое назначение для пациента</p>
+                <a href="{% url 'emr:prescription_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i> Добавить назначение
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно фильтров -->
+<div class="modal fade" id="filterPrescriptionsModal" tabindex="-1" aria-labelledby="filterPrescriptionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterPrescriptionsModalLabel">Фильтры назначений</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <form method="get" id="filterPrescriptionsForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Статус</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Все статусы</option>
+                            {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if request.GET.status == value|stringformat:'s' %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_from" class="form-label">Дата с</label>
+                        <input type="date" class="form-control" id="date_from" name="date_from" 
+                               value="{{ request.GET.date_from }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_to" class="form-label">Дата по</label>
+                        <input type="date" class="form-control" id="date_to" name="date_to"
+                               value="{{ request.GET.date_to }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="prescribed_by" class="form-label">Назначил</label>
+                        <select class="form-select" id="prescribed_by" name="prescribed_by">
+                            <option value="">Все врачи</option>
+                            {% for doctor in doctors %}
+                            <option value="{{ doctor.id }}" {% if request.GET.prescribed_by == doctor.id|stringformat:'s' %}selected{% endif %}>
+                                {{ doctor.get_full_name|default:doctor.username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="important_only" name="important_only"
+                               {% if request.GET.important_only %}checked{% endif %}>
+                        <label class="form-check-label" for="important_only">
+                            Только важные назначения
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="prn_only" name="prn_only"
+                               {% if request.GET.prn_only %}checked{% endif %}>
+                        <label class="form-check-label" for="prn_only">
+                            Только по необходимости (PRN)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <a href="?" class="btn btn-outline-danger me-2">Сбросить</a>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Инициализация тултипов
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    
+    // Обработка формы фильтров
+    document.getElementById('filterPrescriptionsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        
+        // Добавляем только заполненные поля
+        for (const [key, value] of formData.entries()) {
+            if (value) {
+                params.append(key, value);
+            }
+        }
+        
+        // Перенаправляем с новыми параметрами
+        window.location.href = '?' + params.toString();
+    });
+</script>
+{% endblock %}

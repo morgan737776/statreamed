@@ -1,0 +1,317 @@
+{% extends 'core/admin/base.html' %}
+{% load humanize %}
+
+{% block title %}{{ patient.get_full_name }} - {{ block.super }}{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'admin_panel:dashboard' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'admin_panel:patient_list' %}">Пациенты</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ patient.get_short_name }}</li>
+            </ol>
+        </nav>
+        <h1 class="h2 mb-0">{{ patient.get_full_name }}</h1>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{% url 'core:patient_edit' patient.id %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-edit me-1"></i> Редактировать
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Действия</span>
+            </button>
+            <ul class="dropdown-menu">
+                {% with admission=patient.admissions.first %}
+                    {% if admission and not admission.discharge_date %}
+                        <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#dischargeModal">
+                                <i class="fas fa-sign-out-alt me-1"></i> Выписать пациента
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'core:bed_management' %}">
+                                <i class="fas fa-procedures me-1"></i> Поместить в палату
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endwith %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="fas fa-trash me-1"></i> Удалить пациента
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Patient Info -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Основная информация</h5>
+                <span class="badge bg-{% if patient.user.is_active %}success{% else %}secondary{% endif %}">
+                    {% if patient.user.is_active %}Активен{% else %}Неактивен{% endif %}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="avatar avatar-xxl mb-2">
+                        <div class="avatar-img rounded-circle bg-light text-primary d-flex align-items-center justify-content-center" 
+                             style="width: 100px; height: 100px; font-size: 3rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <h5 class="mb-1">{{ patient.get_full_name }}</h5>
+                    <p class="text-muted mb-0">
+                        {% if patient.date_of_birth %}
+                            {{ patient.get_age }} лет
+                        {% endif %}
+                        {% if patient.gender %}
+                            • {{ patient.get_gender_display }}
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <hr>
+                
+                <ul class="list-unstyled">
+                    {% if patient.date_of_birth %}
+                    <li class="mb-2">
+                        <i class="fas fa-birthday-cake me-2 text-muted"></i>
+                        {{ patient.date_of_birth|date:"d.m.Y" }}
+                    </li>
+                    {% endif %}
+                    
+                    {% if patient.phone_number %}
+                    <li class="mb-2">
+                        <i class="fas fa-phone me-2 text-muted"></i>
+                        <a href="tel:{{ patient.phone_number }}" class="text-decoration-none">
+                            {{ patient.phone_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if patient.email %}
+                    <li class="mb-2">
+                        <i class="fas fa-envelope me-2 text-muted"></i>
+                        <a href="mailto:{{ patient.email }}" class="text-decoration-none">
+                            {{ patient.email }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if patient.address %}
+                    <li class="mb-2">
+                        <i class="fas fa-map-marker-alt me-2 text-muted"></i>
+                        {{ patient.address|linebreaksbr }}
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                {% if patient.notes %}
+                <div class="mt-3 p-3 bg-light rounded">
+                    <h6 class="text-muted mb-2">Заметки:</h6>
+                    <p class="mb-0">{{ patient.notes|linebreaksbr }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Current Admission -->
+    <div class="col-md-8 mb-4">
+        {% with admission=patient.admissions.first %}
+        {% if admission and not admission.discharge_date %}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Текущая госпитализация</h5>
+                <span class="badge bg-success">На лечении</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Размещение</h6>
+                        <p class="mb-1">
+                            <i class="fas fa-hospital me-2 text-muted"></i>
+                            {{ admission.bed.ward.name }}
+                        </p>
+                        <p class="mb-1">
+                            <i class="fas fa-bed me-2 text-muted"></i>
+                            Койка {{ admission.bed.number }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                            Поступил: {{ admission.admission_date|date:"d.m.Y" }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Лечащий врач</h6>
+                        {% if admission.doctor %}
+                        <div class="d-flex align-items-center">
+                            <div class="avatar avatar-sm me-3">
+                                <div class="avatar-img rounded-circle bg-light text-primary d-flex align-items-center justify-content-center" 
+                                     style="width: 40px; height: 40px; font-size: 1.2rem;">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="mb-0 fw-bold">{{ admission.doctor.get_full_name }}</p>
+                                <p class="mb-0 small text-muted">
+                                    {{ admission.doctor.specialist_profile.specializations.first|default:"Врач" }}
+                                </p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-muted">Не назначен</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if admission.diagnosis %}
+                <div class="mt-3">
+                    <h6>Диагноз при поступлении</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ admission.diagnosis|linebreaksbr }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if admission.notes %}
+                <div class="mt-3">
+                    <h6>Примечания</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ admission.notes|linebreaksbr }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAdmissionModal">
+                    <i class="fas fa-edit me-1"></i> Редактировать
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#dischargeModal">
+                    <i class="fas fa-sign-out-alt me-1"></i> Выписать
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-info-circle me-3 fa-2x"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">Пациент не госпитализирован</h5>
+                    <p class="mb-0">Для госпитализации перейдите в раздел управления койками.</p>
+                </div>
+            </div>
+            <div class="mt-3 text-end">
+                <a href="{% url 'core:bed_management' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-procedures me-1"></i> Перейти к управлению койками
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+        <!-- Documents -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Документы</h5>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">
+                    <i class="fas fa-upload me-1"></i> Загрузить
+                </button>
+            </div>
+            <div class="card-body p-0">
+                {% if documents %}
+                <div class="list-group list-group-flush">
+                    {% for doc in documents %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-file-pdf text-danger me-2"></i>
+                                <a href="{{ doc.document.url }}" target="_blank" class="text-decoration-none">
+                                    {{ doc.description|default:"Без названия" }}
+                                </a>
+                                <div class="small text-muted">
+                                    Загружено {{ doc.uploaded_at|timesince }} назад
+                                </div>
+                            </div>
+                            <div>
+                                <a href="{{ doc.document.url }}" download class="btn btn-sm btn-outline-secondary me-1" title="Скачать">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                        data-bs-toggle="modal" data-bs-target="#deleteDocument{{ doc.id }}" title="Удалить">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                
+                                <!-- Delete Document Modal -->
+                                <div class="modal fade" id="deleteDocument{{ doc.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Подтверждение удаления</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Вы уверены, что хотите удалить документ <strong>{{ doc.description|default:"" }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                                <form action="{% url 'admin_panel:delete_document' doc.id %}" method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-file-alt fa-3x text-muted"></i>
+                    </div>
+                    <p class="text-muted mb-0">Нет загруженных документов</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Admission History -->
+{% if patient.admissions.count > 0 %}
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">История госпитализаций</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Дата поступления</th>
+                        <th>Дата выписки</th>
+                        <th>Палата / Койка</th>
+                        <th>Лечащий врач</th>
+                        <th>Диагноз</th>
+                        <th class="text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for admission in patient.admissions.all %}
+                    <tr>
+                        <td>{{ admission.admission_date|date:"d.m.Y H:i" }}</td>
+                        <td>{% if admission.discharge_date %}{{ admission.discharge_date|date:"d.m.Y H:i" }}{% else %}-"}

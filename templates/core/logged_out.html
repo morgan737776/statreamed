@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Выход из системы | {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center animate-fade-in">
+    <div class="logout-box mx-auto my-5 p-4 bg-white rounded-4 shadow-sm" style="max-width:420px;">
+        <div class="mb-3">
+            <i class="fas fa-door-open fa-3x text-primary mb-3"></i>
+            <h2 class="mb-2">Вы успешно вышли</h2>
+            <p class="lead mb-4">Спасибо за использование системы.<br>До скорой встречи!</p>
+            <a href="/login/" class="btn btn-primary btn-lg">Войти снова</a>
+            <a href="/" class="btn btn-outline-secondary btn-lg ms-2">На главную</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

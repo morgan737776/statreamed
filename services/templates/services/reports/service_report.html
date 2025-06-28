@@ -1,0 +1,511 @@
+{% extends 'services/base_services.html' %}
+{% load humanize %}
+
+{% block page_title %}Отчет по услугам{% endblock %}
+
+{% block page_actions %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-outline-primary" id="printReport">
+        <i class="fas fa-print me-1"></i> Печать
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="exportPdf">
+        <i class="far fa-file-pdf me-1"></i> PDF
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-success" id="exportExcel">
+        <i class="far fa-file-excel me-1"></i> Excel
+    </button>
+</div>
+<a href="{% url 'services:report_list' %}" class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i> Назад к отчетам
+</a>
+{% endblock %}
+
+{% block content_inner %}
+<div class="card mb-4" id="reportFilters">
+    <div class="card-header">
+        <h5 class="mb-0">Параметры отчета</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="date_from" class="form-label">Дата с</label>
+                <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.GET.date_from }}">
+            </div>
+            <div class="col-md-3">
+                <label for="date_to" class="form-label">Дата по</label>
+                <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.GET.date_to }}">
+            </div>
+            <div class="col-md-3">
+                <label for="category" class="form-label">Категория</label>
+                <select class="form-select" id="category" name="category">
+                    <option value="">Все категории</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:'s' %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="doctor" class="form-label">Врач</label>
+                <select class="form-select" id="doctor" name="doctor">
+                    <option value="">Все врачи</option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.id }}" {% if request.GET.doctor == doctor.id|stringformat:'s' %}selected{% endif %}>
+                            {{ doctor.get_full_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter me-1"></i> Применить фильтры
+                </button>
+                <a href="{% url 'services:service_report' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-undo me-1"></i> Сбросить
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Сводка по услугам</h5>
+        <span class="badge bg-primary">
+            {{ start_date|date:"d.m.Y" }} - {{ end_date|date:"d.m.Y" }}
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Всего услуг</h6>
+                        <h3 class="mb-0">{{ summary.total_services }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Общая выручка</h6>
+                        <h3 class="mb-0">{{ summary.total_revenue|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Средний чек</h6>
+                        <h3 class="mb-0">{{ summary.avg_receipt|default:0|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Средняя стоимость услуги</h6>
+                        <h3 class="mb-0">{{ summary.avg_service_price|default:0|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Статистика по услугам</h5>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="groupByCategory" checked>
+                    <label class="form-check-label" for="groupByCategory">Группировать по категориям</label>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="servicesTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Услуга</th>
+                                <th class="text-center">Кол-во</th>
+                                <th class="text-end">Выручка</th>
+                                <th class="text-end">Средняя цена</th>
+                                <th class="text-end">Доля выручки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for service in services_stats %}
+                            <tr class="{% if service.is_category %}table-active fw-bold{% endif %}">
+                                <td>
+                                    {% if not service.is_category %}
+                                        <a href="{% url 'services:service_detail' service.id %}" class="text-decoration-none">
+                                            {{ service.name }}
+                                        </a>
+                                    {% else %}
+                                        {{ service.name }}
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">{{ service.count }}</td>
+                                <td class="text-end">{{ service.revenue|intcomma }} ₽</td>
+                                <td class="text-end">{{ service.avg_price|default:0|intcomma }} ₽</td>
+                                <td class="text-end">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <span class="me-2">{{ service.revenue_share|floatformat:1 }}%</span>
+                                        <div class="progress flex-grow-1" style="height: 6px; max-width: 100px;">
+                                            <div class="progress-bar" role="progressbar" 
+                                                 style="width: {{ service.revenue_share|default:0 }}%" 
+                                                 aria-valuenow="{{ service.revenue_share|default:0 }}" 
+                                                 aria-valuemin="0" 
+                                                 aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <i class="fas fa-concierge-bell fa-3x text-muted mb-3"></i>
+                                    <p class="mb-0">Нет данных за выбранный период</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Последние записи</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for appointment in recent_appointments %}
+                    <a href="{% url 'services:appointment_detail' appointment.id %}" 
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ appointment.service.name }}</h6>
+                            <small>{{ appointment.appointment_date|date:"d.m.Y H:i" }}</small>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <p class="mb-1">
+                                <i class="far fa-user me-1"></i>
+                                {{ appointment.client.get_full_name }}
+                            </p>
+                            <span class="badge bg-{{ appointment.get_status_class }}">
+                                {{ appointment.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="text-muted">
+                                <i class="fas fa-user-md me-1"></i>
+                                {{ appointment.doctor.get_full_name|default:"Врач не назначен" }}
+                            </small>
+                            <strong>{{ appointment.price|default:0|intcomma }} ₽</strong>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="text-center py-5">
+                        <i class="far fa-calendar-alt fa-3x text-muted mb-3"></i>
+                        <p class="mb-0">Нет записей за выбранный период</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if recent_appointments %}
+            <div class="card-footer text-center">
+                <a href="{% url 'services:appointment_list' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="far fa-list-alt me-1"></i> Все записи
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Распределение по категориям</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoriesChart" height="250"></canvas>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Топ врачей</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for doctor in top_doctors %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ doctor.doctor__get_full_name }}</h6>
+                            <span class="badge bg-primary rounded-pill">{{ doctor.count }}</span>
+                        </div>
+                        <div class="d-flex w-100 justify-content-between">
+                            <small class="text-muted">
+                                {{ doctor.total_revenue|default:0|intcomma }} ₽
+                            </small>
+                            <small class="text-muted">
+                                {{ doctor.avg_revenue|default:0|intcomma }} ₽ средний чек
+                            </small>
+                        </div>
+                        <div class="progress mt-2" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ doctor.revenue_share|default:0 }}%" 
+                                 aria-valuenow="{{ doctor.revenue_share|default:0 }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+                        <p class="mb-0">Нет данных о врачах</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Динамика по неделям</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="weeklyTrendsChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        #reportFilters, .btn, .pagination, .form-check {
+            display: none !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+            page-break-inside: avoid;
+        }
+        
+        .card-header {
+            background-color: transparent !important;
+            border-bottom: 1px solid #dee2e6 !important;
+        }
+        
+        .table th, .table td {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .progress {
+            height: 4px !important;
+        }
+    }
+    
+    .progress {
+        min-width: 50px;
+    }
+    
+    .table th {
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Print report
+    document.getElementById('printReport')?.addEventListener('click', function() {
+        window.print();
+    });
+    
+    // Export to PDF
+    document.getElementById('exportPdf')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        // TODO: Implement PDF export
+        alert('Экспорт в PDF будет доступен в следующем обновлении');
+    });
+    
+    // Export to Excel
+    document.getElementById('exportExcel')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        // TODO: Implement Excel export
+        alert('Экспорт в Excel будет доступен в следующем обновлении');
+    });
+    
+    // Toggle category grouping
+    const groupByCategory = document.getElementById('groupByCategory');
+    if (groupByCategory) {
+        groupByCategory.addEventListener('change', function() {
+            // This would typically be handled by the server with a page reload
+            // For demo purposes, we'll just show a message
+            const url = new URL(window.location.href);
+            if (this.checked) {
+                url.searchParams.set('group_by', 'category');
+            } else {
+                url.searchParams.delete('group_by');
+            }
+            window.location.href = url.toString();
+        });
+    }
+    
+    // Categories chart
+    const categoriesCtx = document.getElementById('categoriesChart')?.getContext('2d');
+    if (categoriesCtx) {
+        new Chart(categoriesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ categories_chart.labels|safe }},
+                datasets: [{
+                    data: {{ categories_chart.data|safe }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 205, 86, 0.7)',
+                        'rgba(201, 203, 207, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 205, 86, 1)',
+                        'rgba(201, 203, 207, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} услуг (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Weekly trends chart
+    const weeklyTrendsCtx = document.getElementById('weeklyTrendsChart')?.getContext('2d');
+    if (weeklyTrendsCtx) {
+        new Chart(weeklyTrendsCtx, {
+            type: 'line',
+            data: {
+                labels: {{ weekly_trends.labels|safe }},
+                datasets: [{
+                    label: 'Количество услуг',
+                    data: {{ weekly_trends.count_data|safe }},
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Выручка',
+                    data: {{ weekly_trends.revenue_data|safe }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Количество услуг'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Выручка, ₽'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('ru-RU');
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    if (context.dataset.yAxisID === 'y1') {
+                                        label += context.parsed.y.toLocaleString('ru-RU') + ' ₽';
+                                    } else {
+                                        label += context.parsed.y;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

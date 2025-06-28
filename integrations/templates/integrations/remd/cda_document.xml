@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 CDA.xsd">
+
+    <!-- Заголовок CDA -->
+    <realmCode code="RU"/>
+    <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+    <!-- OID шаблона документа (пример) -->
+    <templateId root="1.2.643.5.1.13.2.7.1.1"/> 
+    <id root="{{ document_id }}" extension="{{ medical_org_oid }}"/>
+    <!-- Код документа (например, "Медицинский осмотр") -->
+    <code code="{{ document_type_code }}" codeSystem="1.2.643.5.1.13.1.1.1" codeSystemName="Виды медицинской документации" displayName="{{ document_type_name }}"/>
+    <title>{{ document_title }}</title>
+    <effectiveTime value="{{ creation_time }}"/>
+    <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25"/>
+    <languageCode code="ru-RU"/>
+    <versionNumber value="1"/>
+
+    <!-- Пациент -->
+    <recordTarget>
+        <patientRole>
+            <id extension="{{ patient.id }}" root="{{ medical_org_oid }}.1.1"/>
+            <addr>
+                <streetAddressLine>{{ patient.address }}</streetAddressLine>
+            </addr>
+            <patient>
+                <name>
+                    <family>{{ patient.last_name }}</family>
+                    <given>{{ patient.first_name }}</given>
+                    <given>{{ patient.middle_name }}</given>
+                </name>
+                <administrativeGenderCode code="{{ patient.gender_code }}" displayName="{{ patient.gender_name }}" codeSystem="2.16.840.1.113883.5.1"/>
+                <birthTime value="{{ patient.birth_date }}"/>
+            </patient>
+        </patientRole>
+    </recordTarget>
+
+    <!-- Автор документа (врач) -->
+    <author>
+        <time value="{{ creation_time }}"/>
+        <assignedAuthor>
+            <id extension="{{ author.id }}" root="{{ medical_org_oid }}.1.2"/>
+            <assignedPerson>
+                <name>
+                    <family>{{ author.last_name }}</family>
+                    <given>{{ author.first_name }}</given>
+                    <given>{{ author.middle_name }}</given>
+                </name>
+            </assignedPerson>
+            <representedOrganization>
+                <id root="{{ medical_org_oid }}"/>
+                <name>{{ organization.name }}</name>
+            </representedOrganization>
+        </assignedAuthor>
+    </author>
+
+    <!-- Организация-владелец документа -->
+    <custodian>
+        <assignedCustodian>
+            <representedCustodianOrganization>
+                <id root="{{ medical_org_oid }}"/>
+                <name>{{ organization.name }}</name>
+            </representedCustodianOrganization>
+        </assignedCustodian>
+    </custodian>
+
+    <!-- Тело документа -->
+    <component>
+        <structuredBody>
+            <!-- Раздел: Результаты осмотра, обследования, лечения -->
+            <component>
+                <section>
+                    <code code="18783-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Результаты осмотра"/>
+                    <text>
+                        {{ entry.text_content | e }}
+                    </text>
+                </section>
+            </component>
+        </structuredBody>
+    </component>
+
+</ClinicalDocument>

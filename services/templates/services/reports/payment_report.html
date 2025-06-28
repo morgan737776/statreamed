@@ -1,0 +1,365 @@
+{% extends 'services/base_services.html' %}
+{% load humanize %}
+
+{% block page_title %}Отчет по платежам{% endblock %}
+
+{% block page_actions %}
+<div class="btn-group me-2">
+    <button type="button" class="btn btn-sm btn-outline-primary" id="printReport">
+        <i class="fas fa-print me-1"></i> Печать
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="exportPdf">
+        <i class="far fa-file-pdf me-1"></i> PDF
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-success" id="exportExcel">
+        <i class="far fa-file-excel me-1"></i> Excel
+    </button>
+</div>
+<a href="{% url 'services:report_list' %}" class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left me-1"></i> Назад к отчетам
+</a>
+{% endblock %}
+
+{% block content_inner %}
+<div class="card mb-4" id="reportFilters">
+    <div class="card-header">
+        <h5 class="mb-0">Параметры отчета</h5>
+    </div>
+    <div class="card-body
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="date_from" class="form-label">Дата с</label>
+                <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.GET.date_from }}">
+            </div>
+            <div class="col-md-3">
+                <label for="date_to" class="form-label">Дата по</label>
+                <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.GET.date_to }}">
+            </div>
+            <div class="col-md-3">
+                <label for="payment_method" class="form-label">Способ оплаты</label>
+                <select class="form-select" id="payment_method" name="payment_method">
+                    <option value="">Все способы</option>
+                    {% for value, label in payment_methods %}
+                        <option value="{{ value }}" {% if request.GET.payment_method == value|stringformat:'s' %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">Статус</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">Все статусы</option>
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if request.GET.status == value|stringformat:'s' %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter me-1"></i> Применить фильтры
+                </button>
+                <a href="{% url 'services:payment_report' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-undo me-1"></i> Сбросить
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Сводка по платежам</h5>
+        <span class="badge bg-primary">
+            {{ start_date|date:"d.m.Y" }} - {{ end_date|date:"d.m.Y" }}
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Всего платежей</h6>
+                        <h3 class="mb-0">{{ summary.total_payments }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Общая сумма</h6>
+                        <h3 class="mb-0">{{ summary.total_amount|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Средний чек</h6>
+                        <h3 class="mb-0">{{ summary.avg_amount|default:0|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="text-uppercase text-muted small mb-1">Возвраты</h6>
+                        <h3 class="mb-0 text-danger">-{{ summary.total_refunds|default:0|intcomma }} ₽</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Детализация платежей</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="paymentsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Дата</th>
+                                <th>Номер</th>
+                                <th>Клиент</th>
+                                <th>Способ оплаты</th>
+                                <th class="text-end">Сумма</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.payment_date|date:"d.m.Y H:i" }}</td>
+                                <td>
+                                    <a href="{% url 'services:payment_detail' payment.id %}" class="text-decoration-none">
+                                        #{{ payment.id }}
+                                    </a>
+                                </td>
+                                <td>{{ payment.client.get_full_name|default:payment.client.username }}</td>
+                                <td>{{ payment.get_payment_method_display }}</td>
+                                <td class="text-end {% if payment.amount < 0 %}text-danger{% endif %}">
+                                    {{ payment.amount|intcomma }} ₽
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ payment.get_status_class }}">
+                                        {{ payment.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="far fa-credit-card fa-3x text-muted mb-3"></i>
+                                    <p class="mb-0">Нет данных за выбранный период</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% if is_paginated %}
+            <div class="card-footer
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        Показано с {{ page_obj.start_index }} по {{ page_obj.end_index }} из {{ paginator.count }} записей
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo;&laquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo;</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&raquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&raquo;&raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">По способам оплаты</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="paymentMethodsChart" height="250"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">По дням</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="paymentsByDayChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    @media print {
+        #reportFilters, .btn, .pagination {
+            display: none !important;
+        }
+        
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        .card-header {
+            background-color: transparent !important;
+            border-bottom: 1px solid #dee2e6 !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Print report
+    document.getElementById('printReport')?.addEventListener('click', function() {
+        window.print();
+    });
+    
+    // Export to PDF
+    document.getElementById('exportPdf')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        // TODO: Implement PDF export
+        alert('Экспорт в PDF будет доступен в следующем обновлении');
+    });
+    
+    // Export to Excel
+    document.getElementById('exportExcel')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        // TODO: Implement Excel export
+        alert('Экспорт в Excel будет доступен в следующем обновлении');
+    });
+    
+    // Payment methods chart
+    const paymentMethodsCtx = document.getElementById('paymentMethodsChart')?.getContext('2d');
+    if (paymentMethodsCtx) {
+        new Chart(paymentMethodsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ payment_methods_data.labels|safe }},
+                datasets: [{
+                    data: {{ payment_methods_data.data|safe }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} ₽ (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Payments by day chart
+    const paymentsByDayCtx = document.getElementById('paymentsByDayChart')?.getContext('2d');
+    if (paymentsByDayCtx) {
+        new Chart(paymentsByDayCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ payments_by_day.labels|safe }},
+                datasets: [{
+                    label: 'Сумма платежей',
+                    data: {{ payments_by_day.data|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' ₽';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' ₽';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Регистрация пациента - Шаг 1" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h4 class="mb-0">{% trans "Регистрация нового пациента: Шаг 1 из 2 - Основная информация" %}</h4>
+        </div>
+        <div class="card-body">
+            <p>{% blocktrans %}Пожалуйста, заполните основные данные о пациенте.{% endblocktrans %}</p>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                
+                {{ wizard.form|crispy }}
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">{% trans "Далее" %} <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

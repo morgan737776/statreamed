@@ -1,0 +1,236 @@
+{% extends 'core/base_dashboard.html' %}
+{% load static math_filters i18n %}
+
+{% block title %}{% trans "Панель управления" %}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    /* General Card Styles */
+    .dashboard-card-simple {
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        height: 100%;
+    }
+    .dashboard-card-simple:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .stat-number {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Gradient Navigation Card Styles */
+    .dashboard-card-nav {
+        border-radius: 15px;
+        color: white;
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 140px;
+        position: relative;
+        overflow: hidden;
+        padding: 1.25rem;
+    }
+    .dashboard-card-nav:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        color: white;
+    }
+    .card-nav-icon {
+        font-size: 3rem;
+        opacity: 0.5;
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        transition: opacity 0.3s, transform 0.3s ease;
+    }
+    .dashboard-card-nav:hover .card-nav-icon {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+    .card-nav-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+    .card-nav-text {
+        font-size: 0.9rem;
+    }
+
+    /* Gradients */
+    .bg-gradient-patients { background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); }
+    .bg-gradient-calendar { background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%); }
+    .bg-gradient-reports { background: linear-gradient(135deg, #36b9cc 0%, #258391 100%); }
+    .bg-gradient-settings { background: linear-gradient(135deg, #f6c23e 0%, #dda20a 100%); }
+    .bg-gradient-rehab { background: linear-gradient(135deg, #e74a3b 0%, #be2617 100%); }
+    .bg-gradient-wards { background: linear-gradient(135deg, #6f42c1 0%, #4e2d8a 100%); }
+    .bg-gradient-staff { background: linear-gradient(135deg, #20c9a6 0%, #189c80 100%); }
+    .bg-gradient-documents { background: linear-gradient(135deg, #fd7e14 0%, #d9650b 100%); }
+
+    /* Utility */
+    .progress-thin { height: 5px !important; }
+    .progress-bar { transition: width 0.6s ease; }
+</style>
+{% endblock %}
+
+{% block page_title %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{% trans "Панель управления" %}</h1>
+    <div>
+        <button class="btn btn-outline-secondary me-2" onclick="window.location.reload();">
+            <i class="fas fa-sync-alt me-1"></i> {% trans "Обновить" %}
+        </button>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-plus me-1"></i> {% trans "Создать" %}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'core:patient_add' %}"><i class="fas fa-user-plus fa-fw me-2"></i>{% trans "Новый пациент" %}</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-plus fa-fw me-2"></i>{% trans "Новая запись" %}</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-file-invoice fa-fw me-2"></i>{% trans "Новый документ" %}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_content %}
+
+<!-- Main Navigation Cards -->
+<div class="row g-4 mb-4">
+    {% with url_name='core:patient_list' title='Пациенты' text='Управление картами пациентов' icon='fa-user-injured' gradient='bg-gradient-patients' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:calendar' title='Календарь' text='Просмотр и запись на приемы' icon='fa-calendar-alt' gradient='bg-gradient-calendar' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="far {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:programs' title='Программы' text='Реабилитационные программы' icon='fa-project-diagram' gradient='bg-gradient-rehab' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:reports' title='Отчеты' text='Аналитика и отчетность' icon='fa-chart-pie' gradient='bg-gradient-reports' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:bed_management' title='Палаты' text='Управление палатами и койками' icon='fa-procedures' gradient='bg-gradient-wards' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:staff_list' title='Сотрудники' text='Управление персоналом' icon='fa-user-md' gradient='bg-gradient-staff' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:documents' title='Документы' text='Управление файлами' icon='fa-folder-open' gradient='bg-gradient-documents' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="far {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+    {% with url_name='core:settings' title='Настройки' text='Конфигурация системы' icon='fa-cogs' gradient='bg-gradient-settings' %}
+    <div class="col-xl-3 col-md-6">
+        <a href="{% url url_name %}" class="dashboard-card-nav shadow-sm {{ gradient }}">
+            <div>
+                <div class="card-nav-title">{{ title }}</div>
+                <p class="card-nav-text mb-0">{{ text }}</p>
+            </div>
+            <i class="fas {{ icon }} card-nav-icon"></i>
+        </a>
+    </div>
+    {% endwith %}
+</div>
+
+<!-- Paid Services Section -->
+{% if services_stats.has_services %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-hand-holding-usd text-primary me-2"></i>{% trans "Платные услуги" %}</h5>
+        <div>
+            <a href="#" class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-plus me-1"></i> {% trans "Новый прием" %}</a>
+            <a href="#" class="btn btn-sm btn-outline-success"><i class="fas fa-file-contract me-1"></i> {% trans "Новый договор" %}</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <!-- Detailed Stats -->
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set progress bar widths after page load
+        document.querySelectorAll('.progress-bar[data-width]').forEach(function(bar) {
+            bar.style.width = bar.getAttribute('data-width') + '%';
+        });
+    });
+</script>
+{% endblock %}
+

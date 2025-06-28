@@ -1,0 +1,281 @@
+{% extends 'services/base.html' %}
+{% load humanize %}
+
+{% block page_title %}{{ page_title|default:'Главная - Платные услуги' }}{% endblock %}
+
+{% block content_inner %}
+<div class="row g-4 mb-4">
+    <!-- Revenue Card -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-uppercase text-white-50 mb-1">Общий доход</h6>
+                        <h2 class="text-white mb-0">{{ total_revenue|intcomma }} ₽</h2>
+                        <div class="small mt-1">
+                            <span class="text-white-50">За месяц: </span>
+                            <span class="text-white">{{ monthly_revenue|intcomma }} ₽</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-wallet fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-primary bg-opacity-25 border-0">
+                <a class="small text-white stretched-link" href="{% url 'services:report_payments' %}">Детали</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upcoming Appointments Card -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-uppercase text-white-50 mb-1">Ближайшие записи</h6>
+                        <h2 class="text-white mb-0">{{ upcoming_appointments|length }}</h2>
+                        <div class="small mt-1">
+                            <span class="text-white-50">На {{ today|date:'d.m.Y' }}</span>
+                        </div>
+                    </div>
+                    <i class="far fa-calendar-check fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-success bg-opacity-25 border-0">
+                <a class="small text-white stretched-link" href="{% url 'services:appointment_list' %}">Все записи</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Contracts Card -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-uppercase text-white-50 mb-1">Недавние договоры</h6>
+                        <h2 class="text-white mb-0">{{ recent_contracts|length }}</h2>
+                        <div class="small mt-1">
+                            <span class="text-white-50">За последние 30 дней</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-file-contract fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-info bg-opacity-25 border-0">
+                <a class="small text-white stretched-link" href="{% url 'services:contract_list' %}">Все договоры</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popular Services Card -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-uppercase text-white-50 mb-1">Популярные услуги</h6>
+                        <h2 class="text-white mb-0">{{ popular_services|length }}</h2>
+                        <div class="small mt-1">
+                            <span class="text-white-50">По количеству записей</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-star fa-3x opacity-50"></i>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between bg-warning bg-opacity-25 border-0">
+                <a class="small text-white stretched-link" href="{% url 'services:service_list' %}">Все услуги</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Appointments -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="far fa-calendar-alt me-2"></i>Ближайшие записи</h6>
+                <a href="{% url 'services:appointment_add' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-plus me-1"></i> Новая запись
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if upcoming_appointments %}
+                    <div class="list-group list-group-flush">
+                        {% for appointment in upcoming_appointments %}
+                        <a href="{% url 'services:appointment_detail' appointment.pk %}" 
+                           class="list-group-item list-group-item-action border-0 py-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ appointment.service.name }}</h6>
+                                <small class="text-muted">{{ appointment.appointment_date|date:'H:i' }}</small>
+                            </div>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1">
+                                    <i class="far fa-user me-1"></i>
+                                    {{ appointment.client.get_full_name|default:appointment.client.username }}
+                                </p>
+                                <span class="badge bg-{{ appointment.get_status_class }}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="far fa-calendar-alt fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Нет предстоящих записей</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-transparent border-top-0 text-end">
+                <a href="{% url 'services:appointment_list' %}" class="btn btn-sm btn-link">
+                    Просмотреть все <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Contracts -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="far fa-file-contract me-2"></i>Последние договоры</h6>
+                <a href="{% url 'services:contract_add' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-plus me-1"></i> Новый договор
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_contracts %}
+                    <div class="list-group list-group-flush">
+                        {% for contract in recent_contracts %}
+                        <a href="{% url 'services:contract_detail' contract.pk %}" 
+                           class="list-group-item list-group-item-action border-0 py-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Договор #{{ contract.contract_number }}</h6>
+                                <small class="text-muted">{{ contract.created_at|date:'d.m.Y' }}</small>
+                            </div>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1">
+                                    <i class="far fa-user me-1"></i>
+                                    {{ contract.client.get_full_name|default:contract.client.username }}
+                                </p>
+                                <span class="badge bg-{{ contract.get_status_class }}">
+                                    {{ contract.get_status_display }}
+                                </span>
+                            </div>
+                            <small class="text-muted">
+                                <i class="far fa-money-bill-alt me-1"></i>
+                                {{ contract.total_amount|intcomma }} ₽
+                            </small>
+                        </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="far fa-file-contract fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Нет недавних договоров</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-transparent border-top-0 text-end">
+                <a href="{% url 'services:contract_list' %}" class="btn btn-sm btn-link">
+                    Просмотреть все <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Services -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="fas fa-star me-2"></i>Популярные услуги</h6>
+                <a href="{% url 'services:service_list' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-list me-1"></i> Все услуги
+                </a>
+            </div>
+            <div class="card-body">
+                {% if popular_services %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Услуга</th>
+                                    <th>Категория</th>
+                                    <th class="text-end">Цена</th>
+                                    <th class="text-end">Кол-во записей</th>
+                                    <th class="text-end">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for service in popular_services %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'services:service_detail' service.pk %}" class="text-decoration-none">
+                                            {{ service.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if service.category %}
+                                            <span class="badge bg-primary">{{ service.category.name }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Без категории</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">{{ service.price|intcomma }} ₽</td>
+                                    <td class="text-end">{{ service.appointment_count }}</td>
+                                    <td class="text-end">
+                                        <div class="btn-group">
+                                            <a href="{% url 'services:appointment_add' %}?service={{ service.id }}" 
+                                               class="btn btn-sm btn-outline-success" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Записаться">
+                                                <i class="far fa-calendar-plus"></i>
+                                            </a>
+                                            <a href="{% url 'services:service_edit' service.pk %}" 
+                                               class="btn btn-sm btn-outline-primary" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Редактировать">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="fas fa-star fa-3x text-muted mb-3"></i>
+                        <p class="text-muted mb-0">Нет данных о популярных услугах</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content_inner %}
+
+{% block extra_js %}
+<script>
+// Make table rows clickable
+document.addEventListener('DOMContentLoaded', function() {
+    const rows = document.querySelectorAll('tr[style*="cursor: pointer"]');
+    rows.forEach(row => {
+        row.addEventListener('click', function() {
+            window.location = this.getAttribute('data-href') || this.querySelector('a').getAttribute('href');
+        });
+    });
+});
+</script>
+{% endblock %}

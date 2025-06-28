@@ -1,0 +1,209 @@
+<div class="row">
+    <!-- Последние записи -->
+    <div class="col-12 mb-4">
+        <div class="card card-emr">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Последние записи</h5>
+                <a href="{% url 'emr:entry_list' patient_pk=patient.pk %}" class="btn btn-sm btn-outline-primary">
+                    Все записи
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_entries %}
+                    {% for entry in recent_entries|slice:":5" %}
+                    <div class="border-bottom p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-0">
+                                    <i class="bi bi-{{ entry.entry_type|default:'journal-text' }} text-primary me-2"></i>
+                                    {{ entry.title }}
+                                </h6>
+                                <small class="text-muted">
+                                    {{ entry.created_at|date:'d.m.Y H:i' }} • 
+                                    {{ entry.created_by.get_full_name|default:entry.created_by.username }}
+                                </small>
+                            </div>
+                            <div>
+                                {% if entry.is_confidential %}
+                                <span class="badge bg-warning text-dark" data-bs-toggle="tooltip" title="Конфиденциальная запись">
+                                    <i class="bi bi-shield-lock"></i>
+                                </span>
+                                {% endif %}
+                                {% if entry.is_important %}
+                                <span class="badge bg-danger" data-bs-toggle="tooltip" title="Важная запись">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="mb-2">{{ entry.content|truncatewords:30|linebreaksbr }}</p>
+                        {% if entry.diagnosis.exists %}
+                        <div class="mb-2">
+                            <span class="text-muted small">Диагнозы:</span>
+                            {% for diagnosis in entry.diagnosis.all %}
+                            <span class="badge bg-light text-dark">{{ diagnosis.code }} - {{ diagnosis.description_ru }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="text-end">
+                            <a href="{% url 'emr:entry_edit' pk=entry.pk %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil-square"></i> Редактировать
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="bi bi-journal-text display-6 text-muted mb-2"></i>
+                        <p class="text-muted">Нет записей в медицинской карте</p>
+                        <a href="{% url 'emr:entry_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> Добавить запись
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Активные назначения -->
+    <div class="col-md-6 mb-4">
+        <div class="card card-emr h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Активные назначения</h5>
+                <a href="{% url 'emr:prescription_list' patient_pk=patient.pk %}" class="btn btn-sm btn-outline-primary">
+                    Все назначения
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if active_prescriptions %}
+                    {% for prescription in active_prescriptions|slice:":3" %}
+                    <div class="border-bottom p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-0">{{ prescription.title }}</h6>
+                                <small class="text-muted">
+                                    {{ prescription.start_date|date:'d.m.Y' }} - 
+                                    {{ prescription.end_date|date:'d.m.Y'|default:'по настоящее время' }}
+                                </small>
+                            </div>
+                            <span class="badge bg-{{ prescription.status|default:'secondary' }}">
+                                {{ prescription.get_status_display }}
+                            </span>
+                        </div>
+                        <p class="mb-2">{{ prescription.description|truncatewords:15|linebreaksbr }}</p>
+                        <div class="small text-muted">
+                            <span class="me-3">
+                                <i class="bi bi-arrow-repeat me-1"></i> {{ prescription.get_frequency_display }}
+                            </span>
+                            {% if prescription.is_prn %}
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-exclamation-diamond me-1"></i> По необходимости
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="text-end mt-2">
+                            <a href="{% url 'emr:prescription_edit' pk=prescription.pk %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil-square"></i> Редактировать
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="bi bi-capsule display-6 text-muted mb-2"></i>
+                        <p class="text-muted">Нет активных назначений</p>
+                        <a href="{% url 'emr:prescription_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> Добавить назначение
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Последние анализы -->
+    <div class="col-md-6 mb-4">
+        <div class="card card-emr h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Последние анализы</h5>
+                <a href="{% url 'emr:testresult_list' patient_pk=patient.pk %}" class="btn btn-sm btn-outline-primary">
+                    Все анализы
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_tests %}
+                    {% for test in recent_tests|slice:":3" %}
+                    <div class="border-bottom p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-0">{{ test.test_name }}</h6>
+                                <small class="text-muted">
+                                    {{ test.collected_at|date:'d.m.Y H:i' }} • 
+                                    {{ test.get_test_type_display }}
+                                </small>
+                            </div>
+                            {% if test.is_abnormal %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-exclamation-triangle"></i> Отклонение
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if test.result_type == 'numeric' %}
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small">Результат:</span>
+                                <span class="fw-bold">{{ test.numeric_value }} {{ test.unit|default:'' }}</span>
+                            </div>
+                            {% if test.reference_range %}
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-{{ test.is_abnormal|yesno:'danger,success' }}" 
+                                     role="progressbar" 
+                                     style="width: {{ test.percentage_of_range }}%"
+                                     aria-valuenow="{{ test.percentage_of_range }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Референс: {{ test.reference_range }}</small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% elif test.result_type == 'text' %}
+                        <p class="mb-2">{{ test.text_result|truncatewords:15|linebreaksbr }}</p>
+                        {% elif test.result_file %}
+                        <p class="mb-2">
+                            <i class="bi bi-file-earmark-text"></i> 
+                            <a href="{{ test.result_file.url }}" target="_blank">
+                                {{ test.result_file.name|slice:"-20:" }}
+                            </a>
+                        </p>
+                        {% endif %}
+                        
+                        {% if test.notes %}
+                        <div class="alert alert-light p-2 mb-2 small">
+                            <i class="bi bi-chat-square-text me-1"></i> {{ test.notes }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="text-end">
+                            <a href="{% url 'emr:testresult_edit' pk=test.pk %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil-square"></i> Редактировать
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center p-4">
+                        <i class="bi bi-clipboard2-pulse display-6 text-muted mb-2"></i>
+                        <p class="text-muted">Нет результатов анализов</p>
+                        <a href="{% url 'emr:testresult_create' patient_pk=patient.pk %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i> Добавить анализы
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

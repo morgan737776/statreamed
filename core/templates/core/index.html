@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="jumbotron bg-light p-5 rounded">
+        <h1 class="display-4">Добро пожаловать в CRM центра реабилитации!</h1>
+        <p class="lead">Управляйте пациентами, госпитализациями, расписанием, персоналом и услугами центра.</p>
+        <hr class="my-4">
+        <div class="row">
+    <div class="col-md-3 mb-3">
+        <a href="{% url 'admin:index' %}" class="btn btn-outline-primary btn-lg w-100"><i class="fa fa-cogs me-2"></i>Администрирование</a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{% url 'core:settings' %}" class="btn btn-outline-secondary btn-lg w-100"><i class="fa fa-sliders me-2"></i>Настройки системы</a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{% url 'core:bed_management' %}" class="btn btn-outline-success btn-lg w-100"><i class="fa fa-bed me-2"></i>Коечный фонд</a>
+    </div>
+    <div class="col-md-3 mb-3">
+        <a href="{% url 'services:dashboard' %}" class="btn btn-outline-warning btn-lg w-100">
+            <i class="fas fa-hand-holding-usd me-2"></i>Платные услуги
+        </a>
+    </div>
+</div>
+    </div>
+</div>
+{% endblock %}

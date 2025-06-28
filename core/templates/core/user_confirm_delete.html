@@ -1,0 +1,21 @@
+{% extends 'core/base_dashboard.html' %}
+{% block title %}Удаление пользователя{% endblock %}
+{% block page_content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white"><h5>Удалить пользователя</h5></div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <p>Вы уверены, что хотите удалить пользователя <strong>{{ user_obj.username }}</strong>?</p>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                        <a href="{% url 'core:settings' %}" class="btn btn-secondary ms-2">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'emr/base_emr.html' %}
+{% load static %}
+
+{% block page_title %}Список пациентов{% endblock %}
+
+{% block page_header %}Список пациентов{% endblock %}
+
+{% block page_actions %}
+<div class="btn-group me-2">
+    <a href="{% url 'emr:patient_create' %}" class="btn btn-sm btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Добавить пациента
+    </a>
+</div>
+{% endblock %}
+
+{% block emr_content %}
+<div class="card card-emr">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Поиск пациентов</h5>
+        <div class="d-flex">
+            <form method="get" class="d-flex">
+                <input type="text" name="q" class="form-control form-control-sm me-2" 
+                       placeholder="Поиск по ФИО, СНИЛС..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ФИО</th>
+                    <th>Дата рождения</th>
+                    <th>СНИЛС</th>
+                    <th>Телефон</th>
+                    <th>Группа крови</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ patient.user.avatar.url|default:'/static/img/default-avatar.png' }}" 
+                                 alt="{{ patient.user.get_full_name }}" 
+                                 class="rounded-circle me-2" width="32" height="32">
+                            <div>
+                                <div class="fw-semibold">
+                                    <a href="{% url 'emr:patient_detail' pk=patient.pk %}" class="text-decoration-none">
+                                        {{ patient.user.get_full_name }}
+                                    </a>
+                                </div>
+                                <small class="text-muted">ID: {{ patient.id|stringformat:"06d" }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ patient.user.birth_date|date:'d.m.Y'|default:'-' }}</td>
+                    <td>{{ patient.insurance_number|default:'-' }}</td>
+                    <td>{{ patient.phone|default:'-' }}</td>
+                    <td>
+                        {% if patient.blood_type %}
+                            {{ patient.get_blood_type_display }}
+                            {% if patient.rh_factor is not None %}({{ patient.rh_factor|yesno:'+,-' }}){% endif %}
+                        {% else %}-
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'emr:patient_detail' pk=patient.pk %}" 
+                               class="btn btn-outline-primary" title="Просмотр">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'emr:patient_edit' pk=patient.pk %}" 
+                               class="btn btn-outline-secondary" title="Редактировать">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-danger" title="Удалить">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="bi bi-people display-6 d-block mb-2"></i>
+                            <h5>Пациенты не найдены</h5>
+                            <p class="mb-0">Попробуйте изменить параметры поиска</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if is_paginated %}
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div class="text-muted small">
+            Показано с {{ page_obj.start_index }} по {{ page_obj.end_index }} из {{ page_obj.paginator.count }} записей
+        </div>
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination pagination-sm mb-0">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Первая">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
